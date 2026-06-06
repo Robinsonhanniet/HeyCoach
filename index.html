@@ -292,7 +292,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v7 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v10 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -374,6 +374,77 @@ async function sendMsg(){
     typing.remove();addMsg("bot",reply.replace(/\n/g,"<br>"));history.push({role:"assistant",content:reply});
   }catch(e){typing.remove();const reply=fallback(text);addMsg("bot",reply);history.push({role:"assistant",content:reply});}
 }
+/* ============================================================
+   BASE DES BLESSURES (les 150) — catégorie + conseil + exercices
+   cat: "ok" gérable | "care" sérieuse | "stop" urgence/grave
+   kw: mots-clés (sans accents) | ex: exercices de récup/rééduc
+   ============================================================ */
+const INJ=[
+// ---- 🔴 URGENCES / GRAVES : STOP, pas d'exercice ----
+{kw:["fracture","casse os","os casse","stress fracture","fatigue os","pouteau","colles","jones","scaphoide","metacarp","phalange","malleole","tibia casse","perone","femur","cote casse","clavicule","humerus","metatarse","calcaneum","bassin","vertebre","machoire","orbitaire","monteggia","boxeur","avulsion","arrachement"],cat:"stop",name:"Fracture / arrachement osseux",msg:"C'est une urgence : <b>arrête toute activité</b>, immobilise la zone et consulte aux urgences ou un médecin. Pas d'exercice ni d'étirement tant qu'un médecin n'a pas vu et traité la fracture. La reprise se fait seulement après consolidation et avec un protocole de kiné."},
+{kw:["rupture ligament","lca","lcp","ligament croise","cruciate","acl","rupture tendon","tendon achille rompu","achille rompu","quadricipital","long biceps rompu","coiffe rompu","rupture coiffe"],cat:"stop",name:"Rupture (ligament ou tendon)",msg:"Une rupture ne se gère pas par des exercices « pour voir si ça passe ». <b>Arrête le sport</b>, glace si ça gonfle, et fais évaluer par un médecin du sport (souvent IRM). La rééducation viendra plus tard, encadrée par un kiné. En attendant tu peux seulement entretenir doucement SANS douleur (contractions musculaires légères)."},
+{kw:["luxation","epaule demboite","rotule deboite","deboite","disjonction","subluxation","acromio"],cat:"stop",name:"Luxation",msg:"Une articulation déboîtée est une urgence : <b>ne tente pas de la remettre toi-même</b>, immobilise et va aux urgences. Aucun exercice avant qu'un médecin ait replacé et évalué l'articulation."},
+{kw:["commotion","traumatisme cranien","crane","sous-dural","sous dural","perte de connaissance","evanoui","whiplash","coup du lapin"],cat:"stop",name:"Choc à la tête / commotion",msg:"⚠️ Tête = prudence maximale. <b>Arrête immédiatement</b>, ne reprends pas le sport le jour même. Surveille maux de tête, nausées, vertiges, confusion. Consulte un médecin sans tarder ; appelle les secours si vomissements, somnolence anormale ou perte de connaissance. Aucun exercice avant le feu vert médical."},
+{kw:["coup de chaleur","insolation","hyponatremie","hypothermie","gelure","rhabdomyolyse","malaise","hypoglycemie","deshydrat"],cat:"stop",name:"Problème général (chaleur, froid, malaise)",msg:"Ce n'est pas une blessure musculaire : <b>arrête l'effort tout de suite</b>, mets-toi à l'abri (frais ou chaud selon le cas), hydrate-toi, et demande de l'aide. Coup de chaleur, malaise ou urine très foncée = secours/médecin. Pas d'exercice, c'est le repos et la prise en charge qui comptent."},
+{kw:["menisque","labrum","slap","bourrelet","hernie discale","spondylo","sciatique","cruralgie","ostechondrite","decollement retine","cornee","tympan","dent","epistaxis nez casse","oreille chou","chou-fleur","canal carpien","defile thoracique","compression nerf","nevralgie","capsulite","arthrose","coxarthrose","gonarthrose"],cat:"care",name:"Blessure à faire évaluer",msg:"Ce type d'atteinte demande un <b>diagnostic pro</b> (médecin/kiné) avant tout exercice : un mauvais mouvement peut aggraver. En attendant : repos relatif, glace si douleur/gonflement, et évite ce qui réveille la douleur. Demande-moi un programme de renfo doux SEULEMENT pour la prévention générale si tu veux."},
+// ---- 🟠 SÉRIEUSES : repos + rééduc progressive ----
+{kw:["entorse cheville","cheville","entorse haute","syndesmot","instabilite cheville"],cat:"care",name:"Entorse de la cheville",msg:"Protocole <b>GREC</b> 48-72 h : Glace 15 min plusieurs fois/jour, Repos relatif, Élévation, Compression.",ex:["Mobilité cheville (alphabet avec le pied) : 2×/jour","Équilibre sur 1 jambe : 3×30 s (puis yeux fermés)","Montées sur pointes (mollets) : 3×15","Marche puis trottinements légers quand la douleur a disparu"]},
+{kw:["entorse genou","entorse du genou","ligament interne genou","ligament externe genou","collateral"],cat:"care",name:"Entorse du genou",msg:"Glace, repos relatif et évite les pivots. Si le genou est instable ou très gonflé, fais-le voir.",ex:["Contraction du quadriceps (jambe tendue) : 3×10","Pont fessier : 3×15","Chaise contre le mur : 3×20 s","Vélo léger sans résistance quand ça ne fait plus mal"]},
+{kw:["entorse poignet","entorse pouce","pouce du skieur","collateral ulnaire","entorse doigt","entorse doigts"],cat:"care",name:"Entorse poignet / pouce / doigts",msg:"Glace 10-15 min, repos, et strapping léger possible. Évite la prise en charge forte.",ex:["Mobilité poignet (flexion/extension douce) : 3×15","Serrage d'une balle molle : 3×15","Écartement des doigts avec élastique : 3×15"]},
+{kw:["entorse cervicale","cervicalgie","torticolis"],cat:"care",name:"Cou (entorse cervicale / torticolis)",msg:"Chaleur douce, évite les mouvements brusques. Si fourmillements dans les bras, consulte.",ex:["Rotations lentes du cou : 5 par sens","Inclinaisons douces oreille vers épaule : 5 par côté","Rentrer le menton (double menton) : 3×10"]},
+{kw:["entorse lombaire","lumbago","lombalgie","mal de dos","bas du dos","lombaire"],cat:"care",name:"Bas du dos (lombaire)",msg:"Reste actif en douceur (le repos total prolongé n'aide pas), évite de soulever dos rond.",ex:["Cat-cow : 10 mouvements lents","Pont fessier : 3×15","Gainage planche (sans douleur) : 3×20 s","Étirement genoux vers la poitrine : 3×20 s"]},
+{kw:["entorse epaule","entorse coude"],cat:"care",name:"Entorse épaule / coude",msg:"Glace, repos relatif, reprends l'amplitude progressivement sans forcer.",ex:["Pendulaire épaule (bras qui balance) : 1 min","Mobilité coude flexion/extension : 3×15","Rotations externes à l'élastique : 3×12"]},
+{kw:["claquage","dechirure muscul","dechirure ischio","dechirure quadriceps","dechirure mollet","tennis leg","dechirure adducteur","elongation","contracture"],cat:"care",name:"Claquage / déchirure / élongation",msg:"Protocole <b>GREC</b> les premiers jours, pas d'étirement fort sur un muscle déchiré (ça aggrave). Reprise très progressive.",ex:["Contractions douces sans douleur (isométrique) : 3×10","Marche puis vélo léger quand la douleur baisse","Étirements TRÈS doux seulement quand ça ne tire plus","Renfo progressif : commence à 30% d'intensité"]},
+{kw:["pubalgie","adducteur"],cat:"care",name:"Pubalgie / adducteurs",msg:"Repos des accélérations et frappes, glace. Souvent long, la patience paie.",ex:["Serrage d'un ballon entre les genoux (isométrique) : 3×20 s","Pont fessier : 3×15","Gainage planche : 3×30 s"]},
+// ---- 🟢 GÉRABLES : conseils + exercices ----
+{kw:["osgood","schlat"],cat:"ok",name:"Osgood-Schlatter",msg:"Tu peux continuer tant que la douleur reste légère et part à l'échauffement. Glace après l'effort, réduis sauts/sprints.",ex:["Étirement quadriceps debout : 3×30 s/jambe","Chaise contre le mur : 3×30 s","Pont fessier : 3×15","Étirement ischios assis : 3×30 s"]},
+{kw:["sever"],cat:"ok",name:"Maladie de Sever (talon)",msg:"Fréquent chez l'ado, lié à la croissance. Glace après le sport, talonnettes possibles, réduis les sauts.",ex:["Étirement mollet contre un mur : 3×30 s","Montées sur pointes douces : 3×12","Roulage du pied sur une balle : 1 min"]},
+{kw:["sinding","larsen","johansson"],cat:"ok",name:"Sinding-Larsen-Johansson (pointe de rotule)",msg:"Cousin de l'Osgood, sous la rotule. Glace, réduis sauts et squats profonds.",ex:["Étirement quadriceps : 3×30 s/jambe","Chaise contre le mur : 3×20 s","Pont fessier : 3×15"]},
+{kw:["tendinite achille","achille","tendinopathie achille"],cat:"ok",name:"Tendinite d'Achille",msg:"Réduis la course, glace après l'effort. Le renfo excentrique est la clé.",ex:["Excentrique mollet (descente lente sur 1 marche) : 3×15","Étirement mollet contre un mur : 3×30 s","Montées sur pointes : 3×15"]},
+{kw:["tendinite rotulienne","genou du sauteur","tendon patellaire","patellaire","tendinopathie patellaire"],cat:"ok",name:"Tendinite rotulienne (genou du sauteur)",msg:"Réduis sauts et réceptions, glace. Renforce sans douleur vive.",ex:["Squat lent à 1 jambe (excentrique) : 3×10/jambe","Chaise contre le mur : 3×30 s","Étirement quadriceps : 3×30 s"]},
+{kw:["tendinite quadriceps","tendon quadricipital"],cat:"ok",name:"Tendinite du quadriceps",msg:"Réduis les squats lourds et sauts, glace après l'effort.",ex:["Chaise contre le mur : 3×30 s","Étirement quadriceps : 3×30 s/jambe","Pont fessier : 3×15"]},
+{kw:["coiffe des rotateurs","coiffe rotateurs","tendinite epaule","conflit sous-acromial","sous acromial","bursite epaule"],cat:"ok",name:"Épaule (coiffe / conflit)",msg:"Évite les mouvements au-dessus de la tête tant que ça gêne, glace si ça chauffe.",ex:["Rotations externes à l'élastique : 3×15","Élévations latérales légères : 3×12","Pendulaire épaule : 1 min","Étirement épaule croisée : 3×20 s"]},
+{kw:["tendinite biceps","long biceps"],cat:"ok",name:"Tendinite du biceps",msg:"Réduis les tractions et curls lourds, glace.",ex:["Curl biceps léger : 3×12","Étirement biceps (bras tendu contre un mur) : 3×20 s","Rotations externes épaule : 3×12"]},
+{kw:["tendinite poignet","de quervain","quervain"],cat:"ok",name:"Tendinite du poignet / De Quervain",msg:"Repos relatif, attelle possible, glace 10 min.",ex:["Mobilité poignet douce : 3×15","Étirement poignet (paume tirée vers le bas) : 3×20 s","Serrage balle molle : 3×15"]},
+{kw:["epicondylite","tennis elbow","tendinite coude","epitrochleite","golf elbow"],cat:"ok",name:"Coude (épicondylite / golf elbow)",msg:"Réduis les frappes/prises fortes, glace 10 min. Renfo excentrique de l'avant-bras.",ex:["Extension de poignet à l'élastique (excentrique) : 3×15","Étirement avant-bras : 3×20 s/bras","Serrage balle molle : 3×15"]},
+{kw:["moyen fessier","tendinite fessier","bursite hanche","trochanter"],cat:"ok",name:"Hanche (moyen fessier / bursite)",msg:"Évite de dormir sur le côté douloureux, réduis les côtes/escaliers, glace.",ex:["Abduction de hanche couché sur le côté : 3×15","Pont fessier : 3×15","Étirement fessier (pigeon) : 3×30 s"]},
+{kw:["psoas","tendinite psoas"],cat:"ok",name:"Tendinite du psoas",msg:"Réduis les montées de genoux explosives, étire en douceur.",ex:["Étirement du psoas (fente basse) : 3×30 s/côté","Gainage planche : 3×30 s","Pont fessier : 3×15"]},
+{kw:["periostite","tibial","tibia douleur","syndrome loge","compartiment"],cat:"ok",name:"Périostite tibiale",msg:"Réduis la course sur dur, glace le tibia après l'effort, vérifie tes chaussures.",ex:["Étirement mollet contre un mur : 3×30 s","Montées sur pointes : 3×15","Marche sur les talons : 2×30 s","Roulage du mollet au foam roller : 1 min"]},
+{kw:["essuie-glace","essuie glace","bandelette","ilio-tibial","ilio tibial","tfl"],cat:"ok",name:"Syndrome de l'essuie-glace (bandelette IT)",msg:"Douleur sur le côté du genou en course. Réduis le volume, glace.",ex:["Étirement bandelette IT (croiser les jambes, pencher) : 3×30 s","Renfo moyen fessier (abduction) : 3×15","Foam roller cuisse externe : 1 min"]},
+{kw:["syndrome rotulien","femoro-patellaire","femoro patellaire","chondromalacie","syndrome femoro"],cat:"ok",name:"Syndrome rotulien (fémoro-patellaire)",msg:"Douleur avant du genou (escaliers, position assise longue). Renforce quadriceps et fessiers.",ex:["Chaise contre le mur : 3×30 s","Pont fessier : 3×15","Extension de jambe assis (douce) : 3×15","Étirement quadriceps : 3×30 s"]},
+{kw:["fasciite","aponevros","plantaire","epine calcaneenne","talon"],cat:"ok",name:"Fasciite plantaire (sous le pied)",msg:"Douleur sous le talon, surtout le matin. Étire le mollet et la voûte, glace.",ex:["Roulage du pied sur une balle/bouteille froide : 2 min","Étirement mollet contre un mur : 3×30 s","Étirement de la voûte (orteils tirés vers soi) : 3×30 s","Ramasser une serviette avec les orteils : 3×15"]},
+{kw:["metatarsalgie","hallux","ongle incarne","ampoule"],cat:"ok",name:"Avant-pied (métatarsalgie, ampoules…)",msg:"Vérifie tes chaussures (taille, usure). Repos si douleur, protège les ampoules.",ex:["Mobilité des orteils : 2×/jour","Étirement de la voûte plantaire : 3×30 s","Renfo pieds : marche sur la pointe puis le talon : 2×30 s"]},
+{kw:["bursite coude","hygroma"],cat:"ok",name:"Bursite du coude (hygroma)",msg:"Évite l'appui sur le coude, glace si gonflé. Si rouge/chaud/fièvre, consulte.",ex:["Mobilité coude douce : 3×15","Étirement avant-bras : 3×20 s"]},
+{kw:["bursite genou"],cat:"ok",name:"Bursite du genou",msg:"Évite la position à genoux, glace. Repos relatif.",ex:["Contraction quadriceps : 3×10","Pont fessier : 3×15","Mobilité genou douce : 3×15"]},
+{kw:["doigt en maillet","mallet","doigt de jersey","jersey"],cat:"care",name:"Doigt en maillet / de jersey",msg:"Le bout du doigt ne se redresse plus : il faut une attelle adaptée et un avis médical rapide. Pas d'exercice avant.",ex:[]},
+{kw:["point de cote"],cat:"ok",name:"Point de côté",msg:"Bénin : ralentis, expire fort en appuyant sur la zone, respire par le ventre. Évite de manger juste avant l'effort.",ex:["Respiration ventrale lente : 1 min","Étirement du flanc (bras au-dessus de la tête, penche) : 20 s/côté"]},
+{kw:["asthme effort","asthme d'effort"],cat:"care",name:"Asthme d'effort",msg:"Si tu siffles ou manques d'air à l'effort, parles-en à un médecin (un traitement existe). Échauffe-toi progressivement et évite l'air froid sec.",ex:["Échauffement très progressif : 10 min","Respiration nasale à l'effort modéré"]},
+{kw:["crampe","courbature","contusion","bequille","hematome","ecchymose","eraflure","ecorchure","abrasion","brulure friction","tapis","plaie","coupure","tendinose","enthesopathie"],cat:"ok",name:"Petit bobo (crampe, courbature, contusion…)",msg:"Rien de grave en général. Crampe → étire et hydrate. Courbature → récup active, ça part en 24-72 h. Contusion/bleu → glace 15 min. Plaie → nettoie et protège.",ex:["Étirement doux de la zone : 3×30 s","Hydratation + sels minéraux","Récup active (marche/vélo léger) : 10 min"]}
+];
+
+function findInjury(t){
+  // 0) "rupture/dechirure complete d'un tendon" = toujours grave, quel que soit le tendon nommé
+  if(/(rupture|rompu|dechir).{0,20}(tendon|achille|quadricip|patellaire|coiffe)/.test(t)
+     || /(tendon|achille).{0,20}(rompu|rupture|dechir)/.test(t)){
+    return INJ.find(i=>i.name.startsWith("Rupture (ligament"));
+  }
+  // 1) d'abord les cas GRAVES (stop)
+  for(const inj of INJ){ if(inj.cat==="stop"){ for(const w of inj.kw){ if(t.includes(w)) return inj; } } }
+  // 2) ensuite les sérieuses
+  for(const inj of INJ){ if(inj.cat==="care"){ for(const w of inj.kw){ if(t.includes(w)) return inj; } } }
+  // 3) enfin les gérables
+  for(const inj of INJ){ if(inj.cat==="ok"){ for(const w of inj.kw){ if(t.includes(w)) return inj; } } }
+  return null;
+}
+function renderInjury(inj){
+  const icon=inj.cat==="stop"?"🔴":inj.cat==="care"?"🟠":"🟢";
+  let out=icon+" <b>"+inj.name+"</b><br>"+inj.msg;
+  if(inj.cat!=="stop" && inj.ex && inj.ex.length){
+    out+="<br><br><b>Exercices utiles :</b><br>"+inj.ex.map((e,i)=>(i+1)+") "+e).join("<br>");
+  }
+  if(inj.cat==="stop"){ out+="<br><br><i>Je ne te donne pas d'exercice ici : ce serait risqué. La priorité, c'est l'avis médical.</i>"; }
+  return out;
+}
 function fallback(q){
   const t=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); // sans accents
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
@@ -382,12 +453,22 @@ function fallback(q){
   // --- Détection : est-ce une QUESTION / demande de conseil ? ---
   const askContinue = /(continuer|continue|devrais|dois-?je|est-?ce que je|puis-?je|je peux|arreter|stop|reposer|repos|pause|forcer|intensite|trop|mal de faire|risque|grave|inquiet|normal|should i|can i|keep|rest)/.test(t);
   const hasOsgood = /(osgood|schlat)/.test(t);
+  const hasLCA = /(ligament|croise|croises|lca|lcp|cruciate|acl)/.test(t);
   const zone = /genou/.test(t)?"genou": /cheville|entorse/.test(t)?"cheville": /dos|lombaire/.test(t)?"dos": /epaule/.test(t)?"épaule": /coude/.test(t)?"coude": "";
 
   // === MODE CONVERSATION : répond à la question avant de donner un programme ===
-  if(askContinue){
+  if(askContinue||hasLCA){
     let intro="";
-    if(hasOsgood){
+    if(hasLCA){
+      intro="🦵 <b>Ligaments croisés (LCA) — à prendre au sérieux</b><br>"+
+        "Une atteinte des ligaments croisés n'est <b>pas</b> une douleur qu'on gère juste en baissant l'intensité. "+
+        "Si tu as ressenti un craquement, un genou qui « lâche » ou se dérobe, un gonflement rapide, ou une instabilité, il faut <b>arrêter le sport en pivot/contact</b> et faire évaluer le genou par un médecin du sport ou un kiné. Seul un examen (parfois une IRM) peut dire s'il s'agit d'une entorse bénigne ou d'une rupture.<br><br>"+
+        "En attendant le rendez-vous :<br>"+
+        "• Évite les sports avec pivots, sauts et changements de direction (foot, basket, padel, ski…).<br>"+
+        "• Glace 15 min plusieurs fois par jour si ça gonfle.<br>"+
+        "• Tu peux entretenir la cuisse en douceur SANS douleur : contractions du quadriceps assis, pont fessier léger.<br><br>"+
+        "La reprise se fait <b>uniquement</b> avec l'accord d'un pro et un protocole de rééducation — pas en testant si « ça passe ».";
+    } else if(hasOsgood){
       intro="🦵 <b>Osgood-Schlatter & entraînement</b><br>"+
         "La règle simple : tu peux continuer <b>tant que la douleur reste légère (≤ 3/10) et disparaît après l'échauffement</b>. "+
         "Si elle te fait boiter, augmente pendant l'effort, ou reste douloureuse le lendemain, c'est le signe qu'il faut <b>baisser l'intensité</b>.<br><br>"+
@@ -411,6 +492,9 @@ function fallback(q){
   }
 
   // === MODE PROGRAMME (listes d'exercices) ===
+  // Priorité : blessure précise reconnue dans la base des 150
+  const inj=findInjury(t);
+  if(inj) return renderInjury(inj);
   if(hasOsgood)return "🦵 <b>Osgood-Schlatter — reprise</b><br>1) Glace 15 min après l'effort<br>2) Étirement quadriceps : 3×30 s/jambe<br>3) Chaise contre le mur : 3×30 s<br>4) Pont fessier : 3×15<br>5) Réduis sauts/sprints, remonte +10%/semaine.";
   if(t.includes("genou"))return "🦵 <b>Genou</b><br>1) Glace 15 min si gonflement<br>2) Chaise contre le mur : 3×30 s<br>3) Pont fessier : 3×15<br>4) Mollets debout : 3×15<br>5) Etirement du papillon : 3×30 s.";
   if(t.includes("cheville")||t.includes("entorse"))return "🦶 <b>Cheville</b><br>1) GREC : Glace, Repos, Elevation, Compression<br>2) Equilibre 1 jambe : 3×30 s<br>3) Mollets debout : 3×15<br>4) Jumping jacks legers quand ca ne fait plus mal.";
