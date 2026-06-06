@@ -166,7 +166,7 @@
         <button id="lang-es" onclick="setLang('es')">Español</button>
       </div>
       <div style="margin-top:22px;display:flex;gap:10px">
-        <button class="ghost" onclick="editProfile()" data-i="editProfile">Modifier le profil</button>
+        <button class="ghost" onclick="goEditProfile()" data-i="editProfile">Modifier le profil</button>
         <button class="danger" onclick="logout()" data-i="logout">Déconnexion</button>
       </div>
     </div>
@@ -259,7 +259,7 @@ function login(){
   if(data&&data.sport){loadApp(data);}else{show("screen-form");}
 }
 function logout(){closeSettings();localStorage.removeItem("coach_user");currentUser=null;show("screen-login");}
-function editProfile(){
+function goEditProfile(){
   closeSettings();
   // pré-remplit le formulaire avec les infos déjà connues
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
@@ -270,8 +270,8 @@ function editProfile(){
   show("screen-form");
 }
 
-function openSettings(){renderSettings();$("settings").classList.remove("hidden");}
-function closeSettings(){const s=$("settings");if(s)s.classList.add("hidden");}
+function openSettings(){renderSettings();const s=$("settings");s.classList.remove("hidden");s.style.display="flex";}
+function closeSettings(){const s=$("settings");if(s){s.classList.add("hidden");s.style.display="none";}}
 function renderSettings(){
   try{
     const cred=JSON.parse(localStorage.getItem("coach_cred_"+currentUser)||"{}");
@@ -315,7 +315,7 @@ function loadApp(data){
     {t:T("echaufT"),d:k.echauf.join(" · ")},
     {t:T("renfoT"),d:k.renfo.join(" · ")},
     {t:T("recupT"),d:k.recup.join(" · ")},
-    {t:T("ageT"),d:ageNum<16?"":(ageNum>50?"":"")||(ageNum<16?"+ ludique, pas de charges lourdes":ageNum>50?"+ d'échauffement et de récup":"OK")},
+    {t:T("ageT"),d:ageNum<16?"+ ludique, pas de charges lourdes":ageNum>50?"+ d'échauffement et de récup":"Équilibre charge / récup"},
     {t:T("freqT"),d:parseInt(data.freq)>=5?"1 jour de repos complet mini":"Varie les intensités"},
     {t:T("levelT")+" ("+lvl+")",d:data.level==="0"?"+10% max/semaine, technique d'abord":data.level==="3"?"Surveille la fatigue, phases de décharge":"Régularité + écoute des douleurs"}
   ];
