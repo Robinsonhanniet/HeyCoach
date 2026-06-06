@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Sportif - Prévention des blessures</title>
+<style>
+  :root{
+    --bg:#0f1419; --surface:#1a212b; --surface2:#222c38;
+    --txt:#e8edf2; --muted:#9aa7b4; --accent:#1d9e75; --accent2:#185fa5;
+    --border:#2c3744; --danger:#e24b4a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  body{background:var(--bg);color:var(--txt);min-height:100vh;line-height:1.6}
+  .wrap{max-width:880px;margin:0 auto;padding:24px}
+  h1{font-size:26px;font-weight:600;margin-bottom:4px}
+  h2{font-size:19px;font-weight:600;margin-bottom:16px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+  label{display:block;font-size:14px;color:var(--muted);margin:14px 0 6px}
+  input,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+    padding:11px 12px;color:var(--txt);font-size:15px}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:12px 20px;
+    font-size:15px;font-weight:500;cursor:pointer;transition:opacity .15s}
+  button:hover{opacity:.88}
+  button.ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+  .hidden{display:none}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .row > div{flex:1;min-width:160px}
+  .plan-item{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+    padding:14px 16px;margin-bottom:12px}
+  .plan-item h3{font-size:15px;margin-bottom:4px}
+  .plan-item p{font-size:14px;color:var(--muted)}
+  .badge{display:inline-block;background:var(--surface2);border:1px solid var(--border);
+    border-radius:20px;padding:4px 12px;font-size:13px;color:var(--muted);margin:0 6px 6px 0}
+  /* Chat */
+  .chat-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+    height:340px;overflow-y:auto;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:80%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5}
+  .msg.user{align-self:flex-end;background:var(--accent2);color:#fff;border-bottom-right-radius:3px}
+  .msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:3px}
+  .msg.bot b{color:var(--accent)}
+  .chat-input{display:flex;gap:10px}
+  .chat-input input{flex:1}
+  .typing{color:var(--muted);font-size:13px;font-style:italic}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .userinfo{font-size:14px;color:var(--muted)}
+  a.linkbtn{color:var(--accent);cursor:pointer;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ ÉCRAN CONNEXION ============ -->
+  <div id="screen-login" class="card" style="max-width:420px;margin:60px auto">
+    <h1>🏃 Coach Sportif</h1>
+    <p class="sub">Connecte-toi pour accéder à ton programme et au coach.</p>
+    <label>Nom / Pseudo</label>
+    <input id="login-name" placeholder="Ex: Alex">
+    <label>Mot de passe (local)</label>
+    <input id="login-pass" type="password" placeholder="••••••">
+    <div style="margin-top:18px;display:flex;gap:10px">
+      <button onclick="login()">Se connecter</button>
+      <button class="ghost" onclick="login()">Créer un compte</button>
+    </div>
+    <p class="sub" style="margin-top:14px;font-size:12px">Les données restent stockées localement dans ton navigateur.</p>
+  </div>
+
+  <!-- ============ ÉCRAN QUESTIONNAIRE ============ -->
+  <div id="screen-form" class="hidden">
+    <div class="topbar">
+      <div class="userinfo">Connecté : <b id="welcome-name"></b></div>
+      <a class="linkbtn" onclick="logout()">Déconnexion</a>
+    </div>
+    <div class="card">
+      <h2>Parle-moi de ta pratique</h2>
+      <p class="sub">Ces infos servent à créer un programme adapté pour éviter les blessures.</p>
+      <label>Quel âge as-tu ?</label>
+      <input id="q-age" type="number" min="8" max="100" placeholder="Ex: 25">
+      <label>Quel sport pratiques-tu ?</label>
+      <select id="q-sport">
+        <option value="">— Choisir —</option>
+        <option>Course à pied</option><option>Musculation</option><option>Football</option>
+        <option>Basketball</option><option>Tennis</option><option>Natation</option>
+        <option>Cyclisme</option><option>Crossfit</option><option>Yoga</option><option>Autre</option>
+      </select>
+      <div class="row">
+        <div>
+          <label>Fréquence (séances/semaine)</label>
+          <select id="q-freq">
+            <option value="">—</option>
+            <option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6+</option>
+          </select>
+        </div>
+        <div>
+          <label>Ton niveau</label>
+          <select id="q-level">
+            <option value="">—</option>
+            <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option><option>Compétiteur</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:20px">
+        <button onclick="generatePlan()">Générer mon programme</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ÉCRAN PROGRAMME + COACH ============ -->
+  <div id="screen-app" class="hidden">
+    <div class="topbar">
+      <div class="userinfo">Connecté : <b id="welcome-name2"></b></div>
+      <div>
+        <a class="linkbtn" onclick="editProfile()">Modifier mon profil</a> &nbsp;·&nbsp;
+        <a class="linkbtn" onclick="logout()">Déconnexion</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Ton profil</h2>
+      <div id="profile-badges"></div>
+    </div>
+
+    <div class="card">
+      <h2>Programme anti-blessure recommandé</h2>
+      <p class="sub">Adapté à ton sport, ta fréquence, ton niveau et ton âge.</p>
+      <div id="plan"></div>
+    </div>
+
+    <div class="card">
+      <h2>💬 Discute avec Coach</h2>
+      <p class="sub">Pose tes questions sur les blessures, la récupération, la prévention…</p>
+      <div class="chat-box" id="chat"></div>
+      <div class="chat-input">
+        <input id="chat-input" placeholder="Ex: j'ai mal au genou après ma course, que faire ?" onkeydown="if(event.key==='Enter')sendMsg()">
+        <button onclick="sendMsg()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   BASE DE CONNAISSANCES SPORTIVES (fallback hors-ligne)
+   ============================================================ */
+const KB = {
+  sports: {
+    "Course à pied":{zones:["genoux","tendon d'Achille","tibias (périostite)"],echauf:"5-10 min marche rapide + montées de genoux + talons-fesses",renfo:"Mollets, fessiers, gainage",recup:"Étirements doux mollets/ischios, foam roller"},
+    "Musculation":{zones:["épaules","bas du dos","poignets"],echauf:"Mobilité articulaire + séries légères de mise en route",renfo:"Coiffe des rotateurs, gainage lombaire",recup:"Étirements + jours de repos par groupe musculaire"},
+    "Football":{zones:["ischio-jambiers","cheville","genou (LCA)"],echauf:"Course progressive + accélérations + changements de direction",renfo:"Ischios (Nordic curl), proprioception cheville",recup:"Retour au calme + étirements + hydratation"},
+    "Basketball":{zones:["chevilles","genoux","doigts"],echauf:"Sauts progressifs + déplacements latéraux",renfo:"Proprioception, quadriceps, mollets",recup:"Glace si gonflement, étirements"},
+    "Tennis":{zones:["coude (épicondylite)","épaule","poignet"],echauf:"Rotations épaule/poignet + frappes légères",renfo:"Avant-bras, coiffe des rotateurs",recup:"Étirements avant-bras, glace coude si douleur"},
+    "Natation":{zones:["épaules","cou","bas du dos"],echauf:"Mobilité épaules + 200m souple",renfo:"Coiffe des rotateurs, dorsaux",recup:"Étirements épaules/pectoraux"},
+    "Cyclisme":{zones:["genoux","bas du dos","nuque"],echauf:"10 min à faible résistance",renfo:"Gainage, fessiers, ischios",recup:"Étirements quadriceps/ischios, bonne position selle"},
+    "Crossfit":{zones:["épaules","bas du dos","poignets"],echauf:"Mobilité complète + mouvements à vide",renfo:"Technique avant charge, gainage",recup:"Mobilité + récupération active"},
+    "Yoga":{zones:["poignets","bas du dos","ischio-jambiers"],echauf:"Salutations au soleil lentes",renfo:"Gainage doux",recup:"Respiration, relaxation finale (savasana)"},
+    "Autre":{zones:["articulations sollicitées","muscles principaux"],echauf:"Échauffement général 10 min",renfo:"Gainage + renforcement ciblé",recup:"Étirements + repos"}
+  }
+};
+
+/* ============================================================
+   GESTION COMPTE / ÉTAT (localStorage)
+   ============================================================ */
+let currentUser = null;
+const $ = id => document.getElementById(id);
+function show(screen){["screen-login","screen-form","screen-app"].forEach(s=>$(s).classList.add("hidden"));$(screen).classList.remove("hidden");}
+
+function login(){
+  const name=$("login-name").value.trim();
+  const pass=$("login-pass").value.trim();
+  if(!name||!pass){alert("Entre un nom et un mot de passe.");return;}
+  currentUser=name;
+  localStorage.setItem("coach_user",name);
+  const data=JSON.parse(localStorage.getItem("coach_data_"+name)||"null");
+  $("welcome-name").textContent=name;
+  $("welcome-name2").textContent=name;
+  if(data&&data.sport){ loadApp(data); } else { show("screen-form"); }
+}
+function logout(){localStorage.removeItem("coach_user");currentUser=null;show("screen-login");}
+function editProfile(){show("screen-form");}
+
+/* ============================================================
+   GÉNÉRATION DU PROGRAMME
+   ============================================================ */
+function generatePlan(){
+  const age=$("q-age").value, sport=$("q-sport").value, freq=$("q-freq").value, level=$("q-level").value;
+  if(!age||!sport||!freq||!level){alert("Remplis tous les champs.");return;}
+  const data={age,sport,freq,level};
+  localStorage.setItem("coach_data_"+currentUser,JSON.stringify(data));
+  loadApp(data);
+}
+
+function loadApp(data){
+  show("screen-app");
+  // Badges profil
+  $("profile-badges").innerHTML=`
+    <span class="badge">Âge : ${data.age} ans</span>
+    <span class="badge">Sport : ${data.sport}</span>
+    <span class="badge">Fréquence : ${data.freq} séances/sem</span>
+    <span class="badge">Niveau : ${data.level}</span>`;
+  // Programme
+  const k=KB.sports[data.sport]||KB.sports["Autre"];
+  const ageNum=parseInt(data.age);
+  let ageNote = ageNum<16 ? "Privilégie le ludique, évite les charges lourdes (croissance)."
+              : ageNum>50 ? "Augmente le temps d'échauffement et la récupération."
+              : "Profil adulte : équilibre charge / récupération.";
+  let freqNote = parseInt(data.freq)>=5 ? "Fréquence élevée : intègre au moins 1 jour de repos complet pour éviter le surentraînement."
+              : "Bonne fréquence : pense à varier les intensités.";
+  const items=[
+    {t:"⚠️ Zones à surveiller",d:k.zones.join(", ")},
+    {t:"🔥 Échauffement (avant chaque séance)",d:k.echauf},
+    {t:"💪 Renforcement préventif (2x/sem)",d:k.renfo},
+    {t:"🧊 Récupération",d:k.recup},
+    {t:"👤 Adapté à ton âge",d:ageNote},
+    {t:"📅 Adapté à ta fréquence",d:freqNote},
+    {t:"📈 Adapté à ton niveau ("+data.level+")",d:
+      data.level==="Débutant"?"Progresse de 10% max par semaine. Technique avant intensité.":
+      data.level==="Compétiteur"?"Surveille les signaux de fatigue, planifie des phases de décharge.":
+      "Maintiens la régularité et écoute les douleurs inhabituelles."}
+  ];
+  $("plan").innerHTML=items.map(i=>`<div class="plan-item"><h3>${i.t}</h3><p>${i.d}</p></div>`).join("");
+  // Reset chat
+  $("chat").innerHTML="";
+  addMsg("bot","Salut "+currentUser+" 👋 Je suis <b>Coach</b>. Pose-moi tes questions sur la prévention des blessures, la récup ou une douleur précise.");
+}
+
+/* ============================================================
+   CHAT COACH — utilise l'API Claude, fallback base locale
+   ============================================================ */
+let history=[];
+function addMsg(role,html){
+  const d=document.createElement("div");d.className="msg "+role;d.innerHTML=html;
+  $("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight;
+}
+
+async function sendMsg(){
+  const inp=$("chat-input");const text=inp.value.trim();if(!text)return;
+  inp.value="";addMsg("user",text);
+  history.push({role:"user",content:text});
+  const typing=document.createElement("div");typing.className="typing";typing.textContent="Coach écrit…";
+  $("chat").appendChild(typing);$("chat").scrollTop=$("chat").scrollHeight;
+
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  const systemContext=`Tu es "Coach", un assistant expert en médecine du sport et prévention des blessures.
+Profil de l'utilisateur : ${data.age} ans, sport=${data.sport}, fréquence=${data.freq}/sem, niveau=${data.level}.
+Réponds en français, de façon claire, bienveillante et précise. Donne des conseils de prévention, récupération et entraînement.
+IMPORTANT : pour toute douleur intense, persistante, ou en cas de doute, recommande de consulter un médecin ou kiné. Tu ne remplaces pas un professionnel de santé.`;
+
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",max_tokens:1000,
+        system:systemContext,
+        messages:history.slice(-10)
+      })
+    });
+    const json=await res.json();
+    const reply=json.content.filter(c=>c.type==="text").map(c=>c.text).join("\n")||fallback(text);
+    typing.remove();addMsg("bot",reply.replace(/\n/g,"<br>"));
+    history.push({role:"assistant",content:reply});
+  }catch(e){
+    typing.remove();
+    const reply=fallback(text);
+    addMsg("bot",reply);
+    history.push({role:"assistant",content:reply});
+  }
+}
+
+/* Réponses locales si l'API n'est pas disponible */
+function fallback(q){
+  const t=q.toLowerCase();
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  const k=KB.sports[data.sport]||KB.sports["Autre"];
+  if(t.includes("genou"))return "Pour le genou : évite de forcer, applique du froid 15 min si gonflement, et renforce quadriceps + fessiers pour stabiliser. Si la douleur dure plus de quelques jours, consulte un kiné. 🩺";
+  if(t.includes("dos")||t.includes("lombaire"))return "Pour le dos : renforce ton gainage, soigne ta posture et évite les charges mal exécutées. Étire doucement. Douleur irradiante ou persistante → médecin.";
+  if(t.includes("épaule"))return "Pour l'épaule : travaille la coiffe des rotateurs avec des élastiques légers et évite les mouvements au-dessus de la tête tant que ça fait mal.";
+  if(t.includes("échauf"))return "Échauffement conseillé pour "+(data.sport||"ton sport")+" : "+k.echauf+".";
+  if(t.includes("récup")||t.includes("recup"))return "Récupération : "+k.recup+". Dors bien et hydrate-toi !";
+  if(t.includes("courbature"))return "Les courbatures (DOMS) sont normales 24-72h après l'effort. Récupération active légère, hydratation et sommeil aident. Pas de douleur vive = pas d'inquiétude.";
+  if(t.includes("prévenir")||t.includes("éviter")||t.includes("blessure"))return "Prévention pour "+(data.sport||"ton sport")+" : échauffe-toi ("+k.echauf+"), renforce ("+k.renfo+"), et surveille : "+k.zones.join(", ")+".";
+  return "Bonne question ! En général pour "+(data.sport||"ton sport")+", surveille "+k.zones.join(", ")+", échauffe-toi bien et écoute ton corps. Pour une douleur précise, donne-moi plus de détails (où, quand, intensité). En cas de doute, consulte un professionnel de santé. 🩺";
+}
+
+/* ============================================================
+   AUTO-CONNEXION
+   ============================================================ */
+window.onload=()=>{
+  const saved=localStorage.getItem("coach_user");
+  if(saved){currentUser=saved;$("welcome-name").textContent=saved;$("welcome-name2").textContent=saved;
+    const data=JSON.parse(localStorage.getItem("coach_data_"+saved)||"null");
+    if(data&&data.sport){loadApp(data);}else{show("screen-form");}
+  }else{show("screen-login");}
+};
+</script>
+</body>
+</html>
