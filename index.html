@@ -34,7 +34,6 @@
   .plan-item p{font-size:14px;color:var(--muted)}
   .badge{display:inline-block;background:var(--surface2);border:1px solid var(--border);
     border-radius:20px;padding:4px 12px;font-size:13px;color:var(--muted);margin:0 6px 6px 0}
-  /* Chat */
   .chat-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
     height:340px;overflow-y:auto;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:12px}
   .msg{max-width:80%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5}
@@ -52,7 +51,7 @@
 <body>
 <div class="wrap">
 
-  <!-- ============ ÉCRAN CONNEXION ============ -->
+  <!-- ============ ECRAN CONNEXION ============ -->
   <div id="screen-login" class="card" style="max-width:420px;margin:60px auto">
     <h1>🏃 Coach Sportif</h1>
     <p class="sub">Connecte-toi pour accéder à ton programme et au coach.</p>
@@ -67,7 +66,7 @@
     <p class="sub" style="margin-top:14px;font-size:12px">Les données restent stockées localement dans ton navigateur.</p>
   </div>
 
-  <!-- ============ ÉCRAN QUESTIONNAIRE ============ -->
+  <!-- ============ ECRAN QUESTIONNAIRE ============ -->
   <div id="screen-form" class="hidden">
     <div class="topbar">
       <div class="userinfo">Connecté : <b id="welcome-name"></b></div>
@@ -79,12 +78,7 @@
       <label>Quel âge as-tu ?</label>
       <input id="q-age" type="number" min="8" max="100" placeholder="Ex: 25">
       <label>Quel sport pratiques-tu ?</label>
-      <select id="q-sport">
-        <option value="">— Choisir —</option>
-        <option>Course à pied</option><option>Musculation</option><option>Football</option>
-        <option>Basketball</option><option>Tennis</option><option>Natation</option>
-        <option>Cyclisme</option><option>Crossfit</option><option>Yoga</option><option>Autre</option>
-      </select>
+      <select id="q-sport"></select>
       <div class="row">
         <div>
           <label>Fréquence (séances/semaine)</label>
@@ -108,7 +102,7 @@
     </div>
   </div>
 
-  <!-- ============ ÉCRAN PROGRAMME + COACH ============ -->
+  <!-- ============ ECRAN PROGRAMME + COACH ============ -->
   <div id="screen-app" class="hidden">
     <div class="topbar">
       <div class="userinfo">Connecté : <b id="welcome-name2"></b></div>
@@ -134,7 +128,7 @@
       <p class="sub">Pose tes questions sur les blessures, la récupération, la prévention…</p>
       <div class="chat-box" id="chat"></div>
       <div class="chat-input">
-        <input id="chat-input" placeholder="Ex: j'ai mal au genou après ma course, que faire ?" onkeydown="if(event.key==='Enter')sendMsg()">
+        <input id="chat-input" placeholder="Ex: comment récupérer après une grosse séance ?" onkeydown="if(event.key==='Enter')sendMsg()">
         <button onclick="sendMsg()">Envoyer</button>
       </div>
     </div>
@@ -144,25 +138,41 @@
 
 <script>
 /* ============================================================
-   BASE DE CONNAISSANCES SPORTIVES (fallback hors-ligne)
+   BASE DE CONNAISSANCES SPORTIVES - large gamme de sports
    ============================================================ */
 const KB = {
   sports: {
-    "Course à pied":{zones:["genoux","tendon d'Achille","tibias (périostite)"],echauf:"5-10 min marche rapide + montées de genoux + talons-fesses",renfo:"Mollets, fessiers, gainage",recup:"Étirements doux mollets/ischios, foam roller"},
-    "Musculation":{zones:["épaules","bas du dos","poignets"],echauf:"Mobilité articulaire + séries légères de mise en route",renfo:"Coiffe des rotateurs, gainage lombaire",recup:"Étirements + jours de repos par groupe musculaire"},
-    "Football":{zones:["ischio-jambiers","cheville","genou (LCA)"],echauf:"Course progressive + accélérations + changements de direction",renfo:"Ischios (Nordic curl), proprioception cheville",recup:"Retour au calme + étirements + hydratation"},
-    "Basketball":{zones:["chevilles","genoux","doigts"],echauf:"Sauts progressifs + déplacements latéraux",renfo:"Proprioception, quadriceps, mollets",recup:"Glace si gonflement, étirements"},
-    "Tennis":{zones:["coude (épicondylite)","épaule","poignet"],echauf:"Rotations épaule/poignet + frappes légères",renfo:"Avant-bras, coiffe des rotateurs",recup:"Étirements avant-bras, glace coude si douleur"},
-    "Natation":{zones:["épaules","cou","bas du dos"],echauf:"Mobilité épaules + 200m souple",renfo:"Coiffe des rotateurs, dorsaux",recup:"Étirements épaules/pectoraux"},
-    "Cyclisme":{zones:["genoux","bas du dos","nuque"],echauf:"10 min à faible résistance",renfo:"Gainage, fessiers, ischios",recup:"Étirements quadriceps/ischios, bonne position selle"},
-    "Crossfit":{zones:["épaules","bas du dos","poignets"],echauf:"Mobilité complète + mouvements à vide",renfo:"Technique avant charge, gainage",recup:"Mobilité + récupération active"},
-    "Yoga":{zones:["poignets","bas du dos","ischio-jambiers"],echauf:"Salutations au soleil lentes",renfo:"Gainage doux",recup:"Respiration, relaxation finale (savasana)"},
-    "Autre":{zones:["articulations sollicitées","muscles principaux"],echauf:"Échauffement général 10 min",renfo:"Gainage + renforcement ciblé",recup:"Étirements + repos"}
+    "Course à pied":{zones:["genoux","tendon d'Achille","tibias (périostite)"],echauf:"5-10 min marche rapide + 20 montées de genoux + 20 talons-fesses + 10 fentes par jambe",renfo:"Mollets, fessiers, gainage",recup:["Étirement mollet debout contre un mur : 3 × 30 s par jambe","Foam roller cuisses et mollets : 1 min par zone","Marche de récupération : 10 min souple"]},
+    "Padel":{zones:["coude (épicondylite)","épaule","cheville","bas du dos"],echauf:"Mobilité poignets/épaules + 15 frappes douces + 10 déplacements latéraux par côté",renfo:"Avant-bras, coiffe des rotateurs, gainage, proprioception cheville",recup:["Étirement avant-bras (poignet tiré vers le bas) : 3 × 20 s par bras","Étirement épaule croisée devant la poitrine : 3 × 20 s","Glace 10 min sur le coude si chauffe"]},
+    "Tennis":{zones:["coude (épicondylite)","épaule","poignet"],echauf:"Rotations épaule/poignet + 20 frappes légères progressives",renfo:"Avant-bras, coiffe des rotateurs",recup:["Étirement avant-bras : 3 × 20 s par bras","Rotations externes épaule à l'élastique : 3 × 12","Glace coude 10 min si douleur"]},
+    "Football":{zones:["ischio-jambiers","cheville","genou (LCA)"],echauf:"Course progressive 5 min + 6 accélérations + 10 changements de direction",renfo:"Nordic curl (ischios), proprioception cheville, gainage",recup:["Étirement ischios assis : 3 × 30 s","Étirement quadriceps debout : 3 × 30 s par jambe","Retour au calme : 5 min footing léger"]},
+    "Basketball":{zones:["chevilles","genoux","doigts"],echauf:"Sauts progressifs + 10 déplacements latéraux + 10 squats à vide",renfo:"Proprioception cheville, quadriceps, mollets",recup:["Étirement mollets : 3 × 30 s","Glace cheville/genou 10 min si gonflement","Auto-massage voûte plantaire avec une balle : 1 min par pied"]},
+    "Handball":{zones:["épaule","genou (LCA)","doigts","cheville"],echauf:"Mobilité épaule + 15 tirs progressifs + appuis dynamiques",renfo:"Coiffe des rotateurs, ischios, proprioception",recup:["Rotations épaule à l'élastique : 3 × 12","Étirement ischios : 3 × 30 s","Glace épaule si chauffe"]},
+    "Rugby":{zones:["épaules","cou","genoux","côtes"],echauf:"Course + mobilité cou/épaules + plaquages à vide progressifs",renfo:"Cou, gainage, ischios, quadriceps",recup:["Gainage léger : 3 × 30 s","Étirement quadriceps : 3 × 30 s par jambe","Récup active vélo doux 10 min"]},
+    "Volleyball":{zones:["épaule","genoux (rotule)","doigts","chevilles"],echauf:"Mobilité épaule + 10 sauts + 10 smashs à vide",renfo:"Coiffe des rotateurs, quadriceps (genou du sauteur), mollets",recup:["Rotations externes épaule : 3 × 12","Étirement quadriceps : 3 × 30 s","Glace genou 10 min si tendinite rotulienne"]},
+    "Badminton":{zones:["épaule","cheville","genou","coude"],echauf:"Mobilité poignet/épaule + 10 fentes par jambe + frappes légères",renfo:"Mollets, proprioception cheville, avant-bras",recup:["Étirement mollet : 3 × 30 s","Étirement avant-bras : 3 × 20 s","Auto-massage mollet au foam roller : 1 min"]},
+    "Musculation":{zones:["épaules","bas du dos","poignets"],echauf:"Mobilité articulaire + 2 séries légères de mise en route par exercice",renfo:"Coiffe des rotateurs, gainage lombaire",recup:["Étirement pectoraux dans un cadre de porte : 3 × 30 s","Gainage planche : 3 × 30 s","Repos 48 h par groupe musculaire travaillé"]},
+    "Crossfit":{zones:["épaules","bas du dos","poignets","genoux"],echauf:"Mobilité complète 5 min + mouvements à vide des exercices du jour",renfo:"Technique avant charge, gainage, mobilité épaule",recup:["Mobilité hanche (90/90) : 1 min par côté","Gainage : 3 × 30 s","Récup active : 10 min rameur ou vélo léger"]},
+    "Boxe":{zones:["poignets","épaules","cou","mains"],echauf:"Corde à sauter 3 min + rotations épaules + shadow boxing léger 2 min",renfo:"Cou, épaules, gainage, poignets (bien bander les mains)",recup:["Étirement épaule croisée : 3 × 20 s","Mobilité cou douce : 5 rotations par sens","Étirement poignets : 3 × 20 s"]},
+    "Natation":{zones:["épaules","cou","bas du dos"],echauf:"Mobilité épaules + 200 m souple",renfo:"Coiffe des rotateurs, dorsaux, gainage",recup:["Étirement épaules/pectoraux : 3 × 30 s","100 m dos crawlé tranquille","Mobilité cou : 5 rotations par sens"]},
+    "Cyclisme":{zones:["genoux","bas du dos","nuque"],echauf:"10 min à faible résistance, cadence élevée",renfo:"Gainage, fessiers, ischios",recup:["Étirement quadriceps debout : 3 × 30 s par jambe","Étirement ischios : 3 × 30 s","Vérifie ta hauteur de selle pour épargner les genoux"]},
+    "Escalade":{zones:["doigts (poulies)","coude","épaule"],echauf:"Mobilité doigts/poignets + voies faciles 10 min en montée progressive",renfo:"Avant-bras, antagonistes (extenseurs), épaule",recup:["Étirement avant-bras : 3 × 20 s par bras","Extension des doigts à l'élastique : 3 × 15","Repos doigts 48 h après séance intense"]},
+    "Ski / Snowboard":{zones:["genoux (LCA)","poignets","épaules"],echauf:"10 squats + 10 fentes + sauts légers + mobilité chevilles",renfo:"Quadriceps, ischios, gainage, proprioception",recup:["Étirement quadriceps : 3 × 30 s par jambe","Gainage latéral : 3 × 20 s par côté","Massage cuisses au foam roller : 1 min par jambe"]},
+    "Golf":{zones:["bas du dos","coude","épaule","poignet"],echauf:"Rotations tronc + mobilité épaules/hanches + 10 swings progressifs",renfo:"Gainage rotatif, avant-bras, fessiers",recup:["Étirement rotation du tronc allongé : 3 × 20 s par côté","Étirement avant-bras : 3 × 20 s","Mobilité hanche : 1 min par côté"]},
+    "Danse":{zones:["chevilles","genoux","bas du dos","pieds"],echauf:"Mobilité chevilles/hanches + 10 relevés + étirements dynamiques",renfo:"Mollets, gainage, proprioception cheville",recup:["Étirement mollets : 3 × 30 s","Auto-massage pieds avec une balle : 1 min par pied","Étirement hanches (papillon) : 3 × 30 s"]},
+    "Yoga":{zones:["poignets","bas du dos","ischio-jambiers"],echauf:"Salutations au soleil lentes : 3 cycles",renfo:"Gainage doux, mobilité",recup:["Posture de l'enfant : 1 min","Respiration profonde : 2 min","Savasana (relaxation) : 5 min"]},
+    "Autre":{zones:["articulations sollicitées","muscles principaux"],echauf:"Échauffement général 10 min : cardio léger + mobilité articulaire",renfo:"Gainage + renforcement ciblé",recup:["Étirements globaux : 3 × 30 s par groupe","Récup active 10 min","Hydratation + sommeil"]}
   }
 };
 
+function fillSportSelect(){
+  const sel=document.getElementById("q-sport");
+  sel.innerHTML='<option value="">— Choisir —</option>'+
+    Object.keys(KB.sports).map(s=>'<option>'+s+'</option>').join("");
+}
+
 /* ============================================================
-   GESTION COMPTE / ÉTAT (localStorage)
+   GESTION COMPTE / ETAT (localStorage)
    ============================================================ */
 let currentUser = null;
 const $ = id => document.getElementById(id);
@@ -183,7 +193,7 @@ function logout(){localStorage.removeItem("coach_user");currentUser=null;show("s
 function editProfile(){show("screen-form");}
 
 /* ============================================================
-   GÉNÉRATION DU PROGRAMME
+   GENERATION DU PROGRAMME
    ============================================================ */
 function generatePlan(){
   const age=$("q-age").value, sport=$("q-sport").value, freq=$("q-freq").value, level=$("q-level").value;
@@ -195,25 +205,23 @@ function generatePlan(){
 
 function loadApp(data){
   show("screen-app");
-  // Badges profil
-  $("profile-badges").innerHTML=`
-    <span class="badge">Âge : ${data.age} ans</span>
-    <span class="badge">Sport : ${data.sport}</span>
-    <span class="badge">Fréquence : ${data.freq} séances/sem</span>
-    <span class="badge">Niveau : ${data.level}</span>`;
-  // Programme
+  $("profile-badges").innerHTML=
+    '<span class="badge">Âge : '+data.age+' ans</span>'+
+    '<span class="badge">Sport : '+data.sport+'</span>'+
+    '<span class="badge">Fréquence : '+data.freq+' séances/sem</span>'+
+    '<span class="badge">Niveau : '+data.level+'</span>';
   const k=KB.sports[data.sport]||KB.sports["Autre"];
   const ageNum=parseInt(data.age);
   let ageNote = ageNum<16 ? "Privilégie le ludique, évite les charges lourdes (croissance)."
               : ageNum>50 ? "Augmente le temps d'échauffement et la récupération."
               : "Profil adulte : équilibre charge / récupération.";
-  let freqNote = parseInt(data.freq)>=5 ? "Fréquence élevée : intègre au moins 1 jour de repos complet pour éviter le surentraînement."
+  let freqNote = parseInt(data.freq)>=5 ? "Fréquence élevée : garde au moins 1 jour de repos complet pour éviter le surentraînement."
               : "Bonne fréquence : pense à varier les intensités.";
   const items=[
     {t:"⚠️ Zones à surveiller",d:k.zones.join(", ")},
     {t:"🔥 Échauffement (avant chaque séance)",d:k.echauf},
     {t:"💪 Renforcement préventif (2x/sem)",d:k.renfo},
-    {t:"🧊 Récupération",d:k.recup},
+    {t:"🧊 Récupération",d:k.recup.join(" · ")},
     {t:"👤 Adapté à ton âge",d:ageNote},
     {t:"📅 Adapté à ta fréquence",d:freqNote},
     {t:"📈 Adapté à ton niveau ("+data.level+")",d:
@@ -221,14 +229,13 @@ function loadApp(data){
       data.level==="Compétiteur"?"Surveille les signaux de fatigue, planifie des phases de décharge.":
       "Maintiens la régularité et écoute les douleurs inhabituelles."}
   ];
-  $("plan").innerHTML=items.map(i=>`<div class="plan-item"><h3>${i.t}</h3><p>${i.d}</p></div>`).join("");
-  // Reset chat
+  $("plan").innerHTML=items.map(i=>'<div class="plan-item"><h3>'+i.t+'</h3><p>'+i.d+'</p></div>').join("");
   $("chat").innerHTML="";
-  addMsg("bot","Salut "+currentUser+" 👋 Je suis <b>Coach</b>. Pose-moi tes questions sur la prévention des blessures, la récup ou une douleur précise.");
+  addMsg("bot","Salut "+currentUser+" 👋 Je suis <b>Coach</b>. Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.");
 }
 
 /* ============================================================
-   CHAT COACH — utilise l'API Claude, fallback base locale
+   CHAT COACH
    ============================================================ */
 let history=[];
 function addMsg(role,html){
@@ -244,10 +251,14 @@ async function sendMsg(){
   $("chat").appendChild(typing);$("chat").scrollTop=$("chat").scrollHeight;
 
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
-  const systemContext=`Tu es "Coach", un assistant expert en médecine du sport et prévention des blessures.
-Profil de l'utilisateur : ${data.age} ans, sport=${data.sport}, fréquence=${data.freq}/sem, niveau=${data.level}.
-Réponds en français, de façon claire, bienveillante et précise. Donne des conseils de prévention, récupération et entraînement.
-IMPORTANT : pour toute douleur intense, persistante, ou en cas de doute, recommande de consulter un médecin ou kiné. Tu ne remplaces pas un professionnel de santé.`;
+  const systemContext='Tu es "Coach", un assistant expert en préparation physique et prévention des blessures sportives.'+
+'\nProfil de utilisateur : '+data.age+' ans, sport='+data.sport+', fréquence='+data.freq+'/sem, niveau='+data.level+'.'+
+'\nREGLES :'+
+'\n- Réponds en français, de façon directe, motivante et CONCRETE.'+
+'\n- Donne TOUJOURS des exercices nommés et chiffrés (ex: "Le réveil articulaire : 10 rotations de chevilles par pied", "4 séries de 8 squats", "Gainage planche : 3 x 30 s").'+
+'\n- Donne des routines completes étape par étape quand on te demande échauffement, récup ou renfo.'+
+'\n- Ne répete PAS "consulte un médecin" a chaque réponse. Ne le mentionne QUE si utilisateur décrit une douleur aigue, un craquement, un gonflement important, une douleur qui dure depuis plusieurs semaines, ou une urgence claire.'+
+'\n- Tu connais les blessures courantes (Osgood-Schlatter, tendinites, entorses, périostite, etc.) et tu donnes des conseils de reprise progressive.';
 
   try{
     const res=await fetch("https://api.anthropic.com/v1/messages",{
@@ -270,25 +281,87 @@ IMPORTANT : pour toute douleur intense, persistante, ou en cas de doute, recomma
   }
 }
 
-/* Réponses locales si l'API n'est pas disponible */
+/* ============================================================
+   Réponses locales - concretes, chiffrées, sans abus de "médecin"
+   ============================================================ */
 function fallback(q){
   const t=q.toLowerCase();
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
   const k=KB.sports[data.sport]||KB.sports["Autre"];
-  if(t.includes("genou"))return "Pour le genou : évite de forcer, applique du froid 15 min si gonflement, et renforce quadriceps + fessiers pour stabiliser. Si la douleur dure plus de quelques jours, consulte un kiné. 🩺";
-  if(t.includes("dos")||t.includes("lombaire"))return "Pour le dos : renforce ton gainage, soigne ta posture et évite les charges mal exécutées. Étire doucement. Douleur irradiante ou persistante → médecin.";
-  if(t.includes("épaule"))return "Pour l'épaule : travaille la coiffe des rotateurs avec des élastiques légers et évite les mouvements au-dessus de la tête tant que ça fait mal.";
-  if(t.includes("échauf"))return "Échauffement conseillé pour "+(data.sport||"ton sport")+" : "+k.echauf+".";
-  if(t.includes("récup")||t.includes("recup"))return "Récupération : "+k.recup+". Dors bien et hydrate-toi !";
-  if(t.includes("courbature"))return "Les courbatures (DOMS) sont normales 24-72h après l'effort. Récupération active légère, hydratation et sommeil aident. Pas de douleur vive = pas d'inquiétude.";
-  if(t.includes("prévenir")||t.includes("éviter")||t.includes("blessure"))return "Prévention pour "+(data.sport||"ton sport")+" : échauffe-toi ("+k.echauf+"), renforce ("+k.renfo+"), et surveille : "+k.zones.join(", ")+".";
-  return "Bonne question ! En général pour "+(data.sport||"ton sport")+", surveille "+k.zones.join(", ")+", échauffe-toi bien et écoute ton corps. Pour une douleur précise, donne-moi plus de détails (où, quand, intensité). En cas de doute, consulte un professionnel de santé. 🩺";
+
+  if(t.includes("échauf")||t.includes("echauf")||t.includes("warm")){
+    return "🔥 <b>Échauffement pour "+(data.sport||"toi")+"</b><br>"+
+      "1) Cardio léger : 3 min (corde à sauter, footing ou vélo)<br>"+
+      "2) Le réveil articulaire : 10 rotations de chevilles + 10 de poignets + 10 d'épaules<br>"+
+      "3) "+k.echauf+"<br>"+
+      "4) 10 squats à vide + 5 fentes par jambe pour activer les cuisses.";
+  }
+  if(t.includes("récup")||t.includes("recup")||t.includes("après")||t.includes("apres")||t.includes("courbature")){
+    return "🧊 <b>Routine de récupération</b><br>"+
+      k.recup.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>"+
+      "Bonus : 8-9 h de sommeil + 1,5 L d'eau dans les heures qui suivent. Les courbatures partent en 24-72 h, c'est normal.";
+  }
+  if(t.includes("renfo")||t.includes("muscl")||t.includes("exercice")||t.includes("entrain")){
+    return "💪 <b>Séance de renfo préventif (2×/sem)</b><br>"+
+      "1) Gainage planche : 4 × 30 s<br>"+
+      "2) Squats : 4 × 12<br>"+
+      "3) Fentes : 3 × 10 par jambe<br>"+
+      "4) Pompes : 4 × 8 (sur genoux si besoin)<br>"+
+      "5) Ciblé "+(data.sport||"sport")+" : "+k.renfo+" (3 × 12).";
+  }
+  if(t.includes("osgood")||t.includes("schlater")||t.includes("schlatter")){
+    return "🦵 <b>Osgood-Schlatter (douleur sous la rotule)</b><br>"+
+      "1) Glace 15 min après l'effort sur la tubérosité tibiale<br>"+
+      "2) Étirement quadriceps debout (talon vers la fesse) : 3 × 30 s par jambe, 2×/jour<br>"+
+      "3) Étirement ischios assis : 3 × 30 s<br>"+
+      "4) Renforce sans douleur : squats à demi-amplitude 3 × 12 + gainage 3 × 30 s<br>"+
+      "5) Reprise progressive : réduis les sauts et sprints tant que ça tire, augmente de 10%/semaine.<br>"+
+      "Patience : ça se calme avec la fin de la croissance.";
+  }
+  if(t.includes("genou")){
+    return "🦵 <b>Genou</b><br>"+
+      "1) Glace 15 min si gonflement<br>"+
+      "2) Renforce les quadriceps : extensions de jambe assis 3 × 15<br>"+
+      "3) Renforce les fessiers : pont fessier 3 × 15<br>"+
+      "4) Étirement quadriceps + ischios : 3 × 30 s chacun<br>"+
+      "Reprends doucement, sans douleur vive.";
+  }
+  if(t.includes("cheville")||t.includes("entorse")){
+    return "🦶 <b>Cheville / entorse</b><br>"+
+      "1) Protocole GREC : Glace 15 min, Repos relatif, Élévation, Compression<br>"+
+      "2) Proprioception dès que possible : équilibre sur une jambe 3 × 30 s, puis yeux fermés<br>"+
+      "3) Renfo mollets : montées sur pointes 3 × 15<br>"+
+      "Une entorse qui gonfle beaucoup ou t'empêche d'appuyer mérite un avis pro.";
+  }
+  if(t.includes("dos")||t.includes("lombaire")){
+    return "🔙 <b>Bas du dos</b><br>"+
+      "1) Gainage planche : 3 × 30 s<br>"+
+      "2) Gainage latéral : 3 × 20 s par côté<br>"+
+      "3) Pont fessier : 3 × 15<br>"+
+      "4) Étirement chat-vache : 10 mouvements lents<br>"+
+      "Soigne ta posture et évite de soulever dos rond.";
+  }
+  if(t.includes("épaule")||t.includes("epaule")){
+    return "💪 <b>Épaule</b><br>"+
+      "1) Rotations externes à l'élastique : 3 × 15<br>"+
+      "2) Élévations latérales légères : 3 × 12<br>"+
+      "3) Étirement épaule croisée devant la poitrine : 3 × 20 s<br>"+
+      "Évite les mouvements au-dessus de la tête tant que ça gêne.";
+  }
+  if(t.includes("prévenir")||t.includes("prevenir")||t.includes("éviter")||t.includes("eviter")||t.includes("blessure")){
+    return "🛡️ <b>Prévention pour "+(data.sport||"ton sport")+"</b><br>"+
+      "Zones à surveiller : "+k.zones.join(", ")+"<br>"+
+      "Échauffe-toi : "+k.echauf+"<br>"+
+      "Renforce : "+k.renfo+" (3 × 12, 2×/sem).";
+  }
+  return "Dis-m'en un peu plus 💡 Tu veux un <b>échauffement</b>, une <b>routine de récup</b>, des <b>exos de renfo</b>, ou de l'aide sur une zone précise (genou, cheville, épaule, dos) ? Je te donne une séance détaillée et chiffrée.";
 }
 
 /* ============================================================
    AUTO-CONNEXION
    ============================================================ */
 window.onload=()=>{
+  fillSportSelect();
   const saved=localStorage.getItem("coach_user");
   if(saved){currentUser=saved;$("welcome-name").textContent=saved;$("welcome-name2").textContent=saved;
     const data=JSON.parse(localStorage.getItem("coach_data_"+saved)||"null");
