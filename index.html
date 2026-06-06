@@ -105,7 +105,7 @@
       <label data-i="ageQ">Quel âge as-tu ?</label>
       <input id="q-age" type="number" min="8" max="100" placeholder="25">
       <label data-i="sportQ">Quel sport pratiques-tu ?</label>
-      <select id="q-sport"></select>
+      <div id="q-sport" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px"></div>
       <div class="row">
         <div>
           <label data-i="freqQ">Fréquence (séances/semaine)</label>
@@ -231,12 +231,25 @@ const KB={sports:{
   "Golf":{zones:["bas du dos","coude","épaule"],echauf:["Rotations du tronc : 15/côté","Rotations d'épaules : 15/sens","Fentes : 8/jambe","Cat-cow : 10"],renfo:["Russian twists : 3×20","Planche : 3×30 s","Pont fessier : 3×15"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
   "Danse":{zones:["chevilles","genoux","bas du dos"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Fentes : 8/jambe","Salutation au soleil : 2 cycles"],renfo:["Mollets debout : 3×15","Planche : 3×30 s","Pont fessier : 3×15"],recup:["Étirement du papillon : 3×30 s","Étirement du pigeon : 3×30 s","Cat-cow : 10"]},
   "Yoga":{zones:["poignets","bas du dos","ischio-jambiers"],echauf:["Salutation au soleil : 3 cycles","Cat-cow : 10","Rotations d'épaules : 15/sens","Fentes douces : 8/jambe"],renfo:["Planche : 3×30 s","Chaise contre le mur : 3×30 s","Pont fessier : 3×12"],recup:["Étirement du pigeon : 3×30 s","Étirement du papillon : 3×30 s","Cat-cow : 10"]},
+  "Surf":{zones:["épaules","bas du dos","cou","genoux"],echauf:["Rotations d'épaules : 15/sens","Mountain climbers : 20","Cat-cow : 10","Rotations du tronc : 15/côté"],renfo:["Pompes : 3×10","Planche : 3×30 s","Superman (extension dos) : 3×12","Pont fessier : 3×15"],recup:["Étirement épaules/pectoraux : 3×30 s","Étirement du cobra (dos) : 3×20 s","Cat-cow : 10"]},
+  "Voile":{zones:["bas du dos","genoux","avant-bras","épaules"],echauf:["Rotations d'épaules : 15/sens","Squats à vide : 15","Rotations du tronc : 15/côté","Serrage balle molle : 15"],renfo:["Gainage planche : 3×30 s","Chaise contre le mur : 3×30 s","Russian twists : 3×20","Avant-bras (serrage) : 3×15"],recup:["Étirement bas du dos (genoux poitrine) : 3×20 s","Étirement avant-bras : 3×20 s","Cat-cow : 10"]},
   "Autre":{zones:["articulations","muscles principaux"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Squats à vide : 15","Rotations d'épaules : 15/sens"],renfo:["Squats : 4×12","Pompes : 3×10","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Étirement du papillon : 3×30 s"]}
 }};
 
-function fillSportSelect(){const sel=$("q-sport");const cur=sel.value;
-  sel.innerHTML='<option value="">'+T("choose")+'</option>'+Object.keys(KB.sports).map(s=>'<option>'+s+'</option>').join("");
-  if(cur)sel.value=cur;}
+function fillSportSelect(){
+  const box=$("q-sport");
+  // sports triés alphabétiquement, "Autre" toujours à la fin
+  const sports=Object.keys(KB.sports).filter(s=>s!=="Autre").sort((a,b)=>a.localeCompare(b,'fr'));
+  sports.push("Autre");
+  box.innerHTML=sports.map(s=>
+    '<label style="display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;font-size:14px;color:var(--txt);cursor:pointer;margin:0">'+
+      '<input type="checkbox" class="sport-cb" value="'+s+'" style="width:auto;margin:0;flex:none">'+s+
+    '</label>'
+  ).join("");
+}
+function getSelectedSports(){
+  return Array.from(document.querySelectorAll(".sport-cb:checked")).map(c=>c.value);
+}
 function fillLevelSelect(){const sel=$("q-level");const cur=sel.value;
   sel.innerHTML='<option value="">'+T("choose")+'</option>'+T("levels").map((l,i)=>'<option value="'+i+'">'+l+'</option>').join("");
   if(cur)sel.value=cur;}
@@ -264,7 +277,9 @@ function goEditProfile(){
   // pré-remplit le formulaire avec les infos déjà connues
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
   if(data.age!==undefined)$("q-age").value=data.age;
-  if(data.sport)$("q-sport").value=data.sport;
+  // re-coche les sports déjà sélectionnés
+  const chosen=(data.sports&&data.sports.length)?data.sports:(data.sport?data.sport.split(", "):[]);
+  document.querySelectorAll(".sport-cb").forEach(cb=>{cb.checked=chosen.includes(cb.value);});
   if(data.freq)$("q-freq").value=data.freq;
   if(data.level!==undefined&&data.level!=="")$("q-level").value=data.level;
   show("screen-form");
@@ -292,7 +307,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v10 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v11 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -324,27 +339,36 @@ function line(a,b){return '<div class="info-line"><span>'+a+'</span><span>'+b+'<
    PROGRAMME
    ============================================================ */
 function generatePlan(){
-  const age=$("q-age").value,sport=$("q-sport").value,freq=$("q-freq").value,level=$("q-level").value;
-  if(!age||!sport||!freq||level===""){alert(T("fillAll"));return;}
-  const data={age,sport,freq,level};
+  const age=$("q-age").value,freq=$("q-freq").value,level=$("q-level").value;
+  const sports=getSelectedSports();
+  if(!age||sports.length===0||!freq||level===""){alert(T("fillAll"));return;}
+  const sport=sports.join(", "); // texte affiché
+  const data={age,sport,sports,freq,level};
   localStorage.setItem("coach_data_"+currentUser,JSON.stringify(data));
   loadApp(data);
 }
 function loadApp(data){
   show("screen-app");
   const lvl=T("levels")[parseInt(data.level)]||"";
+  // liste des sports : soit le tableau sports, soit on retombe sur l'ancien champ texte
+  const sportList=(data.sports&&data.sports.length)?data.sports:(data.sport?data.sport.split(", "):["Autre"]);
+  const sportBadges=sportList.map(s=>'<span class="badge b-green">'+s+'</span>').join("");
   $("profile-badges").innerHTML=
     '<span class="badge b-blue">'+T("age")+" : "+data.age+" "+T("years")+'</span>'+
-    '<span class="badge b-green">'+T("sport")+" : "+data.sport+'</span>'+
+    sportBadges+
     '<span class="badge b-orange">'+T("freq")+" : "+data.freq+" "+T("sessions")+'</span>'+
     '<span class="badge b-purple">'+T("level")+" : "+lvl+'</span>';
-  const k=KB.sports[data.sport]||KB.sports["Autre"];
+  // fusion des connaissances de tous les sports choisis (sans doublons)
+  const uniq=arr=>[...new Set(arr)];
+  let zones=[],echauf=[],renfo=[],recup=[];
+  sportList.forEach(s=>{const k=KB.sports[s]||KB.sports["Autre"];zones=zones.concat(k.zones);echauf=echauf.concat(k.echauf);renfo=renfo.concat(k.renfo);recup=recup.concat(k.recup);});
+  zones=uniq(zones);echauf=uniq(echauf);renfo=uniq(renfo);recup=uniq(recup);
   const ageNum=parseInt(data.age);
   const items=[
-    {t:T("zones"),d:k.zones.join(", ")},
-    {t:T("echaufT"),d:k.echauf.join(" · ")},
-    {t:T("renfoT"),d:k.renfo.join(" · ")},
-    {t:T("recupT"),d:k.recup.join(" · ")},
+    {t:T("zones"),d:zones.join(", ")},
+    {t:T("echaufT"),d:echauf.join(" · ")},
+    {t:T("renfoT"),d:renfo.join(" · ")},
+    {t:T("recupT"),d:recup.join(" · ")},
     {t:T("ageT"),d:ageNum<16?"+ ludique, pas de charges lourdes":ageNum>50?"+ d'échauffement et de récup":"Équilibre charge / récup"},
     {t:T("freqT"),d:parseInt(data.freq)>=5?"1 jour de repos complet mini":"Varie les intensités"},
     {t:T("levelT")+" ("+lvl+")",d:data.level==="0"?"+10% max/semaine, technique d'abord":data.level==="3"?"Surveille la fatigue, phases de décharge":"Régularité + écoute des douleurs"}
@@ -448,7 +472,8 @@ function renderInjury(inj){
 function fallback(q){
   const t=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); // sans accents
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
-  const k=KB.sports[data.sport]||KB.sports["Autre"];
+  const firstSport=(data.sports&&data.sports.length)?data.sports[0]:(data.sport?data.sport.split(", ")[0]:"Autre");
+  const k=KB.sports[firstSport]||KB.sports["Autre"];
 
   // --- Détection : est-ce une QUESTION / demande de conseil ? ---
   const askContinue = /(continuer|continue|devrais|dois-?je|est-?ce que je|puis-?je|je peux|arreter|stop|reposer|repos|pause|forcer|intensite|trop|mal de faire|risque|grave|inquiet|normal|should i|can i|keep|rest)/.test(t);
