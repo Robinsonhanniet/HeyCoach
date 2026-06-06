@@ -292,7 +292,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v6 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v7 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -375,17 +375,52 @@ async function sendMsg(){
   }catch(e){typing.remove();const reply=fallback(text);addMsg("bot",reply);history.push({role:"assistant",content:reply});}
 }
 function fallback(q){
-  const t=q.toLowerCase();const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");const k=KB.sports[data.sport]||KB.sports["Autre"];
-  if(t.includes("osgood")||t.includes("schlat"))return "🦵 <b>Osgood-Schlatter</b><br>1) Glace 15 min après l'effort<br>2) Étirement quadriceps : 3×30 s/jambe<br>3) Chaise contre le mur : 3×30 s<br>4) Pont fessier : 3×15<br>5) Reprise +10%/semaine.";
-  if(t.includes("genou"))return "🦵 <b>Genou</b><br>1) Glace 15 min si gonflement<br>2) Chaise contre le mur : 3×30 s<br>3) Pont fessier : 3×15<br>4) Mollets debout : 3×15<br>5) Étirement du papillon : 3×30 s.";
-  if(t.includes("cheville")||t.includes("entorse"))return "🦶 <b>Cheville</b><br>1) GREC : Glace, Repos, Élévation, Compression<br>2) Équilibre 1 jambe : 3×30 s<br>3) Mollets debout : 3×15<br>4) Jumping jacks légers quand ça ne fait plus mal.";
+  const t=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); // sans accents
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  const k=KB.sports[data.sport]||KB.sports["Autre"];
+
+  // --- Détection : est-ce une QUESTION / demande de conseil ? ---
+  const askContinue = /(continuer|continue|devrais|dois-?je|est-?ce que je|puis-?je|je peux|arreter|stop|reposer|repos|pause|forcer|intensite|trop|mal de faire|risque|grave|inquiet|normal|should i|can i|keep|rest)/.test(t);
+  const hasOsgood = /(osgood|schlat)/.test(t);
+  const zone = /genou/.test(t)?"genou": /cheville|entorse/.test(t)?"cheville": /dos|lombaire/.test(t)?"dos": /epaule/.test(t)?"épaule": /coude/.test(t)?"coude": "";
+
+  // === MODE CONVERSATION : répond à la question avant de donner un programme ===
+  if(askContinue){
+    let intro="";
+    if(hasOsgood){
+      intro="🦵 <b>Osgood-Schlatter & entraînement</b><br>"+
+        "La règle simple : tu peux continuer <b>tant que la douleur reste légère (≤ 3/10) et disparaît après l'échauffement</b>. "+
+        "Si elle te fait boiter, augmente pendant l'effort, ou reste douloureuse le lendemain, c'est le signe qu'il faut <b>baisser l'intensité</b>.<br><br>"+
+        "Concrètement pour toi :<br>"+
+        "• Réduis temporairement les sauts, sprints et changements de direction (les plus agressifs pour le genou).<br>"+
+        "• Garde le cardio doux et le travail technique sans douleur.<br>"+
+        "• Mets de la glace 15 min après l'effort.<br>"+
+        "• Ne reviens à 100% que quand tu n'as plus mal au quotidien, puis remonte de +10%/semaine.<br><br>"+
+        "L'Osgood se calme généralement avec la fin de la croissance, donc l'idée n'est pas d'arrêter le sport mais d'<b>adapter l'intensité</b> pour ne pas l'entretenir.";
+    } else if(zone){
+      intro="🤔 <b>Continuer à m'entraîner avec une douleur au "+zone+" ?</b><br>"+
+        "Repère-toi à la douleur : <b>légère et qui part à l'échauffement</b> → tu peux continuer en douceur. "+
+        "<b>Qui augmente pendant l'effort, te fait compenser, ou dure le lendemain</b> → réduis l'intensité ou fais une pause.<br><br>"+
+        "Astuce : baisse d'abord le <b>volume</b> (moins de répétitions/durée) avant de tout arrêter. Garde ce qui ne fait pas mal.";
+    } else {
+      intro="🤔 <b>Bonne question sur l'intensité</b><br>"+
+        "Le bon repère, c'est ton corps : une douleur <b>légère qui disparaît à l'échauffement</b> est souvent OK ; une douleur <b>qui augmente, te fait compenser ou persiste le lendemain</b> dit qu'il faut lever le pied.<br><br>"+
+        "Règle d'or : ne monte jamais l'intensité de plus de <b>10% par semaine</b>, et garde au moins 1 jour de vraie récup.";
+    }
+    return intro+"<br><br><i>Veux-tu que je te donne un programme de reprise adapté ? Écris « programme ».</i>";
+  }
+
+  // === MODE PROGRAMME (listes d'exercices) ===
+  if(hasOsgood)return "🦵 <b>Osgood-Schlatter — reprise</b><br>1) Glace 15 min après l'effort<br>2) Étirement quadriceps : 3×30 s/jambe<br>3) Chaise contre le mur : 3×30 s<br>4) Pont fessier : 3×15<br>5) Réduis sauts/sprints, remonte +10%/semaine.";
+  if(t.includes("genou"))return "🦵 <b>Genou</b><br>1) Glace 15 min si gonflement<br>2) Chaise contre le mur : 3×30 s<br>3) Pont fessier : 3×15<br>4) Mollets debout : 3×15<br>5) Etirement du papillon : 3×30 s.";
+  if(t.includes("cheville")||t.includes("entorse"))return "🦶 <b>Cheville</b><br>1) GREC : Glace, Repos, Elevation, Compression<br>2) Equilibre 1 jambe : 3×30 s<br>3) Mollets debout : 3×15<br>4) Jumping jacks legers quand ca ne fait plus mal.";
   if(t.includes("dos")||t.includes("lombaire"))return "🔙 <b>Dos</b><br>1) Planche : 3×30 s<br>2) Pont fessier : 3×15<br>3) Russian twists : 3×20<br>4) Cat-cow : 10 mouvements.";
-  if(t.includes("épaule")||t.includes("epaule"))return "💪 <b>Épaule</b><br>1) Rotations d'épaules : 15/sens<br>2) Élévations latérales : 3×12<br>3) Pompes : 3×8<br>4) Étirement du pigeon : 3×30 s.";
-  if(t.includes("coude"))return "💪 <b>Coude</b><br>1) Repos relatif<br>2) Curl biceps léger : 3×12<br>3) Extension poignet élastique : 3×15<br>4) Glace 10 min si ça chauffe.";
-  if(t.includes("échauf")||t.includes("echauf")||t.includes("warm")||t.includes("calent")||t.includes("calienta"))return "🔥 <b>"+T("echaufT").replace("🔥 ","")+"</b><br>"+k.echauf.map((e,i)=>(i+1)+") "+e).join("<br>");
-  if(t.includes("récup")||t.includes("recup")||t.includes("courbature")||t.includes("recover")||t.includes("recuper"))return "🧊 <b>"+T("recupT").replace("🧊 ","")+"</b><br>"+k.recup.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>+ 8 h de sommeil + hydratation.";
+  if(t.includes("epaule"))return "💪 <b>Epaule</b><br>1) Rotations d'epaules : 15/sens<br>2) Elevations laterales : 3×12<br>3) Pompes : 3×8<br>4) Etirement du pigeon : 3×30 s.";
+  if(t.includes("coude"))return "💪 <b>Coude</b><br>1) Repos relatif<br>2) Curl biceps leger : 3×12<br>3) Extension poignet elastique : 3×15<br>4) Glace 10 min si ca chauffe.";
+  if(t.includes("echauf")||t.includes("warm")||t.includes("calent")||t.includes("calienta"))return "🔥 <b>"+T("echaufT").replace("🔥 ","")+"</b><br>"+k.echauf.map((e,i)=>(i+1)+") "+e).join("<br>");
+  if(t.includes("recup")||t.includes("courbature")||t.includes("recover"))return "🧊 <b>"+T("recupT").replace("🧊 ","")+"</b><br>"+k.recup.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>+ 8 h de sommeil + hydratation.";
   if(t.includes("renfo")||t.includes("muscl")||t.includes("exercice")||t.includes("entrain")||t.includes("programme")||t.includes("program")||t.includes("strength")||t.includes("fuerza"))return "💪 <b>Renfo (2×/sem)</b><br>1) Squats : 4×12<br>2) Pompes : 4×8<br>3) Fentes : 3×10/jambe<br>4) Planche : 3×30 s<br>5) "+k.renfo.join(" · ");
-  if(t.includes("prév), prevenir")||t.includes("éviter")||t.includes("blessure")||t.includes("prevent")||t.includes("lesion"))return "🛡️ <b>Prévention</b><br>"+T("zones")+" : "+k.zones.join(", ")+"<br>"+k.echauf.join(" · ");
+  if(t.includes("eviter")||t.includes("blessure")||t.includes("prevent")||t.includes("lesion")||t.includes("prevenir"))return "🛡️ <b>Prevention</b><br>"+T("zones")+" : "+k.zones.join(", ")+"<br>"+k.echauf.join(" · ");
   return "💡 "+T("coachIntro");
 }
 
