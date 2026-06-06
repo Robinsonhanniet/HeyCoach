@@ -259,22 +259,34 @@ function login(){
   if(data&&data.sport){loadApp(data);}else{show("screen-form");}
 }
 function logout(){closeSettings();localStorage.removeItem("coach_user");currentUser=null;show("screen-login");}
-function editProfile(){closeSettings();show("screen-form");}
+function editProfile(){
+  closeSettings();
+  // pré-remplit le formulaire avec les infos déjà connues
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  if(data.age!==undefined)$("q-age").value=data.age;
+  if(data.sport)$("q-sport").value=data.sport;
+  if(data.freq)$("q-freq").value=data.freq;
+  if(data.level!==undefined&&data.level!=="")$("q-level").value=data.level;
+  show("screen-form");
+}
 
 function openSettings(){renderSettings();$("settings").classList.remove("hidden");}
-function closeSettings(){$("settings").classList.add("hidden");}
+function closeSettings(){const s=$("settings");if(s)s.classList.add("hidden");}
 function renderSettings(){
-  const cred=JSON.parse(localStorage.getItem("coach_cred_"+currentUser)||"{}");
-  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
-  const lvl=(data.level!==undefined&&data.level!=="")?T("levels")[parseInt(data.level)]:"—";
-  $("settings-info").innerHTML=
-    line(T("name"),currentUser||"—")+
-    line(T("email"),cred.email||"—")+
-    line(T("pass"),cred.pass||"—")+
-    line(T("age"),(data.age||"—")+(data.age?" "+T("years"):""))+
-    line(T("sport"),data.sport||"—")+
-    line(T("freq"),(data.freq||"—")+(data.freq?" "+T("sessions"):""))+
-    line(T("level"),lvl);
+  try{
+    const cred=JSON.parse(localStorage.getItem("coach_cred_"+currentUser)||"{}");
+    const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+    const lvls=T("levels")||[];
+    const lvl=(data.level!==undefined&&data.level!=="")?(lvls[parseInt(data.level)]||"—"):"—";
+    $("settings-info").innerHTML=
+      line(T("name"),currentUser||"—")+
+      line(T("email"),cred.email||"—")+
+      line(T("pass"),cred.pass||"—")+
+      line(T("age"),(data.age?data.age+" "+T("years"):"—"))+
+      line(T("sport"),data.sport||"—")+
+      line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
+      line(T("level"),lvl);
+  }catch(e){ $("settings-info").innerHTML=""; }
 }
 function line(a,b){return '<div class="info-line"><span>'+a+'</span><span>'+b+'</span></div>';}
 
