@@ -3,133 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coach Sportif - Prévention des blessures</title>
+<title>Coach Sportif</title>
 <style>
   :root{
-    --bg:#0f1419; --surface:#1a212b; --surface2:#222c38;
-    --txt:#e8edf2; --muted:#9aa7b4; --accent:#1d9e75; --accent2:#185fa5;
-    --border:#2c3744; --danger:#e24b4a;
+    --bg1:#f5f7fb; --bg2:#eef1f8;
+    --card:#ffffff; --card2:#f4f6fb;
+    --txt:#1d1d1f; --muted:#6e6e73; --border:#e3e6ee;
+    --blue:#0a84ff; --green:#30d158; --purple:#bf5af2; --orange:#ff9f0a; --pink:#ff375f;
+    --shadow:0 8px 30px rgba(20,30,60,.08);
   }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-  body{background:var(--bg);color:var(--txt);min-height:100vh;line-height:1.6}
-  .wrap{max-width:880px;margin:0 auto;padding:24px}
-  h1{font-size:26px;font-weight:600;margin-bottom:4px}
-  h2{font-size:19px;font-weight:600;margin-bottom:16px}
-  .sub{color:var(--muted);font-size:14px;margin-bottom:24px}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
-  label{display:block;font-size:14px;color:var(--muted);margin:14px 0 6px}
-  input,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
-    padding:11px 12px;color:var(--txt);font-size:15px}
-  input:focus,select:focus{outline:none;border-color:var(--accent)}
-  button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:12px 20px;
-    font-size:15px;font-weight:500;cursor:pointer;transition:opacity .15s}
-  button:hover{opacity:.88}
-  button.ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif}
+  body{background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--txt);min-height:100vh;line-height:1.6}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px}
+  h1{font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+  h2{font-size:19px;font-weight:600;letter-spacing:-.3px;margin-bottom:16px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;margin-bottom:20px;box-shadow:var(--shadow)}
+  label{display:block;font-size:13px;font-weight:500;color:var(--muted);margin:14px 0 6px}
+  input,select{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:12px;
+    padding:12px 14px;color:var(--txt);font-size:15px;transition:.15s}
+  input:focus,select:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(10,132,255,.12)}
+  button{background:var(--blue);color:#fff;border:none;border-radius:12px;padding:12px 22px;
+    font-size:15px;font-weight:600;cursor:pointer;transition:.15s}
+  button:hover{filter:brightness(1.05);transform:translateY(-1px)}
+  button.ghost{background:var(--card2);border:1px solid var(--border);color:var(--txt)}
+  button.danger{background:var(--pink)}
+  button.green{background:var(--green)}
   .hidden{display:none}
   .row{display:flex;gap:12px;flex-wrap:wrap}
-  .row > div{flex:1;min-width:160px}
-  .plan-item{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
-    padding:14px 16px;margin-bottom:12px}
-  .plan-item h3{font-size:15px;margin-bottom:4px}
-  .plan-item p{font-size:14px;color:var(--muted)}
-  .badge{display:inline-block;background:var(--surface2);border:1px solid var(--border);
-    border-radius:20px;padding:4px 12px;font-size:13px;color:var(--muted);margin:0 6px 6px 0}
-  .chat-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
-    height:340px;overflow-y:auto;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:12px}
-  .msg{max-width:80%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5}
-  .msg.user{align-self:flex-end;background:var(--accent2);color:#fff;border-bottom-right-radius:3px}
-  .msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:3px}
-  .msg.bot b{color:var(--accent)}
-  .chat-input{display:flex;gap:10px}
-  .chat-input input{flex:1}
+  .row > div{flex:1;min-width:150px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .plan-item{background:var(--card2);border-radius:14px;padding:14px 16px;margin-bottom:12px;border-left:4px solid var(--blue)}
+  .plan-item:nth-child(1){border-color:var(--pink)} .plan-item:nth-child(2){border-color:var(--orange)}
+  .plan-item:nth-child(3){border-color:var(--green)} .plan-item:nth-child(4){border-color:var(--blue)}
+  .plan-item:nth-child(5){border-color:var(--purple)} .plan-item:nth-child(6){border-color:var(--orange)}
+  .plan-item:nth-child(7){border-color:var(--green)}
+  .plan-item h3{font-size:14px;margin-bottom:4px} .plan-item p{font-size:13.5px;color:var(--muted)}
+  .badge{display:inline-block;border-radius:20px;padding:5px 13px;font-size:13px;font-weight:500;margin:0 6px 6px 0;color:#fff}
+  .b-blue{background:var(--blue)} .b-green{background:var(--green)} .b-purple{background:var(--purple)} .b-orange{background:var(--orange)}
+  .chat-box{background:var(--card2);border:1px solid var(--border);border-radius:16px;
+    height:380px;overflow-y:auto;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:85%;padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.5}
+  .msg.user{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+  .msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--border);border-bottom-left-radius:4px}
+  .msg.bot b{color:var(--blue)}
+  .chat-input{display:flex;gap:10px} .chat-input input{flex:1}
   .typing{color:var(--muted);font-size:13px;font-style:italic}
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-  .userinfo{font-size:14px;color:var(--muted)}
-  a.linkbtn{color:var(--accent);cursor:pointer;font-size:13px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  .userinfo{font-size:15px;color:var(--muted)}
+  .gear{width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);font-size:20px;transition:.2s}
+  .gear:hover{transform:rotate(40deg);background:var(--card2)}
+  /* Modal réglages */
+  .overlay{position:fixed;inset:0;background:rgba(20,30,60,.35);backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .modal{background:var(--card);border-radius:24px;padding:28px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .modal h2{display:flex;align-items:center;gap:8px}
+  .info-line{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px}
+  .info-line span:first-child{color:var(--muted)} .info-line span:last-child{font-weight:600}
+  .lang-btns{display:flex;gap:8px;margin-top:8px}
+  .lang-btns button{flex:1;padding:10px}
+  .lang-btns button.active{background:var(--blue);color:#fff}
+  .lang-btns button:not(.active){background:var(--card2);color:var(--txt);border:1px solid var(--border)}
+  .close-x{float:right;cursor:pointer;font-size:22px;color:var(--muted);line-height:1}
+  a.linkbtn{color:var(--blue);cursor:pointer;font-size:13px}
+  .logo-badge{display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;
+    background:linear-gradient(135deg,var(--blue),var(--purple));font-size:28px;margin-bottom:10px;box-shadow:var(--shadow)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- ============ ECRAN CONNEXION ============ -->
-  <div id="screen-login" class="card" style="max-width:420px;margin:60px auto">
-    <h1>🏃 Coach Sportif</h1>
-    <p class="sub">Connecte-toi pour accéder à ton programme et au coach.</p>
-    <label>Nom / Pseudo</label>
-    <input id="login-name" placeholder="Ex: Alex">
-    <label>Mot de passe (local)</label>
+  <!-- ============ CONNEXION ============ -->
+  <div id="screen-login" class="card" style="max-width:430px;margin:50px auto">
+    <div class="logo-badge">🏃</div>
+    <h1 data-i="appTitle">Coach Sportif</h1>
+    <p class="sub" data-i="loginSub">Connecte-toi pour accéder à ton programme et au coach.</p>
+    <label data-i="name">Nom / Pseudo</label>
+    <input id="login-name" placeholder="Alex">
+    <label data-i="email">Email</label>
+    <input id="login-email" type="email" placeholder="alex@email.com">
+    <label data-i="pass">Mot de passe</label>
     <input id="login-pass" type="password" placeholder="••••••">
     <div style="margin-top:18px;display:flex;gap:10px">
-      <button onclick="login()">Se connecter</button>
-      <button class="ghost" onclick="login()">Créer un compte</button>
+      <button onclick="login()" data-i="connect">Se connecter</button>
+      <button class="ghost" onclick="login()" data-i="create">Créer un compte</button>
     </div>
-    <p class="sub" style="margin-top:14px;font-size:12px">Les données restent stockées localement dans ton navigateur.</p>
+    <p class="sub" style="margin-top:14px;font-size:12px" data-i="localNote">Les données restent stockées localement dans ton navigateur.</p>
   </div>
 
-  <!-- ============ ECRAN QUESTIONNAIRE ============ -->
+  <!-- ============ QUESTIONNAIRE ============ -->
   <div id="screen-form" class="hidden">
     <div class="topbar">
-      <div class="userinfo">Connecté : <b id="welcome-name"></b></div>
-      <a class="linkbtn" onclick="logout()">Déconnexion</a>
+      <div class="userinfo"><span data-i="connected">Connecté</span> : <b id="welcome-name"></b></div>
+      <div class="gear" onclick="openSettings()">⚙️</div>
     </div>
-    <div class="card">
-      <h2>Parle-moi de ta pratique</h2>
-      <p class="sub">Ces infos servent à créer un programme adapté pour éviter les blessures.</p>
-      <label>Quel âge as-tu ?</label>
-      <input id="q-age" type="number" min="8" max="100" placeholder="Ex: 25">
-      <label>Quel sport pratiques-tu ?</label>
+    <div class="card" style="max-width:560px;margin:0 auto">
+      <h2 data-i="formTitle">Parle-moi de ta pratique</h2>
+      <p class="sub" data-i="formSub">Ces infos servent à créer un programme adapté pour éviter les blessures.</p>
+      <label data-i="ageQ">Quel âge as-tu ?</label>
+      <input id="q-age" type="number" min="8" max="100" placeholder="25">
+      <label data-i="sportQ">Quel sport pratiques-tu ?</label>
       <select id="q-sport"></select>
       <div class="row">
         <div>
-          <label>Fréquence (séances/semaine)</label>
-          <select id="q-freq">
-            <option value="">—</option>
-            <option>1</option><option>2</option><option>3</option>
-            <option>4</option><option>5</option><option>6+</option>
-          </select>
+          <label data-i="freqQ">Fréquence (séances/semaine)</label>
+          <select id="q-freq"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select>
         </div>
         <div>
-          <label>Ton niveau</label>
-          <select id="q-level">
-            <option value="">—</option>
-            <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option><option>Compétiteur</option>
-          </select>
+          <label data-i="levelQ">Ton niveau</label>
+          <select id="q-level"></select>
         </div>
       </div>
-      <div style="margin-top:20px">
-        <button onclick="generatePlan()">Générer mon programme</button>
+      <div style="margin-top:20px"><button class="green" onclick="generatePlan()" data-i="genBtn">Générer mon programme</button></div>
+    </div>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <div id="screen-app" class="hidden">
+    <div class="topbar">
+      <div class="userinfo"><span data-i="connected">Connecté</span> : <b id="welcome-name2"></b></div>
+      <div class="gear" onclick="openSettings()">⚙️</div>
+    </div>
+
+    <div class="card">
+      <h2 data-i="profileTitle">Ton profil</h2>
+      <div id="profile-badges"></div>
+    </div>
+
+    <div class="grid">
+      <!-- GAUCHE : programme -->
+      <div class="card">
+        <h2 data-i="planTitle">Programme anti-blessure</h2>
+        <p class="sub" data-i="planSub">Adapté à ton sport, ta fréquence, ton niveau et ton âge.</p>
+        <div id="plan"></div>
+      </div>
+      <!-- DROITE : chat -->
+      <div class="card">
+        <h2 data-i="chatTitle">💬 Discute avec Coach</h2>
+        <p class="sub" data-i="chatSub">Pose tes questions sur les blessures, la récupération, la prévention…</p>
+        <div class="chat-box" id="chat"></div>
+        <div class="chat-input">
+          <input id="chat-input" data-i-ph="chatPh" placeholder="Ex: comment récupérer après une séance ?" onkeydown="if(event.key==='Enter')sendMsg()">
+          <button onclick="sendMsg()" data-i="send">Envoyer</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ============ ECRAN PROGRAMME + COACH ============ -->
-  <div id="screen-app" class="hidden">
-    <div class="topbar">
-      <div class="userinfo">Connecté : <b id="welcome-name2"></b></div>
-      <div>
-        <a class="linkbtn" onclick="editProfile()">Modifier mon profil</a> &nbsp;·&nbsp;
-        <a class="linkbtn" onclick="logout()">Déconnexion</a>
+  <!-- ============ MODAL REGLAGES ============ -->
+  <div id="settings" class="overlay hidden">
+    <div class="modal">
+      <span class="close-x" onclick="closeSettings()">×</span>
+      <h2>⚙️ <span data-i="settings">Réglages</span></h2>
+      <p class="sub" data-i="settingsSub" style="margin-bottom:14px">Tes informations et préférences.</p>
+      <div id="settings-info"></div>
+      <label style="margin-top:18px" data-i="langLabel">Langue</label>
+      <div class="lang-btns">
+        <button id="lang-fr" onclick="setLang('fr')">Français</button>
+        <button id="lang-en" onclick="setLang('en')">English</button>
+        <button id="lang-es" onclick="setLang('es')">Español</button>
       </div>
-    </div>
-
-    <div class="card">
-      <h2>Ton profil</h2>
-      <div id="profile-badges"></div>
-    </div>
-
-    <div class="card">
-      <h2>Programme anti-blessure recommandé</h2>
-      <p class="sub">Adapté à ton sport, ta fréquence, ton niveau et ton âge.</p>
-      <div id="plan"></div>
-    </div>
-
-    <div class="card">
-      <h2>💬 Discute avec Coach</h2>
-      <p class="sub">Pose tes questions sur les blessures, la récupération, la prévention…</p>
-      <div class="chat-box" id="chat"></div>
-      <div class="chat-input">
-        <input id="chat-input" placeholder="Ex: comment récupérer après une grosse séance ?" onkeydown="if(event.key==='Enter')sendMsg()">
-        <button onclick="sendMsg()">Envoyer</button>
+      <div style="margin-top:22px;display:flex;gap:10px">
+        <button class="ghost" onclick="editProfile()" data-i="editProfile">Modifier le profil</button>
+        <button class="danger" onclick="logout()" data-i="logout">Déconnexion</button>
       </div>
     </div>
   </div>
@@ -138,247 +176,182 @@
 
 <script>
 /* ============================================================
-   BASE DE CONNAISSANCES SPORTIVES - large gamme de sports
-   echauf et recup utilisent des NOMS d'exercices clairs
+   TRADUCTIONS
    ============================================================ */
-const KB = {
-  sports: {
-    "Course à pied":{zones:["genoux","tendon d'Achille","tibias (périostite)"],echauf:["Jumping jacks : 30 s","High knees (montées de genoux) : 30 s","Talons-fesses : 30 s","Fentes marchées : 10 par jambe"],renfo:["Mollets debout : 3 × 15","Pont fessier : 3 × 15","Planche : 3 × 30 s"],recup:["Étirement du papillon : 3 × 30 s","Cat-cow : 10 mouvements","Mollets debout (étirement contre un mur) : 3 × 30 s"]},
-    "Padel":{zones:["coude (épicondylite)","épaule","cheville","bas du dos"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15 par sens","Fentes : 8 par jambe","Mountain climbers : 20"],renfo:["Curl biceps léger : 3 × 12","Élévations latérales : 3 × 12","Planche : 3 × 30 s"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s par côté","Salutation au soleil : 3 cycles"]},
-    "Tennis":{zones:["coude (épicondylite)","épaule","poignet"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15 par sens","High knees : 30 s","Fentes : 8 par jambe"],renfo:["Curl biceps : 3 × 12","Élévations latérales : 3 × 12","Pompes : 3 × 10"],recup:["Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements","Salutation au soleil : 3 cycles"]},
-    "Football":{zones:["ischio-jambiers","cheville","genou (LCA)"],echauf:["Course progressive : 3 min","High knees : 30 s","Talons-fesses : 30 s","Fentes marchées : 10 par jambe"],renfo:["Squats : 4 × 12","Fentes : 3 × 10 par jambe","Pont fessier : 3 × 15"],recup:["Étirement du papillon : 3 × 30 s","Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements"]},
-    "Basketball":{zones:["chevilles","genoux","doigts"],echauf:["Jumping jacks : 30 s","Squats : 15","High knees : 30 s","Sauts légers : 15"],renfo:["Squats : 4 × 12","Mollets debout : 3 × 15","Chaise contre le mur : 3 × 30 s"],recup:["Étirement du papillon : 3 × 30 s","Cat-cow : 10 mouvements","Mollets (étirement) : 3 × 30 s"]},
-    "Handball":{zones:["épaule","genou (LCA)","doigts","cheville"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15 par sens","High knees : 30 s","Fentes : 8 par jambe"],renfo:["Élévations latérales : 3 × 12","Squats : 4 × 12","Planche : 3 × 30 s"],recup:["Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements","Étirement du papillon : 3 × 30 s"]},
-    "Rugby":{zones:["épaules","cou","genoux","côtes"],echauf:["Course progressive : 3 min","Jumping jacks : 30 s","Squats : 15","Rotations d'épaules : 15 par sens"],renfo:["Squats : 4 × 12","Pompes : 3 × 12","Planche : 3 × 30 s"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Salutation au soleil : 3 cycles"]},
-    "Volleyball":{zones:["épaule","genoux (rotule)","doigts","chevilles"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15 par sens","Sauts légers : 15","Fentes : 8 par jambe"],renfo:["Squats : 4 × 12","Élévations latérales : 3 × 12","Mollets debout : 3 × 15"],recup:["Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements","Étirement du papillon : 3 × 30 s"]},
-    "Badminton":{zones:["épaule","cheville","genou","coude"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Fentes : 8 par jambe","Rotations d'épaules : 15 par sens"],renfo:["Mollets debout : 3 × 15","Curl biceps : 3 × 12","Planche : 3 × 30 s"],recup:["Étirement du papillon : 3 × 30 s","Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s"]},
-    "Musculation":{zones:["épaules","bas du dos","poignets"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15 par sens","Squats à vide : 15","Mountain climbers : 20"],renfo:["Développé couché léger : 3 × 12","Élévations latérales : 3 × 12","Planche : 3 × 30 s"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Salutation au soleil : 3 cycles"]},
-    "Crossfit":{zones:["épaules","bas du dos","poignets","genoux"],echauf:["Jumping jacks : 30 s","Squats à vide : 15","Mountain climbers : 20","Rotations d'épaules : 15 par sens"],renfo:["Squats : 4 × 12","Pompes : 3 × 12","Planche : 3 × 30 s"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Étirement du papillon : 3 × 30 s"]},
-    "Boxe":{zones:["poignets","épaules","cou","mains"],echauf:["Corde à sauter : 3 min","Jumping jacks : 30 s","Rotations d'épaules : 15 par sens","Mountain climbers : 20"],renfo:["Pompes : 3 × 12","Planche : 3 × 30 s","Russian twists : 3 × 20"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Salutation au soleil : 3 cycles"]},
-    "Natation":{zones:["épaules","cou","bas du dos"],echauf:["Rotations d'épaules : 15 par sens","Jumping jacks : 30 s","Mountain climbers : 20","Cat-cow : 10 mouvements"],renfo:["Élévations latérales : 3 × 12","Planche : 3 × 30 s","Pont fessier : 3 × 15"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Salutation au soleil : 3 cycles"]},
-    "Cyclisme":{zones:["genoux","bas du dos","nuque"],echauf:["Vélo à faible résistance : 5 min","Squats à vide : 15","Fentes : 8 par jambe","Cat-cow : 10 mouvements"],renfo:["Squats : 4 × 12","Pont fessier : 3 × 15","Planche : 3 × 30 s"],recup:["Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements","Étirement du papillon : 3 × 30 s"]},
-    "Escalade":{zones:["doigts (poulies)","coude","épaule"],echauf:["Rotations d'épaules : 15 par sens","Jumping jacks : 30 s","Mountain climbers : 20","Curl biceps léger : 3 × 12"],renfo:["Tractions : 3 × 5","Pompes : 3 × 10","Planche : 3 × 30 s"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Salutation au soleil : 3 cycles"]},
-    "Ski / Snowboard":{zones:["genoux (LCA)","poignets","épaules"],echauf:["Squats à vide : 15","Fentes : 8 par jambe","Jumping jacks : 30 s","Chaise contre le mur : 30 s"],renfo:["Squats : 4 × 12","Chaise contre le mur : 3 × 45 s","Pont fessier : 3 × 15"],recup:["Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements","Étirement du papillon : 3 × 30 s"]},
-    "Golf":{zones:["bas du dos","coude","épaule","poignet"],echauf:["Rotations du tronc : 15 par côté","Rotations d'épaules : 15 par sens","Fentes : 8 par jambe","Cat-cow : 10 mouvements"],renfo:["Russian twists : 3 × 20","Planche : 3 × 30 s","Pont fessier : 3 × 15"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Salutation au soleil : 3 cycles"]},
-    "Danse":{zones:["chevilles","genoux","bas du dos","pieds"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Fentes : 8 par jambe","Salutation au soleil : 2 cycles"],renfo:["Mollets debout : 3 × 15","Planche : 3 × 30 s","Pont fessier : 3 × 15"],recup:["Étirement du papillon : 3 × 30 s","Étirement du pigeon : 3 × 30 s","Cat-cow : 10 mouvements"]},
-    "Yoga":{zones:["poignets","bas du dos","ischio-jambiers"],echauf:["Salutation au soleil : 3 cycles","Cat-cow : 10 mouvements","Rotations d'épaules : 15 par sens","Fentes douces : 8 par jambe"],renfo:["Planche : 3 × 30 s","Chaise contre le mur : 3 × 30 s","Pont fessier : 3 × 12"],recup:["Étirement du pigeon : 3 × 30 s","Étirement du papillon : 3 × 30 s","Cat-cow : 10 mouvements"]},
-    "Autre":{zones:["articulations sollicitées","muscles principaux"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Squats à vide : 15","Rotations d'épaules : 15 par sens"],renfo:["Squats : 4 × 12","Pompes : 3 × 10","Planche : 3 × 30 s"],recup:["Cat-cow : 10 mouvements","Étirement du pigeon : 3 × 30 s","Étirement du papillon : 3 × 30 s"]}
-  }
+const I18N={
+  fr:{appTitle:"Coach Sportif",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",
+    age:"Âge",sport:"Sport",level:"Niveau",freq:"Fréquence",years:"ans",sessions:"séances/sem",levels:["Débutant","Intermédiaire","Avancé","Compétiteur"],choose:"— Choisir —",
+    hello:"Salut",coachIntro:"Je suis <b>Coach</b>. Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.",
+    zones:"⚠️ Zones à surveiller",echaufT:"🔥 Échauffement (avant chaque séance)",renfoT:"💪 Renforcement préventif (2x/sem)",recupT:"🧊 Récupération",ageT:"👤 Adapté à ton âge",freqT:"📅 Adapté à ta fréquence",levelT:"📈 Adapté à ton niveau",fillAll:"Remplis tous les champs.",needLogin:"Entre un nom, un email et un mot de passe."},
+  en:{appTitle:"Sports Coach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",
+    age:"Age",sport:"Sport",level:"Level",freq:"Frequency",years:"yrs",sessions:"sessions/wk",levels:["Beginner","Intermediate","Advanced","Competitor"],choose:"— Choose —",
+    hello:"Hi",coachIntro:"I'm <b>Coach</b>. Ask me for a warm-up, a recovery routine or strength exercises, I'll give you concrete sessions.",
+    zones:"⚠️ Areas to watch",echaufT:"🔥 Warm-up (before each session)",renfoT:"💪 Preventive strength (2x/week)",recupT:"🧊 Recovery",ageT:"👤 Adapted to your age",freqT:"📅 Adapted to your frequency",levelT:"📈 Adapted to your level",fillAll:"Fill in all fields.",needLogin:"Enter a name, an email and a password."},
+  es:{appTitle:"Entrenador Deportivo",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",
+    age:"Edad",sport:"Deporte",level:"Nivel",freq:"Frecuencia",years:"años",sessions:"sesiones/sem",levels:["Principiante","Intermedio","Avanzado","Competidor"],choose:"— Elegir —",
+    hello:"Hola",coachIntro:"Soy <b>Coach</b>. Pídeme un calentamiento, una rutina de recuperación o ejercicios de fuerza, te doy sesiones concretas.",
+    zones:"⚠️ Zonas a vigilar",echaufT:"🔥 Calentamiento (antes de cada sesión)",renfoT:"💪 Fuerza preventiva (2x/sem)",recupT:"🧊 Recuperación",ageT:"👤 Adaptado a tu edad",freqT:"📅 Adaptado a tu frecuencia",levelT:"📈 Adaptado a tu nivel",fillAll:"Rellena todos los campos.",needLogin:"Introduce un nombre, un correo y una contraseña."}
 };
+let lang = localStorage.getItem("coach_lang") || "fr";
+function T(k){return (I18N[lang]&&I18N[lang][k])!==undefined?I18N[lang][k]:I18N.fr[k];}
 
-function fillSportSelect(){
-  const sel=document.getElementById("q-sport");
-  sel.innerHTML='<option value="">— Choisir —</option>'+
-    Object.keys(KB.sports).map(s=>'<option>'+s+'</option>').join("");
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{el.innerHTML=T(el.getAttribute("data-i"));});
+  document.querySelectorAll("[data-i-ph]").forEach(el=>{el.placeholder=T(el.getAttribute("data-i-ph"));});
+  ["fr","en","es"].forEach(l=>$("lang-"+l).classList.toggle("active",l===lang));
+  fillSportSelect(); fillLevelSelect();
+}
+function setLang(l){lang=l;localStorage.setItem("coach_lang",l);applyLang();
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"null");
+  if(currentUser&&data&&data.sport&&!$("screen-app").classList.contains("hidden")){loadApp(data);}
+  renderSettings();
 }
 
 /* ============================================================
-   GESTION COMPTE / ETAT (localStorage)
+   BASE DE CONNAISSANCES (noms d'exercices clairs)
    ============================================================ */
-let currentUser = null;
-const $ = id => document.getElementById(id);
-function show(screen){["screen-login","screen-form","screen-app"].forEach(s=>$(s).classList.add("hidden"));$(screen).classList.remove("hidden");}
+const KB={sports:{
+  "Course à pied":{zones:["genoux","tendon d'Achille","tibias"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Talons-fesses : 30 s","Fentes marchées : 10/jambe"],renfo:["Mollets debout : 3×15","Pont fessier : 3×15","Planche : 3×30 s"],recup:["Étirement du papillon : 3×30 s","Cat-cow : 10","Mollets (étirement mur) : 3×30 s"]},
+  "Padel":{zones:["coude","épaule","cheville","bas du dos"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15/sens","Fentes : 8/jambe","Mountain climbers : 20"],renfo:["Curl biceps : 3×12","Élévations latérales : 3×12","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Tennis":{zones:["coude","épaule","poignet"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15/sens","High knees : 30 s","Fentes : 8/jambe"],renfo:["Curl biceps : 3×12","Élévations latérales : 3×12","Pompes : 3×10"],recup:["Étirement du pigeon : 3×30 s","Cat-cow : 10","Salutation au soleil : 3 cycles"]},
+  "Football":{zones:["ischio-jambiers","cheville","genou"],echauf:["Course progressive : 3 min","High knees : 30 s","Talons-fesses : 30 s","Fentes marchées : 10/jambe"],renfo:["Squats : 4×12","Fentes : 3×10/jambe","Pont fessier : 3×15"],recup:["Étirement du papillon : 3×30 s","Étirement du pigeon : 3×30 s","Cat-cow : 10"]},
+  "Basketball":{zones:["chevilles","genoux","doigts"],echauf:["Jumping jacks : 30 s","Squats : 15","High knees : 30 s","Sauts légers : 15"],renfo:["Squats : 4×12","Mollets debout : 3×15","Chaise contre le mur : 3×30 s"],recup:["Étirement du papillon : 3×30 s","Cat-cow : 10","Mollets (étirement) : 3×30 s"]},
+  "Handball":{zones:["épaule","genou","doigts","cheville"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15/sens","High knees : 30 s","Fentes : 8/jambe"],renfo:["Élévations latérales : 3×12","Squats : 4×12","Planche : 3×30 s"],recup:["Étirement du pigeon : 3×30 s","Cat-cow : 10","Étirement du papillon : 3×30 s"]},
+  "Rugby":{zones:["épaules","cou","genoux"],echauf:["Course progressive : 3 min","Jumping jacks : 30 s","Squats : 15","Rotations d'épaules : 15/sens"],renfo:["Squats : 4×12","Pompes : 3×12","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Volleyball":{zones:["épaule","genoux","chevilles"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15/sens","Sauts légers : 15","Fentes : 8/jambe"],renfo:["Squats : 4×12","Élévations latérales : 3×12","Mollets debout : 3×15"],recup:["Étirement du pigeon : 3×30 s","Cat-cow : 10","Étirement du papillon : 3×30 s"]},
+  "Badminton":{zones:["épaule","cheville","genou","coude"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Fentes : 8/jambe","Rotations d'épaules : 15/sens"],renfo:["Mollets debout : 3×15","Curl biceps : 3×12","Planche : 3×30 s"],recup:["Étirement du papillon : 3×30 s","Cat-cow : 10","Étirement du pigeon : 3×30 s"]},
+  "Musculation":{zones:["épaules","bas du dos","poignets"],echauf:["Jumping jacks : 30 s","Rotations d'épaules : 15/sens","Squats à vide : 15","Mountain climbers : 20"],renfo:["Développé couché léger : 3×12","Élévations latérales : 3×12","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Crossfit":{zones:["épaules","bas du dos","genoux"],echauf:["Jumping jacks : 30 s","Squats à vide : 15","Mountain climbers : 20","Rotations d'épaules : 15/sens"],renfo:["Squats : 4×12","Pompes : 3×12","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Étirement du papillon : 3×30 s"]},
+  "Boxe":{zones:["poignets","épaules","cou"],echauf:["Corde à sauter : 3 min","Jumping jacks : 30 s","Rotations d'épaules : 15/sens","Mountain climbers : 20"],renfo:["Pompes : 3×12","Planche : 3×30 s","Russian twists : 3×20"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Natation":{zones:["épaules","cou","bas du dos"],echauf:["Rotations d'épaules : 15/sens","Jumping jacks : 30 s","Mountain climbers : 20","Cat-cow : 10"],renfo:["Élévations latérales : 3×12","Planche : 3×30 s","Pont fessier : 3×15"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Cyclisme":{zones:["genoux","bas du dos","nuque"],echauf:["Vélo faible résistance : 5 min","Squats à vide : 15","Fentes : 8/jambe","Cat-cow : 10"],renfo:["Squats : 4×12","Pont fessier : 3×15","Planche : 3×30 s"],recup:["Étirement du pigeon : 3×30 s","Cat-cow : 10","Étirement du papillon : 3×30 s"]},
+  "Escalade":{zones:["doigts","coude","épaule"],echauf:["Rotations d'épaules : 15/sens","Jumping jacks : 30 s","Mountain climbers : 20","Curl biceps léger : 3×12"],renfo:["Tractions : 3×5","Pompes : 3×10","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Ski / Snowboard":{zones:["genoux","poignets","épaules"],echauf:["Squats à vide : 15","Fentes : 8/jambe","Jumping jacks : 30 s","Chaise contre le mur : 30 s"],renfo:["Squats : 4×12","Chaise contre le mur : 3×45 s","Pont fessier : 3×15"],recup:["Étirement du pigeon : 3×30 s","Cat-cow : 10","Étirement du papillon : 3×30 s"]},
+  "Golf":{zones:["bas du dos","coude","épaule"],echauf:["Rotations du tronc : 15/côté","Rotations d'épaules : 15/sens","Fentes : 8/jambe","Cat-cow : 10"],renfo:["Russian twists : 3×20","Planche : 3×30 s","Pont fessier : 3×15"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Salutation au soleil : 3 cycles"]},
+  "Danse":{zones:["chevilles","genoux","bas du dos"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Fentes : 8/jambe","Salutation au soleil : 2 cycles"],renfo:["Mollets debout : 3×15","Planche : 3×30 s","Pont fessier : 3×15"],recup:["Étirement du papillon : 3×30 s","Étirement du pigeon : 3×30 s","Cat-cow : 10"]},
+  "Yoga":{zones:["poignets","bas du dos","ischio-jambiers"],echauf:["Salutation au soleil : 3 cycles","Cat-cow : 10","Rotations d'épaules : 15/sens","Fentes douces : 8/jambe"],renfo:["Planche : 3×30 s","Chaise contre le mur : 3×30 s","Pont fessier : 3×12"],recup:["Étirement du pigeon : 3×30 s","Étirement du papillon : 3×30 s","Cat-cow : 10"]},
+  "Autre":{zones:["articulations","muscles principaux"],echauf:["Jumping jacks : 30 s","High knees : 30 s","Squats à vide : 15","Rotations d'épaules : 15/sens"],renfo:["Squats : 4×12","Pompes : 3×10","Planche : 3×30 s"],recup:["Cat-cow : 10","Étirement du pigeon : 3×30 s","Étirement du papillon : 3×30 s"]}
+}};
+
+function fillSportSelect(){const sel=$("q-sport");const cur=sel.value;
+  sel.innerHTML='<option value="">'+T("choose")+'</option>'+Object.keys(KB.sports).map(s=>'<option>'+s+'</option>').join("");
+  if(cur)sel.value=cur;}
+function fillLevelSelect(){const sel=$("q-level");const cur=sel.value;
+  sel.innerHTML='<option value="">'+T("choose")+'</option>'+T("levels").map((l,i)=>'<option value="'+i+'">'+l+'</option>').join("");
+  if(cur)sel.value=cur;}
+
+/* ============================================================
+   COMPTE / ETAT
+   ============================================================ */
+let currentUser=null;
+const $=id=>document.getElementById(id);
+function show(s){["screen-login","screen-form","screen-app"].forEach(x=>$(x).classList.add("hidden"));$(s).classList.remove("hidden");}
 
 function login(){
-  const name=$("login-name").value.trim();
-  const pass=$("login-pass").value.trim();
-  if(!name||!pass){alert("Entre un nom et un mot de passe.");return;}
+  const name=$("login-name").value.trim(),email=$("login-email").value.trim(),pass=$("login-pass").value.trim();
+  if(!name||!email||!pass){alert(T("needLogin"));return;}
   currentUser=name;
   localStorage.setItem("coach_user",name);
+  localStorage.setItem("coach_cred_"+name,JSON.stringify({email,pass}));
+  $("welcome-name").textContent=name;$("welcome-name2").textContent=name;
   const data=JSON.parse(localStorage.getItem("coach_data_"+name)||"null");
-  $("welcome-name").textContent=name;
-  $("welcome-name2").textContent=name;
-  if(data&&data.sport){ loadApp(data); } else { show("screen-form"); }
+  if(data&&data.sport){loadApp(data);}else{show("screen-form");}
 }
-function logout(){localStorage.removeItem("coach_user");currentUser=null;show("screen-login");}
-function editProfile(){show("screen-form");}
+function logout(){closeSettings();localStorage.removeItem("coach_user");currentUser=null;show("screen-login");}
+function editProfile(){closeSettings();show("screen-form");}
+
+function openSettings(){renderSettings();$("settings").classList.remove("hidden");}
+function closeSettings(){$("settings").classList.add("hidden");}
+function renderSettings(){
+  const cred=JSON.parse(localStorage.getItem("coach_cred_"+currentUser)||"{}");
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  const lvl=(data.level!==undefined&&data.level!=="")?T("levels")[parseInt(data.level)]:"—";
+  $("settings-info").innerHTML=
+    line(T("name"),currentUser||"—")+
+    line(T("email"),cred.email||"—")+
+    line(T("pass"),cred.pass||"—")+
+    line(T("age"),(data.age||"—")+(data.age?" "+T("years"):""))+
+    line(T("sport"),data.sport||"—")+
+    line(T("freq"),(data.freq||"—")+(data.freq?" "+T("sessions"):""))+
+    line(T("level"),lvl);
+}
+function line(a,b){return '<div class="info-line"><span>'+a+'</span><span>'+b+'</span></div>';}
 
 /* ============================================================
-   GENERATION DU PROGRAMME
+   PROGRAMME
    ============================================================ */
 function generatePlan(){
-  const age=$("q-age").value, sport=$("q-sport").value, freq=$("q-freq").value, level=$("q-level").value;
-  if(!age||!sport||!freq||!level){alert("Remplis tous les champs.");return;}
+  const age=$("q-age").value,sport=$("q-sport").value,freq=$("q-freq").value,level=$("q-level").value;
+  if(!age||!sport||!freq||level===""){alert(T("fillAll"));return;}
   const data={age,sport,freq,level};
   localStorage.setItem("coach_data_"+currentUser,JSON.stringify(data));
   loadApp(data);
 }
-
 function loadApp(data){
   show("screen-app");
+  const lvl=T("levels")[parseInt(data.level)]||"";
   $("profile-badges").innerHTML=
-    '<span class="badge">Âge : '+data.age+' ans</span>'+
-    '<span class="badge">Sport : '+data.sport+'</span>'+
-    '<span class="badge">Fréquence : '+data.freq+' séances/sem</span>'+
-    '<span class="badge">Niveau : '+data.level+'</span>';
+    '<span class="badge b-blue">'+T("age")+" : "+data.age+" "+T("years")+'</span>'+
+    '<span class="badge b-green">'+T("sport")+" : "+data.sport+'</span>'+
+    '<span class="badge b-orange">'+T("freq")+" : "+data.freq+" "+T("sessions")+'</span>'+
+    '<span class="badge b-purple">'+T("level")+" : "+lvl+'</span>';
   const k=KB.sports[data.sport]||KB.sports["Autre"];
   const ageNum=parseInt(data.age);
-  let ageNote = ageNum<16 ? "Privilégie le ludique, évite les charges lourdes (croissance)."
-              : ageNum>50 ? "Augmente le temps d'échauffement et la récupération."
-              : "Profil adulte : équilibre charge / récupération.";
-  let freqNote = parseInt(data.freq)>=5 ? "Fréquence élevée : garde au moins 1 jour de repos complet pour éviter le surentraînement."
-              : "Bonne fréquence : pense à varier les intensités.";
   const items=[
-    {t:"⚠️ Zones à surveiller",d:k.zones.join(", ")},
-    {t:"🔥 Échauffement (avant chaque séance)",d:k.echauf.join(" · ")},
-    {t:"💪 Renforcement préventif (2x/sem)",d:k.renfo.join(" · ")},
-    {t:"🧊 Récupération",d:k.recup.join(" · ")},
-    {t:"👤 Adapté à ton âge",d:ageNote},
-    {t:"📅 Adapté à ta fréquence",d:freqNote},
-    {t:"📈 Adapté à ton niveau ("+data.level+")",d:
-      data.level==="Débutant"?"Progresse de 10% max par semaine. Technique avant intensité.":
-      data.level==="Compétiteur"?"Surveille les signaux de fatigue, planifie des phases de décharge.":
-      "Maintiens la régularité et écoute les douleurs inhabituelles."}
+    {t:T("zones"),d:k.zones.join(", ")},
+    {t:T("echaufT"),d:k.echauf.join(" · ")},
+    {t:T("renfoT"),d:k.renfo.join(" · ")},
+    {t:T("recupT"),d:k.recup.join(" · ")},
+    {t:T("ageT"),d:ageNum<16?"":(ageNum>50?"":"")||(ageNum<16?"+ ludique, pas de charges lourdes":ageNum>50?"+ d'échauffement et de récup":"OK")},
+    {t:T("freqT"),d:parseInt(data.freq)>=5?"1 jour de repos complet mini":"Varie les intensités"},
+    {t:T("levelT")+" ("+lvl+")",d:data.level==="0"?"+10% max/semaine, technique d'abord":data.level==="3"?"Surveille la fatigue, phases de décharge":"Régularité + écoute des douleurs"}
   ];
   $("plan").innerHTML=items.map(i=>'<div class="plan-item"><h3>'+i.t+'</h3><p>'+i.d+'</p></div>').join("");
   $("chat").innerHTML="";
-  addMsg("bot","Salut "+currentUser+" 👋 Je suis <b>Coach</b>. Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes avec des noms d'exercices.");
+  addMsg("bot",T("hello")+" "+currentUser+" 👋 "+T("coachIntro"));
 }
 
 /* ============================================================
-   CHAT COACH
+   CHAT
    ============================================================ */
 let history=[];
-function addMsg(role,html){
-  const d=document.createElement("div");d.className="msg "+role;d.innerHTML=html;
-  $("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight;
-}
-
+function addMsg(role,html){const d=document.createElement("div");d.className="msg "+role;d.innerHTML=html;$("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight;}
 async function sendMsg(){
   const inp=$("chat-input");const text=inp.value.trim();if(!text)return;
-  inp.value="";addMsg("user",text);
-  history.push({role:"user",content:text});
-  const typing=document.createElement("div");typing.className="typing";typing.textContent="Coach écrit…";
-  $("chat").appendChild(typing);$("chat").scrollTop=$("chat").scrollHeight;
-
+  inp.value="";addMsg("user",text);history.push({role:"user",content:text});
+  const typing=document.createElement("div");typing.className="typing";typing.textContent="…";$("chat").appendChild(typing);$("chat").scrollTop=$("chat").scrollHeight;
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
-  const systemContext='Tu es "Coach", un assistant expert en préparation physique et prévention des blessures sportives.'+
-'\nProfil de utilisateur : '+data.age+' ans, sport='+data.sport+', fréquence='+data.freq+'/sem, niveau='+data.level+'.'+
-'\nREGLES :'+
-'\n- Réponds en français, de façon directe, motivante et CONCRETE.'+
-'\n- Donne TOUJOURS des exercices avec leur NOM clair et chiffrés (ex: "Jumping jacks : 30 s", "Squats : 4 x 12", "Planche : 3 x 30 s", "Mountain climbers : 20"). Utilise des noms reconnus, pas des descriptions vagues.'+
-'\n- Donne des routines completes étape par étape quand on te demande échauffement, récup ou renfo.'+
-'\n- Ne répete PAS "consulte un médecin" a chaque réponse. Ne le mentionne QUE si utilisateur décrit une douleur aigue, un craquement, un gonflement important, une douleur qui dure depuis plusieurs semaines, ou une urgence claire.'+
-'\n- Tu connais les blessures courantes (Osgood-Schlatter, tendinites, entorses, périostite, etc.) et tu donnes des conseils de reprise progressive.';
-
+  const langName={fr:"français",en:"English",es:"español"}[lang];
+  const sys='Tu es "Coach", expert en préparation physique et prévention des blessures. Profil: '+data.age+' ans, sport='+data.sport+'. Réponds en '+langName+', de façon concrete avec des NOMS d\'exercices chiffrés (ex: "Jumping jacks : 30 s", "Squats : 4x12", "Planche : 3x30 s"). Ne dis "consulte un médecin" QUE pour douleur aigue/gonflement important/urgence.';
   try{
-    const res=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",max_tokens:1000,
-        system:systemContext,
-        messages:history.slice(-10)
-      })
-    });
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:history.slice(-10)})});
     const json=await res.json();
     const reply=json.content.filter(c=>c.type==="text").map(c=>c.text).join("\n")||fallback(text);
-    typing.remove();addMsg("bot",reply.replace(/\n/g,"<br>"));
-    history.push({role:"assistant",content:reply});
-  }catch(e){
-    typing.remove();
-    const reply=fallback(text);
-    addMsg("bot",reply);
-    history.push({role:"assistant",content:reply});
-  }
+    typing.remove();addMsg("bot",reply.replace(/\n/g,"<br>"));history.push({role:"assistant",content:reply});
+  }catch(e){typing.remove();const reply=fallback(text);addMsg("bot",reply);history.push({role:"assistant",content:reply});}
 }
-
-/* ============================================================
-   Réponses locales - NOMS d'exercices, blessures prioritaires
-   ============================================================ */
 function fallback(q){
-  const t=q.toLowerCase();
-  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
-  const k=KB.sports[data.sport]||KB.sports["Autre"];
-
-  /* --- BLESSURES EN PRIORITE (avant récup/échauf) --- */
-  if(t.includes("osgood")||t.includes("schlater")||t.includes("schlatter")){
-    return "🦵 <b>Osgood-Schlatter (douleur sous la rotule)</b><br>"+
-      "1) Glace 15 min après l'effort sur la tubérosité tibiale<br>"+
-      "2) Étirement quadriceps debout (talon vers la fesse) : 3 × 30 s par jambe, 2×/jour<br>"+
-      "3) Chaise contre le mur : 3 × 30 s (renfo sans choc)<br>"+
-      "4) Pont fessier : 3 × 15<br>"+
-      "5) Reprise progressive : réduis sauts et sprints tant que ça tire, +10%/semaine.<br>"+
-      "Patience : ça se calme avec la fin de la croissance.";
-  }
-  if(t.includes("genou")){
-    return "🦵 <b>Programme genou</b><br>"+
-      "1) Glace 15 min si gonflement<br>"+
-      "2) Chaise contre le mur : 3 × 30 s<br>"+
-      "3) Pont fessier : 3 × 15<br>"+
-      "4) Mollets debout : 3 × 15<br>"+
-      "5) Étirement du papillon : 3 × 30 s<br>"+
-      "Reprends sans douleur vive.";
-  }
-  if(t.includes("cheville")||t.includes("entorse")){
-    return "🦶 <b>Programme cheville / entorse</b><br>"+
-      "1) Protocole GREC : Glace, Repos relatif, Élévation, Compression<br>"+
-      "2) Équilibre sur une jambe : 3 × 30 s (puis yeux fermés)<br>"+
-      "3) Mollets debout : 3 × 15<br>"+
-      "4) Jumping jacks légers : 30 s quand ça ne fait plus mal<br>"+
-      "Si ça gonfle beaucoup ou t'empêche d'appuyer, fais voir à un pro.";
-  }
-  if(t.includes("dos")||t.includes("lombaire")){
-    return "🔙 <b>Programme bas du dos</b><br>"+
-      "1) Planche : 3 × 30 s<br>"+
-      "2) Pont fessier : 3 × 15<br>"+
-      "3) Russian twists : 3 × 20<br>"+
-      "4) Cat-cow : 10 mouvements lents<br>"+
-      "Évite de soulever dos rond.";
-  }
-  if(t.includes("épaule")||t.includes("epaule")){
-    return "💪 <b>Programme épaule</b><br>"+
-      "1) Rotations d'épaules : 15 par sens<br>"+
-      "2) Élévations latérales légères : 3 × 12<br>"+
-      "3) Pompes (sur genoux si besoin) : 3 × 8<br>"+
-      "4) Étirement du pigeon : 3 × 30 s<br>"+
-      "Évite les mouvements au-dessus de la tête tant que ça gêne.";
-  }
-  if(t.includes("coude")){
-    return "💪 <b>Programme coude (épicondylite)</b><br>"+
-      "1) Repos relatif des frappes/charges<br>"+
-      "2) Curl biceps léger : 3 × 12<br>"+
-      "3) Extension poignet à l'élastique : 3 × 15<br>"+
-      "4) Glace 10 min si ça chauffe<br>"+
-      "Reprends progressivement.";
-  }
-
-  /* --- ECHAUFFEMENT --- */
-  if(t.includes("échauf")||t.includes("echauf")||t.includes("warm")){
-    return "🔥 <b>Échauffement pour "+(data.sport||"toi")+"</b><br>"+
-      k.echauf.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>"+
-      "Finis par 10 squats à vide pour activer les jambes.";
-  }
-  /* --- RECUPERATION --- */
-  if(t.includes("récup")||t.includes("recup")||t.includes("courbature")||t.includes("après")||t.includes("apres")){
-    return "🧊 <b>Routine de récupération</b><br>"+
-      k.recup.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>"+
-      "Bonus : 8-9 h de sommeil + 1,5 L d'eau. Les courbatures partent en 24-72 h, c'est normal.";
-  }
-  /* --- RENFORCEMENT --- */
-  if(t.includes("renfo")||t.includes("muscl")||t.includes("exercice")||t.includes("entrain")||t.includes("programme")){
-    return "💪 <b>Séance de renfo préventif (2×/sem)</b><br>"+
-      "1) Squats : 4 × 12<br>"+
-      "2) Pompes : 4 × 8 (sur genoux si besoin)<br>"+
-      "3) Fentes : 3 × 10 par jambe<br>"+
-      "4) Planche : 3 × 30 s<br>"+
-      "5) Ciblé "+(data.sport||"sport")+" : "+k.renfo.join(" · ")+".";
-  }
-  /* --- PREVENTION --- */
-  if(t.includes("prévenir")||t.includes("prevenir")||t.includes("éviter")||t.includes("eviter")||t.includes("blessure")){
-    return "🛡️ <b>Prévention pour "+(data.sport||"ton sport")+"</b><br>"+
-      "Zones à surveiller : "+k.zones.join(", ")+"<br>"+
-      "Échauffe-toi : "+k.echauf.join(" · ")+"<br>"+
-      "Renforce : "+k.renfo.join(" · ")+".";
-  }
-
-  return "Dis-m'en un peu plus 💡 Tu veux un <b>échauffement</b>, une <b>routine de récup</b>, des <b>exos de renfo</b>, ou de l'aide sur une zone précise (genou, cheville, épaule, dos, coude) ? Je te donne une séance détaillée avec des noms d'exercices.";
+  const t=q.toLowerCase();const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");const k=KB.sports[data.sport]||KB.sports["Autre"];
+  if(t.includes("osgood")||t.includes("schlat"))return "🦵 <b>Osgood-Schlatter</b><br>1) Glace 15 min après l'effort<br>2) Étirement quadriceps : 3×30 s/jambe<br>3) Chaise contre le mur : 3×30 s<br>4) Pont fessier : 3×15<br>5) Reprise +10%/semaine.";
+  if(t.includes("genou"))return "🦵 <b>Genou</b><br>1) Glace 15 min si gonflement<br>2) Chaise contre le mur : 3×30 s<br>3) Pont fessier : 3×15<br>4) Mollets debout : 3×15<br>5) Étirement du papillon : 3×30 s.";
+  if(t.includes("cheville")||t.includes("entorse"))return "🦶 <b>Cheville</b><br>1) GREC : Glace, Repos, Élévation, Compression<br>2) Équilibre 1 jambe : 3×30 s<br>3) Mollets debout : 3×15<br>4) Jumping jacks légers quand ça ne fait plus mal.";
+  if(t.includes("dos")||t.includes("lombaire"))return "🔙 <b>Dos</b><br>1) Planche : 3×30 s<br>2) Pont fessier : 3×15<br>3) Russian twists : 3×20<br>4) Cat-cow : 10 mouvements.";
+  if(t.includes("épaule")||t.includes("epaule"))return "💪 <b>Épaule</b><br>1) Rotations d'épaules : 15/sens<br>2) Élévations latérales : 3×12<br>3) Pompes : 3×8<br>4) Étirement du pigeon : 3×30 s.";
+  if(t.includes("coude"))return "💪 <b>Coude</b><br>1) Repos relatif<br>2) Curl biceps léger : 3×12<br>3) Extension poignet élastique : 3×15<br>4) Glace 10 min si ça chauffe.";
+  if(t.includes("échauf")||t.includes("echauf")||t.includes("warm")||t.includes("calent")||t.includes("calienta"))return "🔥 <b>"+T("echaufT").replace("🔥 ","")+"</b><br>"+k.echauf.map((e,i)=>(i+1)+") "+e).join("<br>");
+  if(t.includes("récup")||t.includes("recup")||t.includes("courbature")||t.includes("recover")||t.includes("recuper"))return "🧊 <b>"+T("recupT").replace("🧊 ","")+"</b><br>"+k.recup.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>+ 8 h de sommeil + hydratation.";
+  if(t.includes("renfo")||t.includes("muscl")||t.includes("exercice")||t.includes("entrain")||t.includes("programme")||t.includes("program")||t.includes("strength")||t.includes("fuerza"))return "💪 <b>Renfo (2×/sem)</b><br>1) Squats : 4×12<br>2) Pompes : 4×8<br>3) Fentes : 3×10/jambe<br>4) Planche : 3×30 s<br>5) "+k.renfo.join(" · ");
+  if(t.includes("prév), prevenir")||t.includes("éviter")||t.includes("blessure")||t.includes("prevent")||t.includes("lesion"))return "🛡️ <b>Prévention</b><br>"+T("zones")+" : "+k.zones.join(", ")+"<br>"+k.echauf.join(" · ");
+  return "💡 "+T("coachIntro");
 }
 
 /* ============================================================
-   AUTO-CONNEXION
+   INIT
    ============================================================ */
 window.onload=()=>{
-  fillSportSelect();
+  applyLang();
   const saved=localStorage.getItem("coach_user");
   if(saved){currentUser=saved;$("welcome-name").textContent=saved;$("welcome-name2").textContent=saved;
     const data=JSON.parse(localStorage.getItem("coach_data_"+saved)||"null");
