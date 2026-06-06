@@ -57,8 +57,8 @@
   .gear:hover{transform:rotate(40deg);background:var(--card2)}
   /* Modal réglages */
   .overlay{position:fixed;inset:0;background:rgba(20,30,60,.35);backdrop-filter:blur(4px);
-    display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
-  .modal{background:var(--card);border-radius:24px;padding:28px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+    display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;overflow-y:auto}
+  .modal{background:var(--card);border-radius:24px;padding:28px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
   .modal h2{display:flex;align-items:center;gap:8px}
   .info-line{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px}
   .info-line span:first-child{color:var(--muted)} .info-line span:last-child{font-weight:600}
@@ -270,8 +270,8 @@ function goEditProfile(){
   show("screen-form");
 }
 
-function openSettings(){renderSettings();const s=$("settings");s.classList.remove("hidden");s.style.display="flex";}
-function closeSettings(){const s=$("settings");if(s){s.classList.add("hidden");s.style.display="none";}}
+function openSettings(){renderSettings();const s=$("settings");s.classList.remove("hidden");s.style.display="flex";document.body.style.overflow="hidden";}
+function closeSettings(){const s=$("settings");if(s){s.classList.add("hidden");s.style.display="none";}document.body.style.overflow="";}
 function renderSettings(){
   try{
     const cred=JSON.parse(localStorage.getItem("coach_cred_"+currentUser)||"{}");
@@ -292,7 +292,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v5 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v6 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
