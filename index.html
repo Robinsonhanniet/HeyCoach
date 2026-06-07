@@ -78,7 +78,7 @@
   <!-- ============ ACCUEIL ============ -->
   <div id="screen-home">
     <div class="topbar">
-      <button onclick="show('screen-login')" data-i="connect">Se connecter</button>
+      <button onclick="goConnect()" data-i="connect">Se connecter</button>
       <div class="gear" onclick="openSettings()">⚙️</div>
     </div>
     <div class="card" style="max-width:680px;margin:30px auto;text-align:center">
@@ -86,7 +86,7 @@
       <h1 data-i="appTitle">Coach Sportif</h1>
       <p class="sub" data-i="homeDesc" style="margin:14px auto 0;max-width:520px">Bienvenue ! Ce site t'aide à pratiquer ton sport sans te blesser. Indique ton âge, tes sports, ta fréquence et ton niveau : tu reçois un programme de prévention personnalisé (échauffement, renforcement, récupération) et tu peux discuter avec un coach qui répond à tes questions sur les blessures et la récupération.</p>
       <div style="margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="green" onclick="show('screen-login')" data-i="startBtn">Commencer</button>
+        <button class="green" onclick="goConnect()" data-i="startBtn">Commencer</button>
       </div>
     </div>
     <div class="card" style="max-width:680px;margin:0 auto">
@@ -282,6 +282,17 @@ function fillLevelSelect(){const sel=$("q-level");const cur=sel.value;
 let currentUser=null;
 const $=id=>document.getElementById(id);
 function show(s){["screen-home","screen-login","screen-form","screen-app"].forEach(x=>$(x).classList.add("hidden"));$(s).classList.remove("hidden");}
+function goConnect(){
+  const saved=localStorage.getItem("coach_user");
+  if(saved){
+    currentUser=saved;
+    $("welcome-name").textContent=saved;$("welcome-name2").textContent=saved;
+    const data=JSON.parse(localStorage.getItem("coach_data_"+saved)||"null");
+    if(data&&data.sport){loadApp(data);return;}
+    show("screen-form");return;
+  }
+  show("screen-login");
+}
 
 function login(){
   const name=$("login-name").value.trim(),email=$("login-email").value.trim(),pass=$("login-pass").value.trim();
@@ -329,7 +340,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v14 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v15 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -639,11 +650,15 @@ function fallback(q){
    ============================================================ */
 window.onload=()=>{
   applyLang();
+  closeSettings(); // le panneau réglages est toujours fermé au démarrage
   const saved=localStorage.getItem("coach_user");
-  if(saved){currentUser=saved;$("welcome-name").textContent=saved;$("welcome-name2").textContent=saved;
-    const data=JSON.parse(localStorage.getItem("coach_data_"+saved)||"null");
-    if(data&&data.sport){loadApp(data);}else{show("screen-form");}
-  }else{show("screen-home");}
+  if(saved){
+    currentUser=saved;
+    $("welcome-name").textContent=saved;
+    $("welcome-name2").textContent=saved;
+  }
+  // on arrive TOUJOURS sur la page d'accueil
+  show("screen-home");
 };
 </script>
 </body>
