@@ -424,7 +424,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v29 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v30 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -511,6 +511,49 @@ const FICHES={
   "Salutation au soleil":{muscles:"Corps complet — étirement et mobilité générale",cles:["Enchaînement de 12 postures qui s'enchaînent fluidement","Respire : inspire en ouvrant, expire en fermant","Mouvement lent et conscient","Parfait comme échauffement ou retour au calme","Répète 3 à 5 cycles"],erreurs:["Aller trop vite → lenteur et respiration","Sauter des postures → respecter la séquence","Forcer les étirements → douceur"]}
 };
 
+/* ============================================================
+   SILHOUETTE MUSCULAIRE (muscles travaillés colorés)
+   ============================================================ */
+function bodySVG(active){
+  const on="#0a84ff", off="#cdd4de", stroke="#9aa7b4";
+  const c=z=>active.includes(z)?on:off;
+  return '<svg viewBox="0 0 200 320" width="140" height="224" xmlns="http://www.w3.org/2000/svg">'+
+  '<circle cx="100" cy="26" r="17" fill="'+off+'" stroke="'+stroke+'"/>'+
+  '<rect x="92" y="42" width="16" height="9" fill="'+off+'"/>'+
+  '<path d="M60 58 Q100 48 140 58 L140 70 Q100 62 60 70 Z" fill="'+c('epaules')+'" stroke="'+stroke+'"/>'+
+  '<path d="M70 72 Q100 68 130 72 L126 98 Q100 106 74 98 Z" fill="'+c('pectoraux')+'" stroke="'+stroke+'"/>'+
+  '<rect x="82" y="102" width="36" height="48" rx="6" fill="'+c('abdos')+'" stroke="'+stroke+'"/>'+
+  '<ellipse cx="56" cy="90" rx="11" ry="23" fill="'+c('biceps')+'" stroke="'+stroke+'"/>'+
+  '<ellipse cx="144" cy="90" rx="11" ry="23" fill="'+c('biceps')+'" stroke="'+stroke+'"/>'+
+  '<ellipse cx="50" cy="128" rx="9" ry="21" fill="'+c('avantbras')+'" stroke="'+stroke+'"/>'+
+  '<ellipse cx="150" cy="128" rx="9" ry="21" fill="'+c('avantbras')+'" stroke="'+stroke+'"/>'+
+  '<path d="M80 154 Q88 152 96 154 L94 214 Q88 218 84 214 Z" fill="'+c('quadriceps')+'" stroke="'+stroke+'"/>'+
+  '<path d="M104 154 Q112 152 120 154 L116 214 Q112 218 106 214 Z" fill="'+c('quadriceps')+'" stroke="'+stroke+'"/>'+
+  '<ellipse cx="88" cy="258" rx="9" ry="26" fill="'+c('mollets')+'" stroke="'+stroke+'"/>'+
+  '<ellipse cx="112" cy="258" rx="9" ry="26" fill="'+c('mollets')+'" stroke="'+stroke+'"/>'+
+  '</svg>';
+}
+// quels muscles allumer selon l'exercice
+const MUSCLE_MAP={
+  "Squats":["quadriceps","mollets","abdos"],
+  "Pompes":["pectoraux","biceps","abdos","epaules"],
+  "Planche":["abdos","epaules"],
+  "Fentes":["quadriceps","mollets"],
+  "Jumping jacks":["mollets","epaules"],
+  "Pont fessier":["abdos","quadriceps"],
+  "Mollets debout":["mollets"],
+  "Chaise contre le mur":["quadriceps"],
+  "Curl biceps":["biceps","avantbras"],
+  "Élévations latérales":["epaules"],
+  "Russian twists":["abdos"],
+  "Cat-cow":["abdos"],
+  "Étirement du pigeon":["quadriceps"],
+  "Étirement du papillon":["quadriceps"],
+  "Gainage latéral":["abdos","epaules"],
+  "High knees":["quadriceps","mollets","abdos"],
+  "Tractions":["biceps","avantbras","epaules"],
+  "Salutation au soleil":["abdos","epaules","quadriceps"]
+};
 function exoEmoji(muscles){
   const m=muscles.toLowerCase();
   if(/quadriceps|fessier|jambe|mollet/.test(m))return "🦵";
@@ -525,12 +568,14 @@ function openExo(name){
   if(!f){ return; }
   const content=$("exo-content");
   const ytUrl="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+name+" exercice");
+  const zones=MUSCLE_MAP[name]||[];
   content.innerHTML=
-    '<div style="background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:14px;padding:22px;text-align:center;margin-bottom:14px">'+
-      '<div style="font-size:46px;line-height:1">'+exoEmoji(f.muscles)+'</div>'+
-      '<div style="color:#fff;font-size:18px;font-weight:700;margin-top:6px">'+name+'</div>'+
+    '<h2 style="margin-bottom:10px">💪 '+name+'</h2>'+
+    '<div style="display:flex;gap:14px;align-items:center;background:var(--card2);border-radius:14px;padding:12px;margin-bottom:14px">'+
+      bodySVG(zones)+
+      '<div style="font-size:13px"><b>Muscles travaillés :</b><br>'+f.muscles+
+      '<br><br><span style="color:var(--blue)">● en bleu</span> = muscles sollicités</div>'+
     '</div>'+
-    '<p style="font-size:13px;color:var(--muted);margin-bottom:12px"><b>Muscles travaillés :</b> '+f.muscles+'</p>'+
     '<p style="font-size:14px;font-weight:600;margin-bottom:6px">✅ Points clés</p>'+
     '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:14px">'+f.cles.map(c=>'<li style="margin-bottom:4px">'+c+'</li>').join("")+'</ul>'+
     '<p style="font-size:14px;font-weight:600;margin-bottom:6px">⚠️ Erreurs à éviter</p>'+
