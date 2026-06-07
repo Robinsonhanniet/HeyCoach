@@ -34,12 +34,12 @@
   .row > div{flex:1;min-width:150px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
   @media(max-width:860px){.grid{grid-template-columns:1fr}}
-  .plan-item{background:var(--card2);border-radius:14px;padding:14px 16px;margin-bottom:12px;border-left:4px solid var(--blue)}
+  .plan-item{background:var(--card2);border-radius:12px;padding:10px 13px;margin-bottom:8px;border-left:4px solid var(--blue)}
   .plan-item:nth-child(1){border-color:var(--pink)} .plan-item:nth-child(2){border-color:var(--orange)}
   .plan-item:nth-child(3){border-color:var(--green)} .plan-item:nth-child(4){border-color:var(--blue)}
   .plan-item:nth-child(5){border-color:var(--purple)} .plan-item:nth-child(6){border-color:var(--orange)}
   .plan-item:nth-child(7){border-color:var(--green)}
-  .plan-item h3{font-size:14px;margin-bottom:4px} .plan-item p{font-size:13.5px;color:var(--muted)}
+  .plan-item h3{font-size:13.5px;margin-bottom:2px} .plan-item p{font-size:13px;color:var(--muted);margin:0}
   .badge{display:inline-block;border-radius:20px;padding:5px 13px;font-size:13px;font-weight:500;margin:0 6px 6px 0;color:#fff}
   .b-blue{background:var(--blue)} .b-green{background:var(--green)} .b-purple{background:var(--purple)} .b-orange{background:var(--orange)}
   .chat-box{background:var(--card2);border:1px solid var(--border);border-radius:16px;
@@ -350,7 +350,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v22 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v23 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -421,15 +421,12 @@ function videoLink(e){
   const q=exoQuery(e);
   if(!q) return "";
   const url="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+q+" exercice");
-  return '<a href="'+url+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--blue);text-decoration:none;margin-left:14px">▶ '+T("seeDemo")+'</a>';
+  return ' <a href="'+url+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--blue);text-decoration:none;white-space:nowrap">▶ '+T("seeDemo")+'</a>';
 }
-// décore une liste : pictogramme SVG + texte + lien vidéo dessous
+// liste compacte : exercice + lien démo sur la même ligne
 function deco(list){
   return list.map(e=>
-    '<div style="margin:8px 0">'+
-      '<div style="font-size:14px">• '+e+'</div>'+
-      videoLink(e)+
-    '</div>'
+    '<div style="font-size:13.5px;margin:2px 0;line-height:1.45">• '+e+videoLink(e)+'</div>'
   );
 }
 
