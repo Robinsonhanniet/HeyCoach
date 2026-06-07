@@ -350,7 +350,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v21 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v22 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -421,13 +421,13 @@ function videoLink(e){
   const q=exoQuery(e);
   if(!q) return "";
   const url="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+q+" exercice");
-  return '<a href="'+url+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--blue);text-decoration:none;margin-left:38px">▶ '+T("seeDemo")+'</a>';
+  return '<a href="'+url+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--blue);text-decoration:none;margin-left:14px">▶ '+T("seeDemo")+'</a>';
 }
 // décore une liste : pictogramme SVG + texte + lien vidéo dessous
 function deco(list){
   return list.map(e=>
-    '<div style="margin:6px 0">'+
-      '<span style="display:flex;align-items:center;gap:8px">'+exoSvg(e)+'<span>'+e+'</span></span>'+
+    '<div style="margin:8px 0">'+
+      '<div style="font-size:14px">• '+e+'</div>'+
       videoLink(e)+
     '</div>'
   );
