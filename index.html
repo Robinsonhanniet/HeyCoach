@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HeyCoach</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
     --bg1:#f5f7fb; --bg2:#eef1f8;
@@ -213,15 +214,15 @@
    TRADUCTIONS
    ============================================================ */
 const I18N={
-  fr:{appTitle:"HeyCoach",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",printBtn:"🖨 Imprimer",clearChat:"🗑 Effacer",markDone:"J'ai fait ma séance",doneToday:"Séance faite aujourd'hui",streak:"Série",total:"Total",darkMode:"Mode sombre",lightMode:"Mode clair",
+  fr:{appTitle:"HeyCoach",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",printBtn:"🖨 Imprimer",clearChat:"🗑 Effacer",markDone:"J'ai fait ma séance",doneToday:"Séance faite aujourd'hui",streak:"Série",total:"Total",darkMode:"Mode sombre",lightMode:"Mode clair",guestLocked:"Connecte-toi avec un email pour suivre tes séances et sauvegarder ta progression.",
     age:"Âge",sport:"Sport",level:"Niveau",freq:"Fréquence",years:"ans",sessions:"séances/sem",levels:["Débutant","Intermédiaire","Avancé","Compétiteur"],choose:"— Choisir —",
     helloGuest:"Bonjour 👋",startBtn:"Commencer",homeDesc:"Bienvenue !",seeDemo:"Voir la démo",tryGuest:"Essayer sans email",dontKnow:"🤔 Je ne suis pas sûr de comprendre. Je peux t'aider à : créer un <b>programme anti-blessure</b>, te donner un <b>échauffement</b> ou une <b>routine de récup</b>, ou répondre sur une <b>blessure</b> précise (genou, cheville, épaule, dos, tendinite, entorse...). Tu veux parler de quoi ?",hello:"Salut",coachIntro:"Je suis <b>ton coach</b> 💪 Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.",
     zones:"⚠️ Zones à surveiller",echaufT:"🔥 Échauffement (avant chaque séance)",renfoT:"💪 Renforcement préventif (2x/sem)",recupT:"🧊 Récupération",ageT:"👤 Adapté à ton âge",freqT:"📅 Adapté à ta fréquence",levelT:"📈 Adapté à ton niveau",fillAll:"Remplis tous les champs.",needLogin:"Entre un nom, un email et un mot de passe."},
-  en:{appTitle:"HeyCoach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",printBtn:"🖨 Print",clearChat:"🗑 Clear",markDone:"I did my session",doneToday:"Session done today",streak:"Streak",total:"Total",darkMode:"Dark mode",lightMode:"Light mode",
+  en:{appTitle:"HeyCoach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",printBtn:"🖨 Print",clearChat:"🗑 Clear",markDone:"I did my session",doneToday:"Session done today",streak:"Streak",total:"Total",darkMode:"Dark mode",lightMode:"Light mode",guestLocked:"Log in with an email to track your sessions and save your progress.",
     age:"Age",sport:"Sport",level:"Level",freq:"Frequency",years:"yrs",sessions:"sessions/wk",levels:["Beginner","Intermediate","Advanced","Competitor"],choose:"— Choose —",
     helloGuest:"Hello 👋",startBtn:"Start",homeDesc:"Welcome!",seeDemo:"Watch demo",tryGuest:"Try without email",dontKnow:"🤔 I am not sure I understand. I can help you build an <b>injury-prevention program</b>, give a <b>warm-up</b> or a <b>recovery routine</b>, or answer about a specific <b>injury</b> (knee, ankle, shoulder, back, tendinitis, sprain...). What would you like?",hello:"Hi",coachIntro:"I'm <b>your coach</b> 💪 Ask me for a warm-up, a recovery routine or strength exercises, I'll give you concrete sessions.",
     zones:"⚠️ Areas to watch",echaufT:"🔥 Warm-up (before each session)",renfoT:"💪 Preventive strength (2x/week)",recupT:"🧊 Recovery",ageT:"👤 Adapted to your age",freqT:"📅 Adapted to your frequency",levelT:"📈 Adapted to your level",fillAll:"Fill in all fields.",needLogin:"Enter a name, an email and a password."},
-  es:{appTitle:"HeyCoach",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",printBtn:"🖨 Imprimir",clearChat:"🗑 Borrar",markDone:"Hice mi sesión",doneToday:"Sesión hecha hoy",streak:"Racha",total:"Total",darkMode:"Modo oscuro",lightMode:"Modo claro",
+  es:{appTitle:"HeyCoach",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",printBtn:"🖨 Imprimir",clearChat:"🗑 Borrar",markDone:"Hice mi sesión",doneToday:"Sesión hecha hoy",streak:"Racha",total:"Total",darkMode:"Modo oscuro",lightMode:"Modo claro",guestLocked:"Inicia sesión con un correo para seguir tus sesiones y guardar tu progreso.",
     age:"Edad",sport:"Deporte",level:"Nivel",freq:"Frecuencia",years:"años",sessions:"sesiones/sem",levels:["Principiante","Intermedio","Avanzado","Competidor"],choose:"— Elegir —",
     helloGuest:"Hola 👋",startBtn:"Empezar",homeDesc:"¡Bienvenido!",seeDemo:"Ver demo",tryGuest:"Probar sin correo",dontKnow:"🤔 No estoy seguro de entender. Puedo ayudarte a crear un <b>programa anti-lesiones</b>, darte un <b>calentamiento</b> o una <b>rutina de recuperación</b>, o responder sobre una <b>lesión</b> concreta (rodilla, tobillo, hombro, espalda, tendinitis, esguince...). ¿De qué quieres hablar?",hello:"Hola",coachIntro:"Soy <b>tu entrenador</b> 💪 Pídeme un calentamiento, una rutina de recuperación o ejercicios de fuerza, te doy sesiones concretas.",
     zones:"⚠️ Zonas a vigilar",echaufT:"🔥 Calentamiento (antes de cada sesión)",renfoT:"💪 Fuerza preventiva (2x/sem)",recupT:"🧊 Recuperación",ageT:"👤 Adaptado a tu edad",freqT:"📅 Adaptado a tu frecuencia",levelT:"📈 Adaptado a tu nivel",fillAll:"Rellena todos los campos.",needLogin:"Introduce un nombre, un correo y una contraseña."}
@@ -308,26 +309,77 @@ function goConnect(){
   show("screen-login");
 }
 function goStart(){ show("screen-login"); }
-function guestLogin(){
-  // essai sans email : on crée un invité et on va direct au questionnaire
-  currentUser="Invité";
-  localStorage.setItem("coach_user","Invité");
-  $("welcome-name").textContent="Invité";
-  $("welcome-name2").textContent="Invité";
-  show("screen-form");
+/* ============================================================
+   SUPABASE — authentification + sauvegarde cloud
+   ============================================================ */
+const SUPA_URL="https://mtjosgzckucochxcjykt.supabase.co";
+const SUPA_KEY="sb_publishable_IsLpf-86Baf-NCR6OPm85Q_8tgKAEpb";
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+// Sauvegarde profil + chat + tracker dans Supabase
+async function cloudSave(){
+  if(isGuest()||!currentUserId) return;
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  const td=JSON.parse(localStorage.getItem("coach_track_"+currentUser)||'{"days":[],"streak":0}');
+  await sb.from("profiles").upsert({
+    id:currentUserId, pseudo:currentUser,
+    age:data.age||"", sport:data.sport||"", sports:data.sports||[], freq:data.freq||"", level:data.level||"",
+    chat:history, track:td, updated_at:new Date().toISOString()
+  });
+}
+// Charge les données depuis Supabase
+async function cloudLoad(){
+  if(!currentUserId) return;
+  const {data}=await sb.from("profiles").select("*").eq("id",currentUserId).single();
+  if(!data) return;
+  if(data.pseudo) currentUser=data.pseudo;
+  const prof={age:data.age,sport:data.sport,sports:data.sports,freq:data.freq,level:data.level};
+  localStorage.setItem("coach_data_"+currentUser,JSON.stringify(prof));
+  if(data.chat&&data.chat.length) localStorage.setItem("coach_chat_"+currentUser,JSON.stringify(data.chat));
+  if(data.track) localStorage.setItem("coach_track_"+currentUser,JSON.stringify(data.track));
 }
 
-function login(){
+let currentUserId=null;
+
+async function login(){
   const name=$("login-name").value.trim(),email=$("login-email").value.trim(),pass=$("login-pass").value.trim();
-  if(!name||!email||!pass){alert(T("needLogin"));return;}
-  currentUser=name;
-  localStorage.setItem("coach_user",name);
-  localStorage.setItem("coach_cred_"+name,JSON.stringify({email,pass}));
-  $("welcome-name").textContent=name;$("welcome-name2").textContent=name;
-  const data=JSON.parse(localStorage.getItem("coach_data_"+name)||"null");
+  if(!email||!pass){alert(T("needLogin"));return;}
+  // tente connexion, sinon inscription
+  let res=await sb.auth.signInWithPassword({email,pass});
+  if(res.error){
+    res=await sb.auth.signUp({email,password:pass,options:{data:{pseudo:name||email.split("@")[0]}}});
+    if(res.error){alert("Erreur : "+res.error.message);return;}
+  }
+  const user=res.data.user||res.data.session?.user;
+  if(!user){alert("Erreur de connexion, réessaie.");return;}
+  currentUserId=user.id;
+  currentUser=name||user.user_metadata?.pseudo||email.split("@")[0];
+  localStorage.setItem("coach_user",currentUser);
+  localStorage.setItem("coach_uid",currentUserId);
+  localStorage.removeItem("coach_isGuest");
+  localStorage.setItem("coach_cred_"+currentUser,JSON.stringify({email,pass}));
+  $("welcome-name").textContent=currentUser;$("welcome-name2").textContent=currentUser;
+  await cloudLoad();
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"null");
   if(data&&data.sport){loadApp(data);}else{show("screen-form");}
 }
-function logout(){closeSettings();localStorage.removeItem("coach_user");currentUser=null;show("screen-home");}
+function logout(){
+  closeSettings();
+  sb.auth.signOut();
+  localStorage.removeItem("coach_user");localStorage.removeItem("coach_isGuest");localStorage.removeItem("coach_uid");
+  currentUser=null;currentUserId=null;
+  show("screen-home");
+}
+function guestLogin(){
+  currentUser="Invité";currentUserId=null;
+  localStorage.setItem("coach_user","Invité");
+  localStorage.setItem("coach_isGuest","1");
+  localStorage.removeItem("coach_uid");
+  $("welcome-name").textContent="Invité";$("welcome-name2").textContent="Invité";
+  show("screen-form");
+}
+function isGuest(){ return localStorage.getItem("coach_isGuest")==="1"||currentUser==="Invité"; }
+
 function goEditProfile(){
   closeSettings();
   // pré-remplit le formulaire avec les infos déjà connues
@@ -364,7 +416,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v25 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v27 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -454,6 +506,7 @@ function generatePlan(){
   const sport=sports.join(", "); // texte affiché
   const data={age,sport,sports,freq,level};
   localStorage.setItem("coach_data_"+currentUser,JSON.stringify(data));
+  cloudSave();
   loadApp(data);
 }
 function loadApp(data){
@@ -497,6 +550,10 @@ function todayStr(){return new Date().toISOString().slice(0,10);}
 function trackerData(){return JSON.parse(localStorage.getItem("coach_track_"+currentUser)||'{"days":[],"streak":0}');}
 function renderTracker(){
   const box=$("tracker"); if(!box) return;
+  if(isGuest()){
+    box.innerHTML='<div style="font-size:13.5px;color:var(--muted);background:var(--card2);border-radius:10px;padding:10px 12px">🔒 '+T("guestLocked")+'</div>';
+    return;
+  }
   const td=trackerData();
   const doneToday=td.days.includes(todayStr());
   box.innerHTML=
@@ -508,6 +565,7 @@ function renderTracker(){
     '</div>';
 }
 function markDone(){
+  if(isGuest())return;
   const td=trackerData();
   const today=todayStr();
   if(td.days.includes(today)){ // annuler
@@ -524,6 +582,7 @@ function markDone(){
   }
   td.streak=streak;
   localStorage.setItem("coach_track_"+currentUser,JSON.stringify(td));
+  cloudSave();
   renderTracker();
 }
 
@@ -558,7 +617,7 @@ function toggleTheme(){
 }
 let history=[];
 function chatKey(){return "coach_chat_"+currentUser;}
-function saveChat(){ try{ localStorage.setItem(chatKey(),JSON.stringify(history)); }catch(e){} }
+function saveChat(){ if(isGuest())return; try{ localStorage.setItem(chatKey(),JSON.stringify(history)); cloudSave(); }catch(e){} }
 function addMsg(role,html){const d=document.createElement("div");d.className="msg "+role;d.innerHTML=html;$("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight;}
 function renderChatFromHistory(){
   $("chat").innerHTML="";
@@ -834,17 +893,22 @@ function fallback(q){
 /* ============================================================
    INIT
    ============================================================ */
-window.onload=()=>{
+window.onload=async()=>{
   applyTheme();
   applyLang();
-  closeSettings(); // le panneau réglages est toujours fermé au démarrage
-  const saved=localStorage.getItem("coach_user");
-  if(saved){
-    currentUser=saved;
-    $("welcome-name").textContent=saved;
-    $("welcome-name2").textContent=saved;
+  closeSettings();
+  // vérifie si une session Supabase existe déjà
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    currentUserId=session.user.id;
+    const savedName=localStorage.getItem("coach_user");
+    currentUser=savedName||session.user.user_metadata?.pseudo||session.user.email.split("@")[0];
+    $("welcome-name").textContent=currentUser;$("welcome-name2").textContent=currentUser;
+    await cloudLoad();
+  } else {
+    const saved=localStorage.getItem("coach_user");
+    if(saved){currentUser=saved;$("welcome-name").textContent=saved;$("welcome-name2").textContent=saved;}
   }
-  // on arrive TOUJOURS sur la page d'accueil
   show("screen-home");
 };
 </script>
