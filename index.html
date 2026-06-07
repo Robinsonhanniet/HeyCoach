@@ -106,10 +106,10 @@
     <input id="login-email" type="email" placeholder="alex@email.com">
     <label data-i="pass">Mot de passe</label>
     <input id="login-pass" type="password" placeholder="••••••">
-    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-      <button onclick="login()" data-i="connect">Se connecter</button>
-      <button class="ghost" onclick="login()" data-i="create">Créer un compte</button>
-      <button class="ghost" onclick="guestLogin()" data-i="tryGuest">Essayer sans email</button>
+    <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:nowrap">
+      <button onclick="login()" data-i="connect" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Se connecter</button>
+      <button class="ghost" onclick="login()" data-i="create" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Créer un compte</button>
+      <button class="ghost" onclick="guestLogin()" data-i="tryGuest" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Essayer sans email</button>
     </div>
     <p class="sub" style="margin-top:14px;font-size:12px" data-i="localNote">Les données restent stockées localement dans ton navigateur.</p>
   </div>
@@ -350,7 +350,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v19 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v20 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
