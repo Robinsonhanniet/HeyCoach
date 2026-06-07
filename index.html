@@ -187,6 +187,14 @@
     </div>
   </div>
 
+  <!-- ============ MODAL FICHE EXERCICE ============ -->
+  <div id="exo-modal" class="overlay hidden" onclick="if(event.target===this)closeExo()" style="display:none">
+    <div class="modal" style="max-width:500px" onclick="event.stopPropagation()">
+      <span class="close-x" onclick="closeExo()">×</span>
+      <div id="exo-content"></div>
+    </div>
+  </div>
+
   <!-- ============ MODAL REGLAGES ============ -->
   <div id="settings" class="overlay hidden" onclick="if(event.target===this)closeSettings()">
     <div class="modal" onclick="event.stopPropagation()">
@@ -416,7 +424,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v27 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v28 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -478,22 +486,72 @@ function exoSvg(name){
   return PICTO.defaut;
 }
 // nom propre de l'exercice pour la recherche vidéo (avant les ":" et sans chiffres)
+/* ============================================================
+   BASE DE FICHES EXERCICES
+   muscles utilisés, points clés, erreurs à éviter
+   ============================================================ */
+const FICHES={
+  "Squats":{muscles:"Quadriceps, fessiers, ischio-jambiers, mollets",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Squat_300.jpg/320px-Squat_300.jpg",cles:["Pieds largeur épaules, orteils légèrement vers l'extérieur","Descends comme si tu t'asseyais sur une chaise","Garde le dos droit et la poitrine haute","Genoux dans l'axe des orteils (ne les laisse pas rentrer vers l'intérieur)","Descends jusqu'à ce que les cuisses soient parallèles au sol"],erreurs:["Talons qui se soulèvent → pieds à plat","Genoux qui rentrent → pousser vers l'extérieur","Dos qui arrondit → gainage du tronc"]},
+  "Pompes":{muscles:"Pectoraux, triceps, épaules, gainage abdominaux",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Push_up.jpg/320px-Push_up.jpg",cles:["Corps en ligne droite de la tête aux talons","Mains légèrement plus larges que les épaules","Coudes à 45° du corps (pas écartés à 90°)","Descends jusqu'à ce que la poitrine frôle le sol","Si trop difficile : fais sur les genoux"],erreurs:["Fesses en l'air → corps gainé","Coudes trop écartés → risque épaules","Tête qui tombe → regard légèrement devant"]},
+  "Planche":{muscles:"Abdominaux profonds, dos, épaules, fessiers (tout le gainage)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Plank_position.jpg/320px-Plank_position.jpg",cles:["Corps rigide comme une planche en bois","Coudes sous les épaules","Fesses ni trop hautes ni trop basses","Respire normalement sans bloquer","Commence par 20 secondes et augmente progressivement"],erreurs:["Fesses en l'air → baisser les hanches","Bas du dos qui s'affaisse → contracter le ventre","Apnée → respirer normalement"]},
+  "Fentes":{muscles:"Quadriceps, fessiers, ischio-jambiers, mollets",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Lunge_right.jpg/320px-Lunge_right.jpg",cles:["Grand pas en avant, genou arrière proche du sol","Genou avant ne dépasse pas le bout du pied","Dos droit, regard devant","Pousse sur le talon avant pour revenir","Alterne les jambes ou fais un côté puis l'autre"],erreurs:["Genou avant qui part vers l'intérieur","Tronc qui penche en avant","Grand pas trop court (genou dépasse le pied)"]},
+  "Jumping jacks":{muscles:"Mollets, épaules, cardio général",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Jumping_Jacks.jpg/240px-Jumping_Jacks.jpg",cles:["Sauts légers et rebonds souples","Bras qui montent au-dessus de la tête","Atterris sur la plante des pieds, pas sur les talons","Rythme régulier et contrôlé","Bon échauffement cardio en moins de 30 secondes"],erreurs:["Atterrir sur les talons → atterrir sur la plante","Bras qui ne montent pas assez haut","Rythme trop rapide → contrôle d'abord"]},
+  "Pont fessier":{muscles:"Fessiers, ischio-jambiers, lombaires",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Glute_bridge.jpg/320px-Glute_bridge.jpg",cles:["Allongé sur le dos, genoux fléchis, pieds à plat","Monte les hanches jusqu'à avoir un alignement épaules-hanches-genoux","Contracte fort les fessiers en haut","Redescends lentement et contrôle","Pieds proches des fesses (environ 30 cm)"],erreurs:["Creuser le bas du dos → gainage abdominal","Fessiers pas contractés → se concentrer sur la contraction","Descente trop rapide → contrôle excentriq"]},
+  "Mollets debout":{muscles:"Mollets (gastrocnémiens, soléaire)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Standing_calf_raise.jpg/240px-Standing_calf_raise.jpg",cles:["Debout, pieds à largeur de hanches","Monte sur la pointe des pieds le plus haut possible","Tiens 1 seconde en haut","Redescends lentement (phase excentrique)","Utilise un mur ou une chaise pour l'équilibre si besoin"],erreurs:["Descente trop rapide → contrôle","Genoux fléchis → jambes tendues","Pas assez haut → viser le maximum d'amplitude"]},
+  "Chaise contre le mur":{muscles:"Quadriceps (idéal pour renforcer sans choc)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Wall_sit.jpg/240px-Wall_sit.jpg",cles:["Dos bien à plat contre le mur","Cuisses parallèles au sol (90°)","Pieds à largeur d'épaules, à plat","Genoux dans l'axe des orteils","Commence par 20 secondes et augmente"],erreurs:["Genoux qui dépassent les orteils → reculer les pieds","Dos décollé du mur → recoller","Fesses pas assez basses → descendre à 90°"]},
+  "Curl biceps":{muscles:"Biceps, avant-bras",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Curl_biceps.jpg/240px-Curl_biceps.jpg",cles:["Coudes collés au corps, immobiles","Montée et descente contrôlées","Pince pas le poignet, garde-le droit","Amplitude complète : bras tendu jusqu'à plié","Peut se faire avec haltères, élastique ou bouteilles d'eau"],erreurs:["Coudes qui bougent → les coller au corps","Coup de rein → pas de balancement","Descente trop rapide → contrôle sur 2 secondes"]},
+  "Élévations latérales":{muscles:"Épaule (deltoïde moyen)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Lateral_raise.jpg/240px-Lateral_raise.jpg",cles:["Légère flexion du coude (pas bras tendu rigide)","Monte jusqu'à hauteur des épaules","Descente lente et contrôlée","Légère inclinaison du buste en avant","Charge légère, amplitude et contrôle avant tout"],erreurs:["Monter trop haut → limiter à hauteur épaules","Balancement du corps → contrôle strict","Trop lourd → réduire la charge"]},
+  "Russian twists":{muscles:"Obliques, abdominaux, transverse",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Russian_twist.jpg/320px-Russian_twist.jpg",cles:["Assis, genoux fléchis, pieds légèrement décollés","Tronc à 45° en arrière","Rotation du tronc de gauche à droite","Touche le sol de chaque côté","Peut tenir un objet (bouteille, livre) pour plus d'intensité"],erreurs:["Pieds posés au sol → les décoller","Rotation des bras seulement → rotation du tronc","Dos arrondi → garder le dos droit"]},
+  "Cat-cow":{muscles:"Colonne vertébrale, lombaires, abdominaux (mobilité)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Cat-Cow_Pose.jpg/320px-Cat-Cow_Pose.jpg",cles:["À 4 pattes, poignets sous épaules, genoux sous hanches","Cat : dos en arrondi, menton vers poitrine","Cow : dos creusé, regard vers le plafond","Mouvement lent et respiré","Enchaîne les deux sans s'arrêter"],erreurs:["Mouvement trop rapide → lenteur et respiration","Hanches qui bougent → garder le bassin stable","Amplitude réduite → aller au maximum doux"]},
+  "Étirement du pigeon":{muscles:"Fessiers, piriforme, hanche (rotation externe)",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Pigeon_pose.jpg/320px-Pigeon_pose.jpg",cles:["Depuis 4 pattes, amène un genou vers la main du même côté","Jambe arrière allongée derrière toi","Penche le tronc en avant pour intensifier","Tiens 30 secondes par côté","Respire profondément pour relâcher la tension"],erreurs:["Douleur vive → réduire l'amplitude","Bassin de travers → le garder horizontal","Aller trop vite → tenir et respirer"]},
+  "Étirement du papillon":{muscles:"Adducteurs, intérieur des cuisses, hanches",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Butterfly_stretch.jpg/240px-Butterfly_stretch.jpg",cles:["Assis, plantes des pieds l'une contre l'autre","Rapproche les talons de ton bassin","Laisse les genoux tomber vers le sol","Penche légèrement le tronc en avant","Tiens 30 secondes minimum"],erreurs:["Forcer les genoux vers le bas avec les mains → laisser tomber naturellement","Dos arrondi → redresser le buste","Pieds trop loin → rapprocher les talons"]},
+  "Gainage latéral":{muscles:"Obliques, épaule, fessiers moyen",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Side_plank.jpg/240px-Side_plank.jpg",cles:["Sur le côté, coude sous l'épaule","Corps en ligne droite de la tête aux pieds","Hanche décollée du sol","Regard devant, pas vers le bas","Commence par 15-20 secondes par côté"],erreurs:["Hanche qui s'affaisse → la remonter","Bassin de travers → aligner le corps","Corps penché en avant → se redresser"]},
+  "High knees":{muscles:"Fléchisseurs de hanche, quadriceps, cardio",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/High_Knees.jpg/240px-High_Knees.jpg",cles:["Course sur place, genoux qui montent à hauteur des hanches","Bras qui balancent en opposition","Atterris sur la plante des pieds","Rythme rapide mais contrôlé","Bon exercice cardio et d'échauffement"],erreurs:["Genoux pas assez hauts → monter à hauteur des hanches","Atterrir sur les talons → plante des pieds","Bras immobiles → les faire travailler"]},
+  "Tractions":{muscles:"Dorsaux, biceps, épaules (arrière), gainage",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Pull_up.jpg/240px-Pull_up.jpg",cles:["Barre à bout de bras, prise légèrement plus large que les épaules","Monte jusqu'à ce que le menton dépasse la barre","Descente lente et contrôlée","Omoplate qui se rapprochent en montant","Si trop difficile : assistance avec une chaise ou un élastique"],erreurs:["Balancement du corps → mouvement strict","Coudes qui partent trop sur le côté → les ramener","Descente trop rapide → contrôle excentriq"]},
+  "Salutation au soleil":{muscles:"Corps complet — étirement et mobilité générale",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Surya_Namaskar.jpg/320px-Surya_Namaskar.jpg",cles:["Enchaînement de 12 postures qui s'enchaînent fluidement","Respire : inspire en ouvrant, expire en fermant","Mouvement lent et conscient","Parfait comme échauffement ou retour au calme","Répète 3 à 5 cycles"],erreurs:["Aller trop vite → lenteur et respiration","Sauter des postures → respecter la séquence","Forcer les étirements → douceur"]}
+};
+
+function openExo(name){
+  const f=FICHES[name];
+  if(!f){ return; }
+  const content=$("exo-content");
+  content.innerHTML=
+    '<h2 style="margin-bottom:6px">💪 '+name+'</h2>'+
+    (f.img?'<img src="'+f.img+'" alt="'+name+'" style="width:100%;border-radius:12px;margin:10px 0;max-height:200px;object-fit:cover" onerror="this.style.display=\'none\'">':'')+
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:12px"><b>Muscles :</b> '+f.muscles+'</p>'+
+    '<p style="font-size:14px;font-weight:600;margin-bottom:6px">✅ Points clés</p>'+
+    '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:14px">'+f.cles.map(c=>'<li style="margin-bottom:4px">'+c+'</li>').join("")+'</ul>'+
+    '<p style="font-size:14px;font-weight:600;margin-bottom:6px">⚠️ Erreurs à éviter</p>'+
+    '<ul style="font-size:13.5px;padding-left:18px">'+f.erreurs.map(e=>'<li style="margin-bottom:4px;color:var(--muted)">'+e+'</li>').join("")+'</ul>';
+  const m=$("exo-modal");m.classList.remove("hidden");m.style.display="flex";
+  document.body.style.overflow="hidden";
+}
+function closeExo(){
+  const m=$("exo-modal");m.classList.add("hidden");m.style.display="none";
+  document.body.style.overflow="";
+}
 function exoQuery(e){
-  let q=e.split(":")[0].split("(")[0].trim();        // enlève "(...)" et la partie chiffrée
+  let q=e.split(":")[0].split("(")[0].trim();
   q=q.replace(/\d+/g,"").replace(/×|x|\//g," ").replace(/\s+/g," ").trim();
   return q;
 }
-function videoLink(e){
-  const q=exoQuery(e);
-  if(!q) return "";
-  const url="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+q+" exercice");
-  return ' <a href="'+url+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--blue);text-decoration:none;white-space:nowrap">▶ '+T("seeDemo")+'</a>';
+// retrouve la fiche la plus proche d'un nom d'exercice
+function findFiche(name){
+  const q=exoQuery(name).toLowerCase();
+  for(const k of Object.keys(FICHES)){
+    if(q.includes(k.toLowerCase())||k.toLowerCase().includes(q)) return k;
+  }
+  return null;
 }
-// liste compacte : exercice + lien démo sur la même ligne
+// liste compacte : exercice + lien fiche ou démo
 function deco(list){
-  return list.map(e=>
-    '<div style="font-size:13.5px;margin:2px 0;line-height:1.45">• '+e+videoLink(e)+'</div>'
-  );
+  return list.map(e=>{
+    const ficheKey=findFiche(e);
+    const link=ficheKey
+      ? ' <a href="javascript:void(0)" onclick="openExo(\''+ficheKey.replace(/'/g,"\\'")+'\')" style="font-size:12px;color:var(--blue);text-decoration:none;white-space:nowrap">→ En savoir plus</a>'
+      : '';
+    return '<div style="font-size:13.5px;margin:2px 0;line-height:1.45">• '+e+link+'</div>';
+  });
 }
 
 /* ============================================================
