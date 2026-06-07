@@ -12,6 +12,12 @@
     --blue:#0a84ff; --green:#30d158; --purple:#bf5af2; --orange:#ff9f0a; --pink:#ff375f;
     --shadow:0 8px 30px rgba(20,30,60,.08);
   }
+  html.dark{
+    --bg1:#0f1419; --bg2:#161c26;
+    --card:#1a212b; --card2:#222c38;
+    --txt:#e8edf2; --muted:#9aa7b4; --border:#2c3744;
+    --shadow:0 8px 30px rgba(0,0,0,.35);
+  }
   *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif}
   body{background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--txt);min-height:100vh;line-height:1.6}
   .wrap{max-width:1180px;margin:0 auto;padding:24px}
@@ -151,19 +157,26 @@
     <div class="card">
       <h2 data-i="profileTitle">Ton profil</h2>
       <div id="profile-badges"></div>
+      <div id="tracker" style="margin-top:14px"></div>
     </div>
 
     <div class="grid">
       <!-- GAUCHE : programme -->
       <div class="card">
-        <h2 data-i="planTitle">Programme anti-blessure</h2>
-        <p class="sub" data-i="planSub">Adapté à ton sport, ta fréquence, ton niveau et ton âge.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 data-i="planTitle" style="margin:0">Programme anti-blessure</h2>
+          <button class="ghost" style="padding:7px 12px;font-size:13px" onclick="printPlan()" data-i="printBtn">🖨 Imprimer</button>
+        </div>
+        <p class="sub" data-i="planSub" style="margin-top:8px">Adapté à ton sport, ta fréquence, ton niveau et ton âge.</p>
         <div id="plan"></div>
       </div>
       <!-- DROITE : chat -->
       <div class="card">
-        <h2 data-i="chatTitle">💬 Discute avec Coach</h2>
-        <p class="sub" data-i="chatSub">Pose tes questions sur les blessures, la récupération, la prévention…</p>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 data-i="chatTitle" style="margin:0">💬 Discute avec Coach</h2>
+          <button class="ghost" style="padding:7px 12px;font-size:13px" onclick="clearChat()" data-i="clearChat">🗑 Effacer</button>
+        </div>
+        <p class="sub" data-i="chatSub" style="margin-top:8px">Pose tes questions sur les blessures, la récupération, la prévention…</p>
         <div class="chat-box" id="chat"></div>
         <div class="chat-input">
           <input id="chat-input" data-i-ph="chatPh" placeholder="Ex: comment récupérer après une séance ?" onkeydown="if(event.key==='Enter')sendMsg()">
@@ -200,15 +213,15 @@
    TRADUCTIONS
    ============================================================ */
 const I18N={
-  fr:{appTitle:"HeyCoach",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",
+  fr:{appTitle:"HeyCoach",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",printBtn:"🖨 Imprimer",clearChat:"🗑 Effacer",markDone:"J'ai fait ma séance",doneToday:"Séance faite aujourd'hui",streak:"Série",total:"Total",darkMode:"Mode sombre",lightMode:"Mode clair",
     age:"Âge",sport:"Sport",level:"Niveau",freq:"Fréquence",years:"ans",sessions:"séances/sem",levels:["Débutant","Intermédiaire","Avancé","Compétiteur"],choose:"— Choisir —",
     helloGuest:"Bonjour 👋",startBtn:"Commencer",homeDesc:"Bienvenue !",seeDemo:"Voir la démo",tryGuest:"Essayer sans email",dontKnow:"🤔 Je ne suis pas sûr de comprendre. Je peux t'aider à : créer un <b>programme anti-blessure</b>, te donner un <b>échauffement</b> ou une <b>routine de récup</b>, ou répondre sur une <b>blessure</b> précise (genou, cheville, épaule, dos, tendinite, entorse...). Tu veux parler de quoi ?",hello:"Salut",coachIntro:"Je suis <b>ton coach</b> 💪 Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.",
     zones:"⚠️ Zones à surveiller",echaufT:"🔥 Échauffement (avant chaque séance)",renfoT:"💪 Renforcement préventif (2x/sem)",recupT:"🧊 Récupération",ageT:"👤 Adapté à ton âge",freqT:"📅 Adapté à ta fréquence",levelT:"📈 Adapté à ton niveau",fillAll:"Remplis tous les champs.",needLogin:"Entre un nom, un email et un mot de passe."},
-  en:{appTitle:"HeyCoach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",
+  en:{appTitle:"HeyCoach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",printBtn:"🖨 Print",clearChat:"🗑 Clear",markDone:"I did my session",doneToday:"Session done today",streak:"Streak",total:"Total",darkMode:"Dark mode",lightMode:"Light mode",
     age:"Age",sport:"Sport",level:"Level",freq:"Frequency",years:"yrs",sessions:"sessions/wk",levels:["Beginner","Intermediate","Advanced","Competitor"],choose:"— Choose —",
     helloGuest:"Hello 👋",startBtn:"Start",homeDesc:"Welcome!",seeDemo:"Watch demo",tryGuest:"Try without email",dontKnow:"🤔 I am not sure I understand. I can help you build an <b>injury-prevention program</b>, give a <b>warm-up</b> or a <b>recovery routine</b>, or answer about a specific <b>injury</b> (knee, ankle, shoulder, back, tendinitis, sprain...). What would you like?",hello:"Hi",coachIntro:"I'm <b>your coach</b> 💪 Ask me for a warm-up, a recovery routine or strength exercises, I'll give you concrete sessions.",
     zones:"⚠️ Areas to watch",echaufT:"🔥 Warm-up (before each session)",renfoT:"💪 Preventive strength (2x/week)",recupT:"🧊 Recovery",ageT:"👤 Adapted to your age",freqT:"📅 Adapted to your frequency",levelT:"📈 Adapted to your level",fillAll:"Fill in all fields.",needLogin:"Enter a name, an email and a password."},
-  es:{appTitle:"HeyCoach",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",
+  es:{appTitle:"HeyCoach",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",printBtn:"🖨 Imprimir",clearChat:"🗑 Borrar",markDone:"Hice mi sesión",doneToday:"Sesión hecha hoy",streak:"Racha",total:"Total",darkMode:"Modo oscuro",lightMode:"Modo claro",
     age:"Edad",sport:"Deporte",level:"Nivel",freq:"Frecuencia",years:"años",sessions:"sesiones/sem",levels:["Principiante","Intermedio","Avanzado","Competidor"],choose:"— Elegir —",
     helloGuest:"Hola 👋",startBtn:"Empezar",homeDesc:"¡Bienvenido!",seeDemo:"Ver demo",tryGuest:"Probar sin correo",dontKnow:"🤔 No estoy seguro de entender. Puedo ayudarte a crear un <b>programa anti-lesiones</b>, darte un <b>calentamiento</b> o una <b>rutina de recuperación</b>, o responder sobre una <b>lesión</b> concreta (rodilla, tobillo, hombro, espalda, tendinitis, esguince...). ¿De qué quieres hablar?",hello:"Hola",coachIntro:"Soy <b>tu entrenador</b> 💪 Pídeme un calentamiento, una rutina de recuperación o ejercicios de fuerza, te doy sesiones concretas.",
     zones:"⚠️ Zonas a vigilar",echaufT:"🔥 Calentamiento (antes de cada sesión)",renfoT:"💪 Fuerza preventiva (2x/sem)",recupT:"🧊 Recuperación",ageT:"👤 Adaptado a tu edad",freqT:"📅 Adaptado a tu frecuencia",levelT:"📈 Adaptado a tu nivel",fillAll:"Rellena todos los campos.",needLogin:"Introduce un nombre, un correo y una contraseña."}
@@ -344,13 +357,14 @@ function renderSettings(){
       '<label>'+T("pass")+'</label>'+
       '<input id="set-pass" type="text" value="'+(cred.pass||"").replace(/"/g,"&quot;")+'" placeholder="••••••">'+
       '<button class="green" style="margin-top:10px;width:100%" onclick="saveCred()">'+T("saveBtn")+'</button>'+
+      '<button class="ghost" style="margin-top:8px;width:100%" onclick="toggleTheme()">'+(localStorage.getItem("coach_theme")==="dark"?("☀️ "+T("lightMode")):("🌙 "+T("darkMode")))+'</button>'+
       '<div style="margin:14px 0 4px 0">'+
         line(T("age"),(data.age?data.age+" "+T("years"):"—"))+
         line(T("sport"),data.sport||"—")+
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v24 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v25 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -469,18 +483,95 @@ function loadApp(data){
     {t:T("levelT")+" ("+lvl+")",d:data.level==="0"?"+10% max/semaine, technique d'abord":data.level==="3"?"Surveille la fatigue, phases de décharge":"Régularité + écoute des douleurs"}
   ];
   $("plan").innerHTML=items.map(i=>'<div class="plan-item"><h3>'+i.t+'</h3><p>'+i.d+'</p></div>').join("");
-  $("chat").innerHTML="";
-  addMsg("bot",T("hello")+" "+currentUser+" 👋 "+T("coachIntro"));
+  // recharge le chat sauvegardé, sinon message d'accueil
+  const savedChat=JSON.parse(localStorage.getItem("coach_chat_"+currentUser)||"null");
+  if(savedChat&&savedChat.length){ history=savedChat; renderChatFromHistory(); }
+  else { history=[]; $("chat").innerHTML=""; addMsg("bot",T("hello")+" "+currentUser+" 👋 "+T("coachIntro")); }
+  renderTracker();
 }
 
 /* ============================================================
-   CHAT
+   SUIVI DES SÉANCES (compteur de jours)
    ============================================================ */
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function trackerData(){return JSON.parse(localStorage.getItem("coach_track_"+currentUser)||'{"days":[],"streak":0}');}
+function renderTracker(){
+  const box=$("tracker"); if(!box) return;
+  const td=trackerData();
+  const doneToday=td.days.includes(todayStr());
+  box.innerHTML=
+    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">'+
+      '<button class="'+(doneToday?'ghost':'green')+'" style="padding:9px 14px;font-size:14px" onclick="markDone()">'+
+        (doneToday?('✅ '+T("doneToday")):('＋ '+T("markDone")))+'</button>'+
+      '<span style="font-size:14px;color:var(--muted)">🔥 '+T("streak")+' : <b style="color:var(--txt)">'+td.streak+'</b> '+T("days")+
+      ' &nbsp;·&nbsp; 📅 '+T("total")+' : <b style="color:var(--txt)">'+td.days.length+'</b></span>'+
+    '</div>';
+}
+function markDone(){
+  const td=trackerData();
+  const today=todayStr();
+  if(td.days.includes(today)){ // annuler
+    td.days=td.days.filter(d=>d!==today);
+  } else {
+    td.days.push(today);
+  }
+  // recalcule la série de jours consécutifs
+  td.days.sort();
+  let streak=0; let d=new Date();
+  for(;;){
+    const s=d.toISOString().slice(0,10);
+    if(td.days.includes(s)){streak++; d.setDate(d.getDate()-1);} else break;
+  }
+  td.streak=streak;
+  localStorage.setItem("coach_track_"+currentUser,JSON.stringify(td));
+  renderTracker();
+}
+
+/* ============================================================
+   IMPRIMER LE PROGRAMME
+   ============================================================ */
+function printPlan(){
+  const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
+  const planHtml=$("plan").innerHTML;
+  const w=window.open("","_blank");
+  w.document.write('<html><head><title>HeyCoach - '+T("planTitle")+'</title>'+
+    '<style>body{font-family:-apple-system,Arial,sans-serif;padding:30px;color:#1d1d1f}'+
+    'h1{color:#0a84ff}h3{margin:14px 0 4px}p{margin:0 0 8px;color:#444}'+
+    'a{color:#0a84ff}</style></head><body>'+
+    '<h1>HeyCoach — '+T("planTitle")+'</h1>'+
+    '<p><b>'+currentUser+'</b> · '+(data.sport||"")+' · '+(data.age||"")+' '+T("years")+'</p><hr>'+
+    planHtml+'</body></html>');
+  w.document.close(); w.focus(); w.print();
+}
+
+/* ============================================================
+   MODE SOMBRE
+   ============================================================ */
+function applyTheme(){
+  const dark=localStorage.getItem("coach_theme")==="dark";
+  document.documentElement.classList.toggle("dark",dark);
+}
+function toggleTheme(){
+  const dark=localStorage.getItem("coach_theme")==="dark";
+  localStorage.setItem("coach_theme",dark?"light":"dark");
+  applyTheme(); renderSettings();
+}
 let history=[];
+function chatKey(){return "coach_chat_"+currentUser;}
+function saveChat(){ try{ localStorage.setItem(chatKey(),JSON.stringify(history)); }catch(e){} }
 function addMsg(role,html){const d=document.createElement("div");d.className="msg "+role;d.innerHTML=html;$("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight;}
+function renderChatFromHistory(){
+  $("chat").innerHTML="";
+  history.forEach(m=>addMsg(m.role==="user"?"user":"bot", m.role==="user"?escapeHtml(m.content):m.content.replace(/\n/g,"<br>")));
+}
+function escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function clearChat(){
+  history=[]; saveChat(); $("chat").innerHTML="";
+  addMsg("bot",T("hello")+" "+currentUser+" 👋 "+T("coachIntro"));
+}
 async function sendMsg(){
   const inp=$("chat-input");const text=inp.value.trim();if(!text)return;
-  inp.value="";addMsg("user",text);history.push({role:"user",content:text});
+  inp.value="";addMsg("user",escapeHtml(text));history.push({role:"user",content:text});saveChat();
   const typing=document.createElement("div");typing.className="typing";typing.textContent="…";$("chat").appendChild(typing);$("chat").scrollTop=$("chat").scrollHeight;
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
   const langName={fr:"français",en:"English",es:"español"}[lang];
@@ -490,8 +581,19 @@ async function sendMsg(){
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:history.slice(-10)})});
     const json=await res.json();
     const reply=json.content.filter(c=>c.type==="text").map(c=>c.text).join("\n")||fallback(text);
-    typing.remove();addMsg("bot",reply.replace(/\n/g,"<br>"));history.push({role:"assistant",content:reply});
-  }catch(e){typing.remove();const reply=fallback(text);addMsg("bot",reply);history.push({role:"assistant",content:reply});}
+    typing.remove();addMsg("bot",reply.replace(/\n/g,"<br>"));history.push({role:"assistant",content:reply});saveChat();
+  }catch(e){typing.remove();const reply=fallbackWithMemory(text);addMsg("bot",reply);history.push({role:"assistant",content:reply});saveChat();}
+}
+// mémoire de conversation : combine le dernier message avec le précédent si utile
+function fallbackWithMemory(text){
+  // récupère le dernier message utilisateur précédent pour donner du contexte
+  const prevUser=[...history].reverse().slice(1).find(m=>m.role==="user");
+  if(prevUser){
+    const combined=(prevUser.content+" "+text);
+    // si le message actuel est court (un détail comme "ça gonfle"), on l'analyse avec le précédent
+    if(text.split(" ").length<=4){ return fallback(combined); }
+  }
+  return fallback(text);
 }
 /* ============================================================
    BASE DES BLESSURES (les 150) — catégorie + conseil + exercices
@@ -733,6 +835,7 @@ function fallback(q){
    INIT
    ============================================================ */
 window.onload=()=>{
+  applyTheme();
   applyLang();
   closeSettings(); // le panneau réglages est toujours fermé au démarrage
   const saved=localStorage.getItem("coach_user");
