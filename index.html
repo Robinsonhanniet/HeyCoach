@@ -109,9 +109,7 @@
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button onclick="login()" data-i="connect">Se connecter</button>
       <button class="ghost" onclick="login()" data-i="create">Créer un compte</button>
-    </div>
-    <div id="guest-row" style="margin-top:10px">
-      <button class="ghost" style="width:100%" onclick="guestLogin()" data-i="tryGuest">Essayer sans se connecter</button>
+      <button class="ghost" onclick="guestLogin()" data-i="tryGuest">Essayer sans email</button>
     </div>
     <p class="sub" style="margin-top:14px;font-size:12px" data-i="localNote">Les données restent stockées localement dans ton navigateur.</p>
   </div>
@@ -204,15 +202,15 @@
 const I18N={
   fr:{appTitle:"Coach Sportif",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",
     age:"Âge",sport:"Sport",level:"Niveau",freq:"Fréquence",years:"ans",sessions:"séances/sem",levels:["Débutant","Intermédiaire","Avancé","Compétiteur"],choose:"— Choisir —",
-    helloGuest:"Bonjour 👋",startBtn:"Commencer",homeDesc:"Bienvenue !",seeDemo:"Voir la démo",tryGuest:"Essayer sans email",hello:"Salut",coachIntro:"Je suis <b>ton coach</b> 💪 Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.",
+    helloGuest:"Bonjour 👋",startBtn:"Commencer",homeDesc:"Bienvenue !",seeDemo:"Voir la démo",tryGuest:"Essayer sans email",dontKnow:"🤔 Je ne suis pas sûr de comprendre. Je peux t'aider à : créer un <b>programme anti-blessure</b>, te donner un <b>échauffement</b> ou une <b>routine de récup</b>, ou répondre sur une <b>blessure</b> précise (genou, cheville, épaule, dos, tendinite, entorse...). Tu veux parler de quoi ?",hello:"Salut",coachIntro:"Je suis <b>ton coach</b> 💪 Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.",
     zones:"⚠️ Zones à surveiller",echaufT:"🔥 Échauffement (avant chaque séance)",renfoT:"💪 Renforcement préventif (2x/sem)",recupT:"🧊 Récupération",ageT:"👤 Adapté à ton âge",freqT:"📅 Adapté à ta fréquence",levelT:"📈 Adapté à ton niveau",fillAll:"Remplis tous les champs.",needLogin:"Entre un nom, un email et un mot de passe."},
   en:{appTitle:"Sports Coach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",
     age:"Age",sport:"Sport",level:"Level",freq:"Frequency",years:"yrs",sessions:"sessions/wk",levels:["Beginner","Intermediate","Advanced","Competitor"],choose:"— Choose —",
-    helloGuest:"Hello 👋",startBtn:"Start",homeDesc:"Welcome!",seeDemo:"Watch demo",tryGuest:"Try without email",hello:"Hi",coachIntro:"I'm <b>your coach</b> 💪 Ask me for a warm-up, a recovery routine or strength exercises, I'll give you concrete sessions.",
+    helloGuest:"Hello 👋",startBtn:"Start",homeDesc:"Welcome!",seeDemo:"Watch demo",tryGuest:"Try without email",dontKnow:"🤔 I am not sure I understand. I can help you build an <b>injury-prevention program</b>, give a <b>warm-up</b> or a <b>recovery routine</b>, or answer about a specific <b>injury</b> (knee, ankle, shoulder, back, tendinitis, sprain...). What would you like?",hello:"Hi",coachIntro:"I'm <b>your coach</b> 💪 Ask me for a warm-up, a recovery routine or strength exercises, I'll give you concrete sessions.",
     zones:"⚠️ Areas to watch",echaufT:"🔥 Warm-up (before each session)",renfoT:"💪 Preventive strength (2x/week)",recupT:"🧊 Recovery",ageT:"👤 Adapted to your age",freqT:"📅 Adapted to your frequency",levelT:"📈 Adapted to your level",fillAll:"Fill in all fields.",needLogin:"Enter a name, an email and a password."},
   es:{appTitle:"Entrenador Deportivo",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",
     age:"Edad",sport:"Deporte",level:"Nivel",freq:"Frecuencia",years:"años",sessions:"sesiones/sem",levels:["Principiante","Intermedio","Avanzado","Competidor"],choose:"— Elegir —",
-    helloGuest:"Hola 👋",startBtn:"Empezar",homeDesc:"¡Bienvenido!",seeDemo:"Ver demo",tryGuest:"Probar sin correo",hello:"Hola",coachIntro:"Soy <b>tu entrenador</b> 💪 Pídeme un calentamiento, una rutina de recuperación o ejercicios de fuerza, te doy sesiones concretas.",
+    helloGuest:"Hola 👋",startBtn:"Empezar",homeDesc:"¡Bienvenido!",seeDemo:"Ver demo",tryGuest:"Probar sin correo",dontKnow:"🤔 No estoy seguro de entender. Puedo ayudarte a crear un <b>programa anti-lesiones</b>, darte un <b>calentamiento</b> o una <b>rutina de recuperación</b>, o responder sobre una <b>lesión</b> concreta (rodilla, tobillo, hombro, espalda, tendinitis, esguince...). ¿De qué quieres hablar?",hello:"Hola",coachIntro:"Soy <b>tu entrenador</b> 💪 Pídeme un calentamiento, una rutina de recuperación o ejercicios de fuerza, te doy sesiones concretas.",
     zones:"⚠️ Zonas a vigilar",echaufT:"🔥 Calentamiento (antes de cada sesión)",renfoT:"💪 Fuerza preventiva (2x/sem)",recupT:"🧊 Recuperación",ageT:"👤 Adaptado a tu edad",freqT:"📅 Adaptado a tu frecuencia",levelT:"📈 Adaptado a tu nivel",fillAll:"Rellena todos los campos.",needLogin:"Introduce un nombre, un correo y una contraseña."}
 };
 let lang = localStorage.getItem("coach_lang") || "fr";
@@ -286,8 +284,6 @@ let currentUser=null;
 const $=id=>document.getElementById(id);
 function show(s){["screen-home","screen-login","screen-form","screen-app"].forEach(x=>$(x).classList.add("hidden"));$(s).classList.remove("hidden");}
 function goConnect(){
-  // "Se connecter" : on cache le bouton invité
-  const g=$("guest-row"); if(g) g.style.display="none";
   const saved=localStorage.getItem("coach_user");
   if(saved && saved!=="Invité"){
     currentUser=saved;
@@ -298,11 +294,7 @@ function goConnect(){
   }
   show("screen-login");
 }
-function goStart(){
-  // "Commencer" : on affiche le bouton "Essayer sans email"
-  const g=$("guest-row"); if(g) g.style.display="block";
-  show("screen-login");
-}
+function goStart(){ show("screen-login"); }
 function guestLogin(){
   // essai sans email : on crée un invité et on va direct au questionnaire
   currentUser="Invité";
@@ -358,7 +350,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v16 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v19 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -542,7 +534,7 @@ const INJ=[
 {kw:["coup de chaleur","insolation","hyponatremie","hypothermie","gelure","rhabdomyolyse","malaise","hypoglycemie","deshydrat"],cat:"stop",name:"Problème général (chaleur, froid, malaise)",msg:"Ce n'est pas une blessure musculaire : <b>arrête l'effort tout de suite</b>, mets-toi à l'abri (frais ou chaud selon le cas), hydrate-toi, et demande de l'aide. Coup de chaleur, malaise ou urine très foncée = secours/médecin. Pas d'exercice, c'est le repos et la prise en charge qui comptent."},
 {kw:["menisque","labrum","slap","bourrelet","hernie discale","spondylo","sciatique","cruralgie","ostechondrite","decollement retine","cornee","tympan","dent","epistaxis nez casse","oreille chou","chou-fleur","canal carpien","defile thoracique","compression nerf","nevralgie","capsulite","arthrose","coxarthrose","gonarthrose"],cat:"care",name:"Blessure à faire évaluer",msg:"Ce type d'atteinte demande un <b>diagnostic pro</b> (médecin/kiné) avant tout exercice : un mauvais mouvement peut aggraver. En attendant : repos relatif, glace si douleur/gonflement, et évite ce qui réveille la douleur. Demande-moi un programme de renfo doux SEULEMENT pour la prévention générale si tu veux."},
 // ---- 🟠 SÉRIEUSES : repos + rééduc progressive ----
-{kw:["entorse cheville","cheville","entorse haute","syndesmot","instabilite cheville"],cat:"care",name:"Entorse de la cheville",msg:"Protocole <b>GREC</b> 48-72 h : Glace 15 min plusieurs fois/jour, Repos relatif, Élévation, Compression.",ex:["Mobilité cheville (alphabet avec le pied) : 2×/jour","Équilibre sur 1 jambe : 3×30 s (puis yeux fermés)","Montées sur pointes (mollets) : 3×15","Marche puis trottinements légers quand la douleur a disparu"]},
+{kw:["entorse cheville","entorse","cheville","entorse haute","syndesmot","instabilite cheville"],cat:"care",name:"Entorse de la cheville",msg:"Protocole <b>GREC</b> 48-72 h : Glace 15 min plusieurs fois/jour, Repos relatif, Élévation, Compression.",ex:["Mobilité cheville (alphabet avec le pied) : 2×/jour","Équilibre sur 1 jambe : 3×30 s (puis yeux fermés)","Montées sur pointes (mollets) : 3×15","Marche puis trottinements légers quand la douleur a disparu"]},
 {kw:["entorse genou","entorse du genou","ligament interne genou","ligament externe genou","collateral"],cat:"care",name:"Entorse du genou",msg:"Glace, repos relatif et évite les pivots. Si le genou est instable ou très gonflé, fais-le voir.",ex:["Contraction du quadriceps (jambe tendue) : 3×10","Pont fessier : 3×15","Chaise contre le mur : 3×20 s","Vélo léger sans résistance quand ça ne fait plus mal"]},
 {kw:["entorse poignet","entorse pouce","pouce du skieur","collateral ulnaire","entorse doigt","entorse doigts"],cat:"care",name:"Entorse poignet / pouce / doigts",msg:"Glace 10-15 min, repos, et strapping léger possible. Évite la prise en charge forte.",ex:["Mobilité poignet (flexion/extension douce) : 3×15","Serrage d'une balle molle : 3×15","Écartement des doigts avec élastique : 3×15"]},
 {kw:["entorse cervicale","cervicalgie","torticolis"],cat:"care",name:"Cou (entorse cervicale / torticolis)",msg:"Chaleur douce, évite les mouvements brusques. Si fourmillements dans les bras, consulte.",ex:["Rotations lentes du cou : 5 par sens","Inclinaisons douces oreille vers épaule : 5 par côté","Rentrer le menton (double menton) : 3×10"]},
@@ -554,7 +546,7 @@ const INJ=[
 {kw:["osgood","schlat"],cat:"ok",name:"Osgood-Schlatter",msg:"Tu peux continuer tant que la douleur reste légère et part à l'échauffement. Glace après l'effort, réduis sauts/sprints.",ex:["Étirement quadriceps debout : 3×30 s/jambe","Chaise contre le mur : 3×30 s","Pont fessier : 3×15","Étirement ischios assis : 3×30 s"]},
 {kw:["sever"],cat:"ok",name:"Maladie de Sever (talon)",msg:"Fréquent chez l'ado, lié à la croissance. Glace après le sport, talonnettes possibles, réduis les sauts.",ex:["Étirement mollet contre un mur : 3×30 s","Montées sur pointes douces : 3×12","Roulage du pied sur une balle : 1 min"]},
 {kw:["sinding","larsen","johansson"],cat:"ok",name:"Sinding-Larsen-Johansson (pointe de rotule)",msg:"Cousin de l'Osgood, sous la rotule. Glace, réduis sauts et squats profonds.",ex:["Étirement quadriceps : 3×30 s/jambe","Chaise contre le mur : 3×20 s","Pont fessier : 3×15"]},
-{kw:["tendinite achille","achille","tendinopathie achille"],cat:"ok",name:"Tendinite d'Achille",msg:"Réduis la course, glace après l'effort. Le renfo excentrique est la clé.",ex:["Excentrique mollet (descente lente sur 1 marche) : 3×15","Étirement mollet contre un mur : 3×30 s","Montées sur pointes : 3×15"]},
+{kw:["tendinite achille","tendon dachille","talon dachille","achille","tendinopathie achille"],cat:"ok",name:"Tendinite d'Achille",msg:"Réduis la course, glace après l'effort. Le renfo excentrique est la clé.",ex:["Excentrique mollet (descente lente sur 1 marche) : 3×15","Étirement mollet contre un mur : 3×30 s","Montées sur pointes : 3×15"]},
 {kw:["tendinite rotulienne","genou du sauteur","tendon patellaire","patellaire","tendinopathie patellaire"],cat:"ok",name:"Tendinite rotulienne (genou du sauteur)",msg:"Réduis sauts et réceptions, glace. Renforce sans douleur vive.",ex:["Squat lent à 1 jambe (excentrique) : 3×10/jambe","Chaise contre le mur : 3×30 s","Étirement quadriceps : 3×30 s"]},
 {kw:["tendinite quadriceps","tendon quadricipital"],cat:"ok",name:"Tendinite du quadriceps",msg:"Réduis les squats lourds et sauts, glace après l'effort.",ex:["Chaise contre le mur : 3×30 s","Étirement quadriceps : 3×30 s/jambe","Pont fessier : 3×15"]},
 {kw:["coiffe des rotateurs","coiffe rotateurs","tendinite epaule","conflit sous-acromial","sous acromial","bursite epaule"],cat:"ok",name:"Épaule (coiffe / conflit)",msg:"Évite les mouvements au-dessus de la tête tant que ça gêne, glace si ça chauffe.",ex:["Rotations externes à l'élastique : 3×15","Élévations latérales légères : 3×12","Pendulaire épaule : 1 min","Étirement épaule croisée : 3×20 s"]},
@@ -566,7 +558,7 @@ const INJ=[
 {kw:["periostite","tibial","tibia douleur","syndrome loge","compartiment"],cat:"ok",name:"Périostite tibiale",msg:"Réduis la course sur dur, glace le tibia après l'effort, vérifie tes chaussures.",ex:["Étirement mollet contre un mur : 3×30 s","Montées sur pointes : 3×15","Marche sur les talons : 2×30 s","Roulage du mollet au foam roller : 1 min"]},
 {kw:["essuie-glace","essuie glace","bandelette","ilio-tibial","ilio tibial","tfl"],cat:"ok",name:"Syndrome de l'essuie-glace (bandelette IT)",msg:"Douleur sur le côté du genou en course. Réduis le volume, glace.",ex:["Étirement bandelette IT (croiser les jambes, pencher) : 3×30 s","Renfo moyen fessier (abduction) : 3×15","Foam roller cuisse externe : 1 min"]},
 {kw:["syndrome rotulien","femoro-patellaire","femoro patellaire","chondromalacie","syndrome femoro"],cat:"ok",name:"Syndrome rotulien (fémoro-patellaire)",msg:"Douleur avant du genou (escaliers, position assise longue). Renforce quadriceps et fessiers.",ex:["Chaise contre le mur : 3×30 s","Pont fessier : 3×15","Extension de jambe assis (douce) : 3×15","Étirement quadriceps : 3×30 s"]},
-{kw:["fasciite","aponevros","plantaire","epine calcaneenne","talon"],cat:"ok",name:"Fasciite plantaire (sous le pied)",msg:"Douleur sous le talon, surtout le matin. Étire le mollet et la voûte, glace.",ex:["Roulage du pied sur une balle/bouteille froide : 2 min","Étirement mollet contre un mur : 3×30 s","Étirement de la voûte (orteils tirés vers soi) : 3×30 s","Ramasser une serviette avec les orteils : 3×15"]},
+{kw:["fasciite","aponevros","plantaire","epine calcaneenne","sous le talon","talon le matin","douleur talon"],cat:"ok",name:"Fasciite plantaire (sous le pied)",msg:"Douleur sous le talon, surtout le matin. Étire le mollet et la voûte, glace.",ex:["Roulage du pied sur une balle/bouteille froide : 2 min","Étirement mollet contre un mur : 3×30 s","Étirement de la voûte (orteils tirés vers soi) : 3×30 s","Ramasser une serviette avec les orteils : 3×15"]},
 {kw:["metatarsalgie","hallux","ongle incarne","ampoule"],cat:"ok",name:"Avant-pied (métatarsalgie, ampoules…)",msg:"Vérifie tes chaussures (taille, usure). Repos si douleur, protège les ampoules.",ex:["Mobilité des orteils : 2×/jour","Étirement de la voûte plantaire : 3×30 s","Renfo pieds : marche sur la pointe puis le talon : 2×30 s"]},
 {kw:["bursite coude","hygroma"],cat:"ok",name:"Bursite du coude (hygroma)",msg:"Évite l'appui sur le coude, glace si gonflé. Si rouge/chaud/fièvre, consulte.",ex:["Mobilité coude douce : 3×15","Étirement avant-bras : 3×20 s"]},
 {kw:["bursite genou"],cat:"ok",name:"Bursite du genou",msg:"Évite la position à genoux, glace. Repos relatif.",ex:["Contraction quadriceps : 3×10","Pont fessier : 3×15","Mobilité genou douce : 3×15"]},
@@ -590,6 +582,23 @@ function findInjury(t){
   for(const inj of INJ){ if(inj.cat==="ok"){ for(const w of inj.kw){ if(t.includes(w)) return inj; } } }
   return null;
 }
+// trouve TOUTES les blessures distinctes mentionnées dans la phrase
+function findAllInjuries(t){
+  const found=[];
+  // rupture explicite d'abord
+  let ruptureFound=false;
+  if(/(rupture|rompu|dechir).{0,20}(tendon|achille|quadricip|patellaire|coiffe)/.test(t)
+     || /(tendon|achille).{0,20}(rompu|rupture|dechir)/.test(t)){
+    const r=INJ.find(i=>i.name.startsWith("Rupture (ligament")); if(r){found.push(r);ruptureFound=true;}
+  }
+  for(const inj of INJ){
+    if(found.includes(inj)) continue;
+    // si une rupture a été détectée, ne pas ajouter la tendinite d'Achille (c'est le même endroit)
+    if(ruptureFound && inj.name.indexOf("Achille")>=0) continue;
+    for(const w of inj.kw){ if(t.includes(w)){ found.push(inj); break; } }
+  }
+  return found;
+}
 function renderInjury(inj){
   const icon=inj.cat==="stop"?"🔴":inj.cat==="care"?"🟠":"🟢";
   let out=icon+" <b>"+inj.name+"</b><br>"+inj.msg;
@@ -599,11 +608,76 @@ function renderInjury(inj){
   if(inj.cat==="stop"){ out+="<br><br><i>Je ne te donne pas d'exercice ici : ce serait risqué. La priorité, c'est l'avis médical.</i>"; }
   return out;
 }
+/* ============================================================
+   MATHS DE BASE pour le coach (+, -, ×, ÷)
+   ============================================================ */
+function tryMath(q){
+  let s=q.toLowerCase()
+    .replace(/[,]/g,".")
+    .replace(/fois|multiplie par|x|×/g,"*")
+    .replace(/divise par|sur|÷|:/g,"/")
+    .replace(/plus|et/g,"+")
+    .replace(/moins/g,"-")
+    .replace(/combien font|combien fait|calcule|egal|egale|=|\?/g,"");
+  // ne garde que chiffres et opérateurs
+  const clean=s.replace(/[^0-9+\-*/(). ]/g,"").trim();
+  // il faut au moins un nombre, un opérateur et un autre nombre
+  if(!/[0-9]/.test(clean)) return null;
+  if(!/[+\-*/]/.test(clean)) return null;
+  if(!/[0-9].*[+\-*/].*[0-9]/.test(clean)) return null;
+  try{
+    // évaluation sûre : on n'autorise que les caractères mathématiques
+    if(/[^0-9+\-*/(). ]/.test(clean)) return null;
+    const r=Function('"use strict";return ('+clean+')')();
+    if(typeof r!=="number"||!isFinite(r)) return null;
+    const arrondi=Math.round(r*1000)/1000;
+    return clean.replace(/\*/g," × ").replace(/\//g," ÷ ")+" = <b>"+arrondi+"</b>";
+  }catch(e){ return null; }
+}
+
+/* ============================================================
+   NORMALISATION : comprend raccourcis SMS et fautes courantes
+   ============================================================ */
+function normalizeText(t){
+  // t est déjà en minuscules et sans accents
+  let s=" "+t+" ";
+  const repl=[
+    // langage SMS courant
+    [/\bg\b/g," jai "],[/\bj'?ai\b/g," jai "],[/\bjé\b/g," jai "],
+    [/\bbcp\b/g," beaucoup "],[/\bpcq\b|\bpck\b|\bpq\b/g," parce que "],
+    [/\bstp\b|\bsvp\b/g," s il te plait "],[/\bpk\b/g," pourquoi "],
+    [/\bki\b/g," qui "],[/\bkoi\b|\bqoi\b/g," quoi "],[/\bauj\b|\bajd\b|\bojourdui\b|\baujourdui\b/g," aujourd hui "],
+    [/\btjs\b|\btjrs\b/g," toujours "],[/\bqd\b/g," quand "],[/\bdsl\b/g," desole "],
+    [/\bmtn\b/g," maintenant "],[/\bvrmt\b/g," vraiment "],[/\bjsp\b/g," je sais pas "],
+    [/\bcv\b/g," ca va "],[/\bc\b/g," c est "],[/\bt\b/g," tu es "],
+    // fautes fréquentes sur les blessures
+    [/entorce|entors\b|antorse/g,"entorse"],
+    [/achile|achill\b|tendon d achile|talon d achile/g,"achille"],
+    [/tendignite|tendinit\b|tendinitte|tandinite|\btendi\b|\btendinit\b/g,"tendinite"],
+    [/\btendinite\b(?=.*(epaule|epol))/g,"tendinite epaule"],
+    [/epaul\b|epol|epaule s/g,"epaule"],
+    [/genoux\b|jenou|genous/g,"genou"],
+    [/cheviye|chevill\b/g,"cheville"],
+    [/claquage|clakage|klaquage/g,"claquage"],
+    [/osgood ?schlatter?|osgood ?schlater?|ozgood/g,"osgood schlatter"],
+    [/perioste|periostit\b/g,"periostite"],
+    [/echauf\b|echofement|echaufement/g,"echauffement"],
+    [/recup\b|recuperation/g,"recuperation"]
+  ];
+  repl.forEach(([re,to])=>{s=s.replace(re,to);});
+  return s.replace(/\s+/g," ").trim();
+}
+
 function fallback(q){
-  const t=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); // sans accents
+  let t=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); // sans accents
+  t=normalizeText(t); // comprend raccourcis et fautes
   const data=JSON.parse(localStorage.getItem("coach_data_"+currentUser)||"{}");
   const firstSport=(data.sports&&data.sports.length)?data.sports[0]:(data.sport?data.sport.split(", ")[0]:"Autre");
   const k=KB.sports[firstSport]||KB.sports["Autre"];
+
+  // === MATHS : le coach sait calculer +, -, ×, ÷ ===
+  const calc=tryMath(q);
+  if(calc!==null) return "🧮 "+calc;
 
   // --- Détection : est-ce une QUESTION / demande de conseil ? ---
   const askContinue = /(continuer|continue|devrais|dois-?je|est-?ce que je|puis-?je|je peux|arreter|stop|reposer|repos|pause|forcer|intensite|trop|mal de faire|risque|grave|inquiet|normal|should i|can i|keep|rest)/.test(t);
@@ -647,10 +721,29 @@ function fallback(q){
   }
 
   // === MODE PROGRAMME (listes d'exercices) ===
-  // Priorité : blessure précise reconnue dans la base des 150
-  const inj=findInjury(t);
-  if(inj) return renderInjury(inj);
+  // Priorité : blessures précises reconnues dans la base des 150 (plusieurs possibles)
+  const injs=findAllInjuries(t);
+  if(injs.length===1) return renderInjury(injs[0]);
+  if(injs.length>1){
+    const intro="J'ai repéré <b>"+injs.length+" blessures</b> dans ton message. Voici pour chacune :<br>";
+    return intro+injs.map(renderInjury).join('<br><hr style="border:none;border-top:1px solid var(--border);margin:10px 0">');
+  }
   if(hasOsgood)return "🦵 <b>Osgood-Schlatter — reprise</b><br>1) Glace 15 min après l'effort<br>2) Étirement quadriceps : 3×30 s/jambe<br>3) Chaise contre le mur : 3×30 s<br>4) Pont fessier : 3×15<br>5) Réduis sauts/sprints, remonte +10%/semaine.";
+
+  // === QUESTIONS DE PRÉCISION pour une douleur vague ===
+  // si l'utilisateur a déjà donné des détails, on saute les questions
+  const aDejaDetails = /(gonfl|craqu|lache|lâche|depuis|matin|coup|chute|tomber|tombe|tordu|torsion|faux mouvement|claque|coince|brule|fourmi|saut|course|monte|escalier|plie|plier|chronique|semaine|jour|mois|recemment)/.test(t);
+  const veutExercices = /(exercice|programme|program|renfo|muscl|echauf|recup|que faire|quoi faire|aide|soigne|soulage)/.test(t);
+  const zoneVague = /genou/.test(t)?"genou": /epaule|epol/.test(t)?"epaule": /cheville/.test(t)?"cheville": /dos|lombaire/.test(t)?"dos": /coude/.test(t)?"coude": /poignet/.test(t)?"poignet": /hanche/.test(t)?"hanche": /mollet/.test(t)?"mollet": /cuisse/.test(t)?"cuisse": "";
+  if(zoneVague && !aDejaDetails && !veutExercices){
+    return "🤕 Tu as mal "+ (zoneVague==="dos"?"au dos":"au "+zoneVague) +". Pour bien te conseiller, dis-moi :<br>"+
+      "1) <b>Comment c'est arrivé ?</b> (un coup, une chute, un faux mouvement… ou c'est venu petit à petit ?)<br>"+
+      "2) <b>Où exactement ?</b> (devant, derrière, sur le côté, dessous…)<br>"+
+      "3) Est-ce que ça <b>gonfle</b>, ça <b>craque</b>, ou ça <b>lâche</b> ?<br>"+
+      "4) <b>Depuis quand</b> ? (aujourd'hui, quelques jours, plusieurs semaines ?)<br><br>"+
+      "<i>Et si tu veux juste des exercices tout de suite, écris « exercices ».</i>";
+  }
+
   if(t.includes("genou"))return "🦵 <b>Genou</b><br>1) Glace 15 min si gonflement<br>2) Chaise contre le mur : 3×30 s<br>3) Pont fessier : 3×15<br>4) Mollets debout : 3×15<br>5) Etirement du papillon : 3×30 s.";
   if(t.includes("cheville")||t.includes("entorse"))return "🦶 <b>Cheville</b><br>1) GREC : Glace, Repos, Elevation, Compression<br>2) Equilibre 1 jambe : 3×30 s<br>3) Mollets debout : 3×15<br>4) Jumping jacks legers quand ca ne fait plus mal.";
   if(t.includes("dos")||t.includes("lombaire"))return "🔙 <b>Dos</b><br>1) Planche : 3×30 s<br>2) Pont fessier : 3×15<br>3) Russian twists : 3×20<br>4) Cat-cow : 10 mouvements.";
@@ -660,7 +753,7 @@ function fallback(q){
   if(t.includes("recup")||t.includes("courbature")||t.includes("recover"))return "🧊 <b>"+T("recupT").replace("🧊 ","")+"</b><br>"+k.recup.map((e,i)=>(i+1)+") "+e).join("<br>")+"<br>+ 8 h de sommeil + hydratation.";
   if(t.includes("renfo")||t.includes("muscl")||t.includes("exercice")||t.includes("entrain")||t.includes("programme")||t.includes("program")||t.includes("strength")||t.includes("fuerza"))return "💪 <b>Renfo (2×/sem)</b><br>1) Squats : 4×12<br>2) Pompes : 4×8<br>3) Fentes : 3×10/jambe<br>4) Planche : 3×30 s<br>5) "+k.renfo.join(" · ");
   if(t.includes("eviter")||t.includes("blessure")||t.includes("prevent")||t.includes("lesion")||t.includes("prevenir"))return "🛡️ <b>Prevention</b><br>"+T("zones")+" : "+k.zones.join(", ")+"<br>"+k.echauf.join(" · ");
-  return "💡 "+T("coachIntro");
+  return T("dontKnow");
 }
 
 /* ============================================================
