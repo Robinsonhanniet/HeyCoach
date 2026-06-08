@@ -96,10 +96,6 @@
         <button class="green" onclick="goStart()" data-i="startBtn">Commencer</button>
       </div>
     </div>
-    <div class="card" style="max-width:680px;margin:0 auto">
-      <h2 data-i="chatTitle">💬 Discute avec Coach</h2>
-      <div class="chat-box" id="chat-home" style="height:160px"></div>
-    </div>
   </div>
 
   <!-- ============ CONNEXION ============ -->
@@ -112,10 +108,13 @@
     <label data-i="email">Email</label>
     <input id="login-email" type="email" placeholder="alex@email.com">
     <label data-i="pass">Mot de passe</label>
-    <input id="login-pass" type="password" placeholder="••••••">
+    <div style="position:relative">
+      <input id="login-pass" type="password" placeholder="••••••" style="width:100%;padding-right:44px">
+      <span onclick="togglePass()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;user-select:none" id="pass-eye">👁</span>
+    </div>
     <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:nowrap">
       <button onclick="login()" data-i="connect" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Se connecter</button>
-      <button class="ghost" onclick="login()" data-i="create" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Créer un compte</button>
+      <button class="ghost" onclick="register()" data-i="create" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Créer un compte</button>
       <button class="ghost" onclick="guestLogin()" data-i="tryGuest" style="flex:1;padding:11px 6px;white-space:nowrap;font-size:13.5px">Essayer sans email</button>
     </div>
     <p class="sub" style="margin-top:14px;font-size:12px" data-i="localNote">Les données restent stockées localement dans ton navigateur.</p>
@@ -222,15 +221,15 @@
    TRADUCTIONS
    ============================================================ */
 const I18N={
-  fr:{appTitle:"HeyCoach",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",printBtn:"🖨 Imprimer",clearChat:"🗑 Effacer",markDone:"J'ai fait ma séance",doneToday:"Séance faite aujourd'hui",streak:"Série",total:"Total",darkMode:"Mode sombre",lightMode:"Mode clair",guestLocked:"Connecte-toi avec un email pour suivre tes séances et sauvegarder ta progression.",
+  fr:{appTitle:"HeyCoach",loginSub:"Connecte-toi pour accéder à ton programme et au coach.",name:"Nom / Pseudo",email:"Email",pass:"Mot de passe",connect:"Se connecter",create:"Créer un compte",localNote:"Les données restent stockées localement dans ton navigateur.",connected:"Connecté",formTitle:"Parle-moi de ta pratique",formSub:"Ces infos servent à créer un programme adapté pour éviter les blessures.",ageQ:"Quel âge as-tu ?",sportQ:"Quel sport pratiques-tu ?",freqQ:"Fréquence (séances/semaine)",levelQ:"Ton niveau",genBtn:"Générer mon programme",profileTitle:"Ton profil",planTitle:"Programme anti-blessure",planSub:"Adapté à ton sport, ta fréquence, ton niveau et ton âge.",chatTitle:"💬 Discute avec Coach",chatSub:"Pose tes questions sur les blessures, la récupération, la prévention…",chatPh:"Ex: comment récupérer après une séance ?",send:"Envoyer",settings:"Réglages",settingsSub:"Tes informations et préférences.",langLabel:"Langue",editProfile:"Modifier le profil",logout:"Déconnexion",saveBtn:"Enregistrer mes infos",saved:"Enregistré",needName:"Le pseudo ne peut pas être vide.",printBtn:"🖨 Imprimer",clearChat:"🗑 Effacer",markDone:"J'ai fait ma séance",doneToday:"Séance faite aujourd'hui",streak:"Série",total:"Total",darkMode:"Mode sombre",lightMode:"Mode clair",guestLocked:"Connecte-toi avec un email pour suivre tes séances et sauvegarder ta progression.",wrongLogin:"Email ou mot de passe incorrect. Si tu n'as pas de compte, clique sur Créer un compte.",alreadyAcc:"Ce compte existe déjà mais le mot de passe ne correspond pas. Clique sur Se connecter avec le bon mot de passe.",
     age:"Âge",sport:"Sport",level:"Niveau",freq:"Fréquence",years:"ans",sessions:"séances/sem",levels:["Débutant","Intermédiaire","Avancé","Compétiteur"],choose:"— Choisir —",
     helloGuest:"Bonjour 👋",startBtn:"Commencer",homeDesc:"<p style='font-size:16px;font-weight:600;margin-bottom:10px'>Bienvenue sur HeyCoach 👋</p><p style='margin-bottom:12px'><b>Comment ça marche ?</b> Tu indiques ton âge, le ou les sports que tu pratiques, ta fréquence et ton niveau. HeyCoach te crée aussitôt un <b>programme anti-blessure personnalisé</b> (échauffement, renforcement, récupération) et te donne accès à un <b>coach</b> avec qui discuter : pose-lui tes questions sur une douleur, une blessure ou comment récupérer, il te répond avec des exercices concrets et des fiches détaillées.</p><p style='margin-bottom:12px'><b>Qui a créé HeyCoach ?</b> Ce site a été imaginé et développé par <b>Robinson Hanniet</b>.</p><p><b>Pourquoi ?</b> J'ai moi-même eu la maladie d'Osgood-Schlatter, et je sais à quel point une blessure peut être frustrante quand on veut continuer son sport. Je me suis dit qu'une application capable d'aider chaque personne blessée à se soigner et à <b>retrouver son sport le plus vite possible</b>, en toute sécurité, serait vraiment utile. C'est pour ça que HeyCoach existe.</p>",seeDemo:"Voir la démo",tryGuest:"Essayer sans email",dontKnow:"🤔 Je ne suis pas sûr de comprendre. Je peux t'aider à : créer un <b>programme anti-blessure</b>, te donner un <b>échauffement</b> ou une <b>routine de récup</b>, ou répondre sur une <b>blessure</b> précise (genou, cheville, épaule, dos, tendinite, entorse...). Tu veux parler de quoi ?",hello:"Salut",coachIntro:"Je suis <b>ton coach</b> 💪 Demande-moi un échauffement, une routine de récup ou des exos de renfo, je te donne des séances concrètes.",
     zones:"⚠️ Zones à surveiller",echaufT:"🔥 Échauffement (avant chaque séance)",renfoT:"💪 Renforcement préventif (2x/sem)",recupT:"🧊 Récupération",ageT:"👤 Adapté à ton âge",freqT:"📅 Adapté à ta fréquence",levelT:"📈 Adapté à ton niveau",fillAll:"Remplis tous les champs.",needLogin:"Entre un nom, un email et un mot de passe."},
-  en:{appTitle:"HeyCoach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",printBtn:"🖨 Print",clearChat:"🗑 Clear",markDone:"I did my session",doneToday:"Session done today",streak:"Streak",total:"Total",darkMode:"Dark mode",lightMode:"Light mode",guestLocked:"Log in with an email to track your sessions and save your progress.",
+  en:{appTitle:"HeyCoach",loginSub:"Log in to access your program and the coach.",name:"Name / Nickname",email:"Email",pass:"Password",connect:"Log in",create:"Create account",localNote:"Your data stays stored locally in your browser.",connected:"Logged in",formTitle:"Tell me about your practice",formSub:"This info is used to build a program tailored to prevent injuries.",ageQ:"How old are you?",sportQ:"Which sport do you play?",freqQ:"Frequency (sessions/week)",levelQ:"Your level",genBtn:"Generate my program",profileTitle:"Your profile",planTitle:"Injury-prevention program",planSub:"Tailored to your sport, frequency, level and age.",chatTitle:"💬 Chat with Coach",chatSub:"Ask your questions about injuries, recovery, prevention…",chatPh:"E.g. how to recover after a session?",send:"Send",settings:"Settings",settingsSub:"Your information and preferences.",langLabel:"Language",editProfile:"Edit profile",logout:"Log out",saveBtn:"Save my info",saved:"Saved",needName:"Nickname cannot be empty.",printBtn:"🖨 Print",clearChat:"🗑 Clear",markDone:"I did my session",doneToday:"Session done today",streak:"Streak",total:"Total",darkMode:"Dark mode",lightMode:"Light mode",guestLocked:"Log in with an email to track your sessions and save your progress.",wrongLogin:"Wrong email or password. If you have no account, click Create account.",alreadyAcc:"This account already exists but the password does not match. Click Log in with the right password.",
     age:"Age",sport:"Sport",level:"Level",freq:"Frequency",years:"yrs",sessions:"sessions/wk",levels:["Beginner","Intermediate","Advanced","Competitor"],choose:"— Choose —",
     helloGuest:"Hello 👋",startBtn:"Start",homeDesc:"<p style='font-size:16px;font-weight:600;margin-bottom:10px'>Welcome to HeyCoach 👋</p><p style='margin-bottom:12px'><b>How does it work?</b> You enter your age, the sport(s) you play, your frequency and your level. HeyCoach instantly builds a <b>personalised injury-prevention program</b> (warm-up, strength, recovery) and gives you a <b>coach</b> to chat with: ask about a pain, an injury or how to recover, and it answers with concrete exercises and detailed guides.</p><p style='margin-bottom:12px'><b>Who created HeyCoach?</b> This site was designed and built by <b>Robinson Hanniet</b>.</p><p><b>Why?</b> I had Osgood-Schlatter disease myself, and I know how frustrating an injury can be when you want to keep playing. I thought an app that helps every injured person recover and <b>get back to their sport as fast as possible</b>, safely, would be truly useful. That is why HeyCoach exists.</p>",seeDemo:"Watch demo",tryGuest:"Try without email",dontKnow:"🤔 I am not sure I understand. I can help you build an <b>injury-prevention program</b>, give a <b>warm-up</b> or a <b>recovery routine</b>, or answer about a specific <b>injury</b> (knee, ankle, shoulder, back, tendinitis, sprain...). What would you like?",hello:"Hi",coachIntro:"I'm <b>your coach</b> 💪 Ask me for a warm-up, a recovery routine or strength exercises, I'll give you concrete sessions.",
     zones:"⚠️ Areas to watch",echaufT:"🔥 Warm-up (before each session)",renfoT:"💪 Preventive strength (2x/week)",recupT:"🧊 Recovery",ageT:"👤 Adapted to your age",freqT:"📅 Adapted to your frequency",levelT:"📈 Adapted to your level",fillAll:"Fill in all fields.",needLogin:"Enter a name, an email and a password."},
-  es:{appTitle:"HeyCoach",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",printBtn:"🖨 Imprimir",clearChat:"🗑 Borrar",markDone:"Hice mi sesión",doneToday:"Sesión hecha hoy",streak:"Racha",total:"Total",darkMode:"Modo oscuro",lightMode:"Modo claro",guestLocked:"Inicia sesión con un correo para seguir tus sesiones y guardar tu progreso.",
+  es:{appTitle:"HeyCoach",loginSub:"Inicia sesión para acceder a tu programa y al entrenador.",name:"Nombre / Apodo",email:"Correo",pass:"Contraseña",connect:"Iniciar sesión",create:"Crear cuenta",localNote:"Tus datos se guardan localmente en tu navegador.",connected:"Conectado",formTitle:"Cuéntame tu práctica",formSub:"Esta información sirve para crear un programa adaptado y evitar lesiones.",ageQ:"¿Cuántos años tienes?",sportQ:"¿Qué deporte practicas?",freqQ:"Frecuencia (sesiones/semana)",levelQ:"Tu nivel",genBtn:"Generar mi programa",profileTitle:"Tu perfil",planTitle:"Programa anti-lesiones",planSub:"Adaptado a tu deporte, frecuencia, nivel y edad.",chatTitle:"💬 Habla con el Entrenador",chatSub:"Haz tus preguntas sobre lesiones, recuperación, prevención…",chatPh:"Ej: ¿cómo recuperar tras una sesión?",send:"Enviar",settings:"Ajustes",settingsSub:"Tu información y preferencias.",langLabel:"Idioma",editProfile:"Editar perfil",logout:"Cerrar sesión",saveBtn:"Guardar mis datos",saved:"Guardado",needName:"El apodo no puede estar vacío.",printBtn:"🖨 Imprimir",clearChat:"🗑 Borrar",markDone:"Hice mi sesión",doneToday:"Sesión hecha hoy",streak:"Racha",total:"Total",darkMode:"Modo oscuro",lightMode:"Modo claro",guestLocked:"Inicia sesión con un correo para seguir tus sesiones y guardar tu progreso.",wrongLogin:"Correo o contraseña incorrectos. Si no tienes cuenta, pulsa Crear cuenta.",alreadyAcc:"Esta cuenta ya existe pero la contraseña no coincide. Pulsa Iniciar sesión con la contraseña correcta.",
     age:"Edad",sport:"Deporte",level:"Nivel",freq:"Frecuencia",years:"años",sessions:"sesiones/sem",levels:["Principiante","Intermedio","Avanzado","Competidor"],choose:"— Elegir —",
     helloGuest:"Hola 👋",startBtn:"Empezar",homeDesc:"<p style='font-size:16px;font-weight:600;margin-bottom:10px'>Bienvenido a HeyCoach 👋</p><p style='margin-bottom:12px'><b>¿Cómo funciona?</b> Indicas tu edad, el o los deportes que practicas, tu frecuencia y tu nivel. HeyCoach crea al instante un <b>programa anti-lesiones personalizado</b> (calentamiento, fuerza, recuperación) y te da un <b>entrenador</b> con quien hablar: pregúntale por un dolor, una lesión o cómo recuperarte, y responde con ejercicios concretos y fichas detalladas.</p><p style='margin-bottom:12px'><b>¿Quién creó HeyCoach?</b> Este sitio fue diseñado y desarrollado por <b>Robinson Hanniet</b>.</p><p><b>¿Por qué?</b> Yo mismo tuve la enfermedad de Osgood-Schlatter, y sé lo frustrante que es una lesión cuando quieres seguir con tu deporte. Pensé que una app que ayude a cada persona lesionada a recuperarse y <b>volver a su deporte lo antes posible</b>, de forma segura, sería muy útil. Por eso existe HeyCoach.</p>",seeDemo:"Ver demo",tryGuest:"Probar sin correo",dontKnow:"🤔 No estoy seguro de entender. Puedo ayudarte a crear un <b>programa anti-lesiones</b>, darte un <b>calentamiento</b> o una <b>rutina de recuperación</b>, o responder sobre una <b>lesión</b> concreta (rodilla, tobillo, hombro, espalda, tendinitis, esguince...). ¿De qué quieres hablar?",hello:"Hola",coachIntro:"Soy <b>tu entrenador</b> 💪 Pídeme un calentamiento, una rutina de recuperación o ejercicios de fuerza, te doy sesiones concretas.",
     zones:"⚠️ Zonas a vigilar",echaufT:"🔥 Calentamiento (antes de cada sesión)",renfoT:"💪 Fuerza preventiva (2x/sem)",recupT:"🧊 Recuperación",ageT:"👤 Adaptado a tu edad",freqT:"📅 Adaptado a tu frecuencia",levelT:"📈 Adaptado a tu nivel",fillAll:"Rellena todos los campos.",needLogin:"Introduce un nombre, un correo y una contraseña."}
@@ -349,16 +348,44 @@ async function cloudLoad(){
 
 let currentUserId=null;
 
+function togglePass(){
+  const inp=$("login-pass");
+  if(inp.type==="password"){inp.type="text";$("pass-eye").textContent="🙈";}
+  else{inp.type="password";$("pass-eye").textContent="👁";}
+}
+
 async function login(){
   const name=$("login-name").value.trim(),email=$("login-email").value.trim(),pass=$("login-pass").value.trim();
   if(!email||!pass){alert(T("needLogin"));return;}
-  // tente connexion, sinon inscription
-  let res=await sb.auth.signInWithPassword({email,pass});
+  // CONNEXION uniquement (compte existant)
+  const res=await sb.auth.signInWithPassword({email,password:pass});
   if(res.error){
-    res=await sb.auth.signUp({email,password:pass,options:{data:{pseudo:name||email.split("@")[0]}}});
-    if(res.error){alert("Erreur : "+res.error.message);return;}
+    if(/invalid login credentials/i.test(res.error.message)){
+      alert(T("wrongLogin"));
+    } else {
+      alert("Erreur : "+res.error.message);
+    }
+    return;
   }
-  const user=res.data.user||res.data.session?.user;
+  await finishLogin(res.data.user||res.data.session?.user,name,email,pass);
+}
+async function register(){
+  const name=$("login-name").value.trim(),email=$("login-email").value.trim(),pass=$("login-pass").value.trim();
+  if(!email||!pass){alert(T("needLogin"));return;}
+  // INSCRIPTION (nouveau compte)
+  const res=await sb.auth.signUp({email,password:pass,options:{data:{pseudo:name||email.split("@")[0]}}});
+  if(res.error){
+    if(/already registered|already exists/i.test(res.error.message)){
+      // le compte existe déjà → on tente directement de le connecter
+      const res2=await sb.auth.signInWithPassword({email,password:pass});
+      if(res2.error){ alert(T("alreadyAcc")); return; }
+      await finishLogin(res2.data.user,name,email,pass); return;
+    }
+    alert("Erreur : "+res.error.message); return;
+  }
+  await finishLogin(res.data.user||res.data.session?.user,name,email,pass);
+}
+async function finishLogin(user,name,email,pass){
   if(!user){alert("Erreur de connexion, réessaie.");return;}
   currentUserId=user.id;
   currentUser=name||user.user_metadata?.pseudo||email.split("@")[0];
@@ -424,7 +451,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v30 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v31 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -533,7 +560,22 @@ function bodySVG(active){
   '<ellipse cx="112" cy="258" rx="9" ry="26" fill="'+c('mollets')+'" stroke="'+stroke+'"/>'+
   '</svg>';
 }
-// quels muscles allumer selon l'exercice
+// quels muscles allumer selon l'exercice (devine pour TOUS les exercices)
+function guessMuscles(name){
+  const n=name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const z=new Set();
+  if(/squat|chaise|fente|jumping|high knee|talon|saut|velo|corde|course|mountain/.test(n)){z.add("quadriceps");}
+  if(/mollet|saut|corde|jumping|high knee|pointe|course|talon/.test(n)){z.add("mollets");}
+  if(/pont fessier|fessier|superman|fente|squat/.test(n)){z.add("quadriceps");}
+  if(/pompe|developpe|pectoraux|dips/.test(n)){z.add("pectoraux");z.add("biceps");}
+  if(/curl|biceps|traction|serrage|avant-bras|avant bras/.test(n)){z.add("biceps");z.add("avantbras");}
+  if(/planche|gainage|abdo|russian|twist|tronc|superman|cobra|cat-cow|bas du dos|mountain/.test(n)){z.add("abdos");}
+  if(/epaule|elevation|rotation d|developpe|traction|pompe|jumping|salutation/.test(n)){z.add("epaules");}
+  if(/traction|superman|cobra|dos/.test(n)){z.add("epaules");}
+  if(/pigeon|papillon|adducteur/.test(n)){z.add("quadriceps");}
+  if(z.size===0){z.add("abdos");} // par défaut, gainage général
+  return [...z];
+}
 const MUSCLE_MAP={
   "Squats":["quadriceps","mollets","abdos"],
   "Pompes":["pectoraux","biceps","abdos","epaules"],
@@ -563,26 +605,38 @@ function exoEmoji(muscles){
   if(/adducteur|hanche|étirement|etirement|mobilité|mobilite|piriforme/.test(m))return "🧘";
   return "🏋️";
 }
-function openExo(name){
-  const f=FICHES[name];
-  if(!f){ return; }
+function openExo(rawName){
+  const ficheKey=findFiche(rawName);
+  const f=ficheKey?FICHES[ficheKey]:null;
+  const niceName=exoQuery(rawName)||rawName;
   const content=$("exo-content");
-  const ytUrl="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+name+" exercice");
-  const zones=MUSCLE_MAP[name]||[];
-  content.innerHTML=
-    '<h2 style="margin-bottom:10px">💪 '+name+'</h2>'+
+  const ytUrl="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+niceName+" exercice");
+  const zones=(ficheKey&&MUSCLE_MAP[ficheKey])?MUSCLE_MAP[ficheKey]:guessMuscles(rawName);
+  const musclesTxt=f?f.muscles:zonesText(zones);
+  let html=
+    '<h2 style="margin-bottom:10px">💪 '+niceName+'</h2>'+
     '<div style="display:flex;gap:14px;align-items:center;background:var(--card2);border-radius:14px;padding:12px;margin-bottom:14px">'+
       bodySVG(zones)+
-      '<div style="font-size:13px"><b>Muscles travaillés :</b><br>'+f.muscles+
+      '<div style="font-size:13px"><b>Muscles travaillés :</b><br>'+musclesTxt+
       '<br><br><span style="color:var(--blue)">● en bleu</span> = muscles sollicités</div>'+
-    '</div>'+
-    '<p style="font-size:14px;font-weight:600;margin-bottom:6px">✅ Points clés</p>'+
-    '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:14px">'+f.cles.map(c=>'<li style="margin-bottom:4px">'+c+'</li>').join("")+'</ul>'+
-    '<p style="font-size:14px;font-weight:600;margin-bottom:6px">⚠️ Erreurs à éviter</p>'+
-    '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:16px">'+f.erreurs.map(e=>'<li style="margin-bottom:4px;color:var(--muted)">'+e+'</li>').join("")+'</ul>'+
-    '<a href="'+ytUrl+'" target="_blank" rel="noopener"><button class="green" style="width:100%">▶ Voir une vidéo de démonstration</button></a>';
+    '</div>';
+  if(f){
+    html+='<p style="font-size:14px;font-weight:600;margin-bottom:6px">✅ Points clés</p>'+
+      '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:14px">'+f.cles.map(c=>'<li style="margin-bottom:4px">'+c+'</li>').join("")+'</ul>'+
+      '<p style="font-size:14px;font-weight:600;margin-bottom:6px">⚠️ Erreurs à éviter</p>'+
+      '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:16px">'+f.erreurs.map(e=>'<li style="margin-bottom:4px;color:var(--muted)">'+e+'</li>').join("")+'</ul>';
+  } else {
+    html+='<p style="font-size:13px;color:var(--muted);margin-bottom:14px">Regarde la vidéo ci-dessous pour bien réaliser le mouvement et éviter les blessures.</p>';
+  }
+  html+='<a href="'+ytUrl+'" target="_blank" rel="noopener"><button class="green" style="width:100%">▶ Voir une vidéo de démonstration</button></a>';
+  content.innerHTML=html;
   const m=$("exo-modal");m.classList.remove("hidden");m.style.display="flex";
   document.body.style.overflow="hidden";
+}
+// texte lisible des zones musculaires
+function zonesText(zones){
+  const noms={quadriceps:"Quadriceps / jambes",mollets:"Mollets",pectoraux:"Pectoraux",biceps:"Biceps / bras",avantbras:"Avant-bras",abdos:"Abdominaux / gainage",epaules:"Épaules"};
+  return zones.map(z=>noms[z]||z).join(", ");
 }
 function closeExo(){
   const m=$("exo-modal");m.classList.add("hidden");m.style.display="none";
@@ -601,13 +655,11 @@ function findFiche(name){
   }
   return null;
 }
-// liste compacte : exercice + lien fiche ou démo
+// liste : CHAQUE exercice a un lien "En savoir plus" (schéma musculaire pour tous)
 function deco(list){
   return list.map(e=>{
-    const ficheKey=findFiche(e);
-    const link=ficheKey
-      ? ' <a href="javascript:void(0)" onclick="openExo(\''+ficheKey.replace(/'/g,"\\'")+'\')" style="font-size:12px;color:var(--blue);text-decoration:none;white-space:nowrap">→ En savoir plus</a>'
-      : '';
+    const safe=e.replace(/'/g,"\\'").replace(/"/g,"&quot;");
+    const link=' <a href="javascript:void(0)" onclick="openExo(\''+safe+'\')" style="font-size:12px;color:var(--blue);text-decoration:none;white-space:nowrap">→ En savoir plus</a>';
     return '<div style="font-size:13.5px;margin:2px 0;line-height:1.45">• '+e+link+'</div>';
   });
 }
