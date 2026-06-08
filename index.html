@@ -451,7 +451,7 @@ function renderSettings(){
         line(T("freq"),(data.freq?data.freq+" "+T("sessions"):"—"))+
         line(T("level"),lvl)+
       '</div>'+
-      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v31 ✓</div>';
+      '<div style="text-align:center;color:#b0b4bd;font-size:11px;margin-top:4px">v32 ✓</div>';
   }catch(e){ $("settings-info").innerHTML=""; }
 }
 function saveCred(){
@@ -605,12 +605,35 @@ function exoEmoji(muscles){
   if(/adducteur|hanche|étirement|etirement|mobilité|mobilite|piriforme/.test(m))return "🧘";
   return "🏋️";
 }
+// table des vidéos YouTube par exercice (ID de vidéos de chaînes fitness)
+const VIDEOS={
+  "squat":"aclHkVaku9U","chaise":"y-wV4Venusw","fente":"QOVaHwm-Q6U","fente marchee":"L8fvypPrzzs",
+  "pompe":"IODxDxX7oi4","developpe":"gRVjAtPip0Y","planche":"pSHjTRCQxIw","gainage":"pSHjTRCQxIw",
+  "jumping jack":"c4DAnQ6DtF8","pont fessier":"wPM8icPu6H8","mollet":"-M4-G8p8fmc","mollets debout":"-M4-G8p8fmc",
+  "curl":"ykJmrZ5v0Oo","elevation laterale":"3VcKaXpzqRo","russian twist":"wkD8rjkodUk","cat-cow":"kqnua4rHVVA",
+  "pigeon":"0_zPjgkGo_8","papillon":"DKusVjY1Nw0","gainage lateral":"K2VljzCC16g","high knee":"oDdkytliOqE",
+  "traction":"eGo4IYlbE5g","salutation au soleil":"73sjOu0g58M","mountain climber":"nmwgirgXLYM",
+  "corde a sauter":"u3zgHI8QnqE","course":"_kGESn8ArrU","velo":"S8jFW3jpqEU","talon":"6yMdhErgDPo",
+  "superman":"cc6UVRS7PW4","rotation":"X3-gBdFpZNk","rotation du tronc":"7AKjEgFZ2Tw","elevation":"3VcKaXpzqRo",
+  "saut":"c4DAnQ6DtF8","serrage":"6RUjY3FjUJg","avant-bras":"6RUjY3FjUJg","etirement avant-bras":"O8Occ1Hz_K0",
+  "etirement bas du dos":"4BOTvaRaDjI","cobra":"DPkU5YfD416","etirement epaule":"f7yQQRBzp9k","etirement pectoraux":"f7yQQRBzp9k"
+};
+function findVideo(rawName){
+  const n=rawName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  // cherche la clé la plus spécifique d'abord
+  let best=null,bestLen=0;
+  for(const k of Object.keys(VIDEOS)){
+    if(n.includes(k)&&k.length>bestLen){best=VIDEOS[k];bestLen=k.length;}
+  }
+  return best;
+}
 function openExo(rawName){
   const ficheKey=findFiche(rawName);
   const f=ficheKey?FICHES[ficheKey]:null;
   const niceName=exoQuery(rawName)||rawName;
   const content=$("exo-content");
-  const ytUrl="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+niceName+" exercice");
+  const vid=findVideo(rawName);
+  const ytSearch="https://www.youtube.com/results?search_query="+encodeURIComponent("comment faire "+niceName+" exercice");
   const zones=(ficheKey&&MUSCLE_MAP[ficheKey])?MUSCLE_MAP[ficheKey]:guessMuscles(rawName);
   const musclesTxt=f?f.muscles:zonesText(zones);
   let html=
@@ -625,10 +648,15 @@ function openExo(rawName){
       '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:14px">'+f.cles.map(c=>'<li style="margin-bottom:4px">'+c+'</li>').join("")+'</ul>'+
       '<p style="font-size:14px;font-weight:600;margin-bottom:6px">⚠️ Erreurs à éviter</p>'+
       '<ul style="font-size:13.5px;padding-left:18px;margin-bottom:16px">'+f.erreurs.map(e=>'<li style="margin-bottom:4px;color:var(--muted)">'+e+'</li>').join("")+'</ul>';
-  } else {
-    html+='<p style="font-size:13px;color:var(--muted);margin-bottom:14px">Regarde la vidéo ci-dessous pour bien réaliser le mouvement et éviter les blessures.</p>';
   }
-  html+='<a href="'+ytUrl+'" target="_blank" rel="noopener"><button class="green" style="width:100%">▶ Voir une vidéo de démonstration</button></a>';
+  // vidéo intégrée jouable directement
+  html+='<p style="font-size:14px;font-weight:600;margin-bottom:8px">🎥 Démonstration en vidéo</p>';
+  if(vid){
+    html+='<div style="position:relative;width:100%;padding-bottom:56.25%;border-radius:12px;overflow:hidden;margin-bottom:10px">'+
+      '<iframe src="https://www.youtube.com/embed/'+vid+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen loading="lazy"></iframe>'+
+    '</div>';
+  }
+  html+='<a href="'+ytSearch+'" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--blue)">Voir d\'autres vidéos sur YouTube →</a>';
   content.innerHTML=html;
   const m=$("exo-modal");m.classList.remove("hidden");m.style.display="flex";
   document.body.style.overflow="hidden";
